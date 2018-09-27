@@ -14,9 +14,17 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // Scroll level specification
         self.floorPlanScrollView.minimumZoomScale = 1.0
         self.floorPlanScrollView.maximumZoomScale = 6.0
+        
+        // Setup gesture recognition
+        let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(imageTapped))
+        floorPlanView.isUserInteractionEnabled = true
+        floorPlanView.addGestureRecognizer(addPinRecognizer)
+        
+        
         do {
             let url = URL(string:"https://i.imgur.com/DkvC9R6.png")
             let data = try Data.init(contentsOf: url!)
@@ -36,14 +44,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         return self.floorPlanView
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        let location = touch.location(in: self.floorPlanScrollView)
+    @objc func imageTapped(gesture: UITapGestureRecognizer) {
+        let point = gesture.location(in: gesture.view)
         print("X: ")
-        print(location.x)
+        print(point.x)
         print("Y: ")
-        print(location.y)
-        print("")
+        print(point.y)
+        print("Atleast I tried")
+        
     }
 
 
