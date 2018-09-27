@@ -24,6 +24,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }catch{
             print(error)
         }
+        print("started")
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,6 +34,16 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.floorPlanView
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        let location = touch.location(in: self.floorPlanScrollView)
+        print("X: ")
+        print(location.x)
+        print("Y: ")
+        print(location.y)
+        print("")
     }
 
 
