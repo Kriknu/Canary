@@ -1,8 +1,5 @@
 # Xcode
 #
-## Added specifically for this project
-MobileComputingProject/MobileComputingProject.xcodeproj/*
-
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## Build generated
