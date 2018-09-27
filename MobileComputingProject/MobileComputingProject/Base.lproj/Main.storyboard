@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,16 +13,46 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MobileComputingProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o4N-1n-IG3">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <imageView contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mch-Rm-86a">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="mch-Rm-86a" firstAttribute="leading" secondItem="o4N-1n-IG3" secondAttribute="leading" id="48s-9y-Zfp"/>
+                                    <constraint firstAttribute="trailing" secondItem="mch-Rm-86a" secondAttribute="trailing" id="Knr-ej-NFV"/>
+                                    <constraint firstAttribute="bottom" secondItem="mch-Rm-86a" secondAttribute="bottom" id="hWp-k5-tF2"/>
+                                    <constraint firstItem="mch-Rm-86a" firstAttribute="top" secondItem="o4N-1n-IG3" secondAttribute="top" id="nOi-Zn-P0J"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="i4e-Pw-TDk"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="o4N-1n-IG3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3a3-Zp-0Da"/>
+                            <constraint firstItem="o4N-1n-IG3" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="3uF-nV-cLH"/>
+                            <constraint firstItem="o4N-1n-IG3" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="REF-PV-0f7"/>
+                            <constraint firstAttribute="bottom" secondItem="o4N-1n-IG3" secondAttribute="bottom" id="cxW-kR-Z9H"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="floorPlanScrollView" destination="o4N-1n-IG3" id="bIM-cR-E5r"/>
+                        <outlet property="floorPlanView" destination="mch-Rm-86a" id="q2q-mR-6Rf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="152.17391304347828" y="18.75"/>
         </scene>
     </scenes>
 </document>
