@@ -50,10 +50,19 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         print(point.x)
         print("Y: ")
         print(point.y)
-        print("Atleast I tried")
-        
     }
-
+    
+    func addPoi(){
+        do {
+            let url = URL(string:"https://i.imgur.com/eaoBRfx.png")
+            let data = try Data.init(contentsOf: url!)
+            let image = UIImage(data: data)
+            let view = UIImageView(image: image)
+            self.floorPlanView.addSubview(view)
+        } catch {
+            print(error)
+        }
+    }
 
 }
 
