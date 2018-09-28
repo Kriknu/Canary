@@ -17,12 +17,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     var locationManager: CLLocationManager = CLLocationManager()
     var longitude: Double {
         get{
-            return Double(self.locationManager.location?.coordinate.longitude ?? 0);
+            return Double(self.getLocation()?.coordinate.longitude ?? 0);
         }
     }
     var latitude: Double {
         get{
-            return Double(self.locationManager.location?.coordinate.latitude ?? 0);
+            return Double(self.getLocation()?.coordinate.latitude ?? 0);
         }
     }
     
@@ -42,7 +42,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            locationManager.requestWhenInUseAuthorization()
             locationManager.startUpdatingLocation()
+        }else{
+            print("Location services not enabled")
         }
         
         do {
@@ -88,9 +91,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
-    func getLocation(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) -> CLLocationCoordinate2D {
-        print(manager.location!.coordinate)
-        return manager.location!.coordinate
+    func getLocation() -> CLLocation? {
+        return self.locationManager.location
     }
 
 }
