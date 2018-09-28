@@ -7,12 +7,12 @@
 //
 
 import UIKit
+import FirebaseStorage
 
 class PaintViewController: UIViewController {
 
     @IBOutlet weak var tempImageView: UIImageView!
     @IBOutlet weak var mainImageView: UIImageView!
-
     
     
     var lastPoint = CGPoint.zero
@@ -20,10 +20,15 @@ class PaintViewController: UIViewController {
     var brushWidth: CGFloat = 10.0
     var opacity: CGFloat = 1.0
     var swiped = false
+    var saveButton: UIButton = UIButton(frame: CGRect(x: 150, y: 500, width: 120, height: 50))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        saveButton.setTitle("Post", for: .normal)
+        saveButton.backgroundColor = UIColor.init(red: 230, green: 150, blue: 0, alpha: 0.8)
+        saveButton.addTarget(self, action: #selector(PaintViewController.uploadImageToFirebase), for: .touchUpInside)
+        //self.buttonView.addSubview(saveButton)
         // Do any additional setup after loading the view.
     }
     
@@ -82,6 +87,7 @@ class PaintViewController: UIViewController {
             drawLine(from: lastPoint, to: lastPoint)
         }
         
+        saveButton.isHidden = false
         // Merge tempImageView into mainImageView
         UIGraphicsBeginImageContext(mainImageView.frame.size)
         mainImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: 1.0)
@@ -90,6 +96,31 @@ class PaintViewController: UIViewController {
         UIGraphicsEndImageContext()
         
         tempImageView.image = nil
+    }
+
+    @objc func uploadImageToFirebase(){
+        do {
+            print("Do we trigger this function?")
+            let storage = Storage.storage()
+            let storageReference = storage.reference()
+            /*let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
+            let data = try Data.init(contentsOf: url!)
+            let image = UIImage(data: data)
+            */
+            let image = self.mainImageView.image
+            let pngImage: Data? = UIImagePNGRepresentation(image!)
+            var imageRef = storageReference.child("images/test.png")
+            _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
+                guard let metadata = metadata else{
+                    print(error)
+                    return
+                }
+                let downloadUrl = metadata
+                print(downloadUrl)
+            })
+        } catch{
+            print(error)
+        }
     }
 
     /*

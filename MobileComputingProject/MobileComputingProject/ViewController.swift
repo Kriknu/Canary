@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreLocation
-import FirebaseStorage
 
 class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate {
     
@@ -146,26 +145,5 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         self.performSegue(withIdentifier: "paintSegue", sender: self)
     }
 
-    func uploadImageToFirebase(){
-        do {
-            let storage = Storage.storage()
-            let storageReference = storage.reference()
-            let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
-            let data = try Data.init(contentsOf: url!)
-            let image = UIImage(data: data)
-            let pngImage = UIImagePNGRepresentation(image!)
-            var imageRef = storageReference.child("images/lol.png")
-            _ = imageRef.putData(data, metadata:nil, completion:{(metadata,error) in
-                guard let metadata = metadata else{
-                    print(error)
-                    return
-                }
-                let downloadUrl = metadata
-                print(downloadUrl)
-            })
-        } catch{
-            
-        }
-    }
 }
 
