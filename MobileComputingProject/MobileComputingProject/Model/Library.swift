@@ -8,15 +8,28 @@
 
 import Foundation
 
-struct Library {
+class Library {
     
     var name: String
-    var nbrOfFloors: Int
+    var id: Int
+    var nbrOfFloors: Int{
+        get{
+            return floorPlans.count
+        }
+    }
+    
+    var floorPlans = [String: String]()
     
     
+    init(name: String, id: Int){
+        self.name = name
+        self.id = id;
+    }
     
-    init(libName: String, floors: Int){
-        name = libName
-        nbrOfFloors = floors
+    func addFloorPlan(nameOfFloor: String, urlToPicture: String) -> Bool{
+        let oldCount = floorPlans.count
+        floorPlans[nameOfFloor] = urlToPicture
+        let newCount = floorPlans.count
+        return oldCount < newCount
     }
 }

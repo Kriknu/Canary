@@ -13,6 +13,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     @IBOutlet weak var floorPlanView: UIImageView!
     @IBOutlet weak var floorPlanScrollView: UIScrollView!
     
+    // GPS
     var locationManager: CLLocationManager = CLLocationManager()
     var longitude: Double {
         get{
