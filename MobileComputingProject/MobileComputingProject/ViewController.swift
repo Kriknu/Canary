@@ -12,7 +12,18 @@ import CoreLocation
 class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate {
     @IBOutlet weak var floorPlanView: UIImageView!
     @IBOutlet weak var floorPlanScrollView: UIScrollView!
-    var locationManager: CLLocationManager!
+    
+    var locationManager: CLLocationManager = CLLocationManager()
+    var longitude: Double {
+        get{
+            return Double(self.locationManager.location?.coordinate.longitude ?? 0);
+        }
+    }
+    var latitude: Double {
+        get{
+            return Double(self.locationManager.location?.coordinate.latitude ?? 0);
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +69,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         print(point.x)
         print("Y: ")
         print(point.y)
+        print("latitude: \(latitude) || longitude: \(longitude)")
         addPoi(x: point.x, y: point.y)
     }
     
