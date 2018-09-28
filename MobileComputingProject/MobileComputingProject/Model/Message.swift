@@ -7,3 +7,15 @@
 //
 
 import Foundation
+
+class Message {
+    var x: Double
+    var y: Double
+    var urlToMessage: String
+    
+    init(x: Double, y: Double, url:String){
+        self.x = x
+        self.y = y
+        self.urlToMessage = url        
+    }
+}

@@ -15,6 +15,7 @@
 		9C535FFC215C041F006C7BB1 /* CanaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C535FFB215C041F006C7BB1 /* CanaryModel.swift */; };
 		9C535FFF215C06A2006C7BB1 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C535FFE215C06A2006C7BB1 /* Library.swift */; };
 		9C536002215D2976006C7BB1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C536001215D2976006C7BB1 /* CoreLocation.framework */; };
+		9C536004215E0B2F006C7BB1 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C536003215E0B2F006C7BB1 /* Message.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		9C535FFB215C041F006C7BB1 /* CanaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanaryModel.swift; sourceTree = "<group>"; };
 		9C535FFE215C06A2006C7BB1 /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		9C536001215D2976006C7BB1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		9C536003215E0B2F006C7BB1 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 			children = (
 				9C535FFB215C041F006C7BB1 /* CanaryModel.swift */,
 				9C535FFE215C06A2006C7BB1 /* Library.swift */,
+				9C536003215E0B2F006C7BB1 /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -172,6 +175,7 @@
 			files = (
 				9C1B6D3A214A9A25006F0FE5 /* ViewController.swift in Sources */,
 				9C535FFF215C06A2006C7BB1 /* Library.swift in Sources */,
+				9C536004215E0B2F006C7BB1 /* Message.swift in Sources */,
 				9C535FFC215C041F006C7BB1 /* CanaryModel.swift in Sources */,
 				9C1B6D38214A9A25006F0FE5 /* AppDelegate.swift in Sources */,
 			);
@@ -316,6 +320,7 @@
 		9C1B6D47214A9A25006F0FE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X8NBC92BJ5;
@@ -324,7 +329,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = CanaryLaolLAsdaSDW12345;
+				PRODUCT_BUNDLE_IDENTIFIER = CIU196.MobileComputingProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -334,6 +339,7 @@
 		9C1B6D48214A9A25006F0FE5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X8NBC92BJ5;
@@ -342,7 +348,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = CanaryLaolLAsdaSDW12345;
+				PRODUCT_BUNDLE_IDENTIFIER = CIU196.MobileComputingProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
