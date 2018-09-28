@@ -9,7 +9,8 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate {
+    
     @IBOutlet weak var floorPlanView: UIImageView!
     @IBOutlet weak var floorPlanScrollView: UIScrollView!
     
@@ -74,7 +75,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         print("Y: ")
         print(point.y)
         print("latitude: \(latitude) || longitude: \(longitude)")
-        addPoi(x: point.x, y: point.y)
+        //addPoi(x: point.x, y: point.y)
+        createPopOver()
     }
     
     func addPoi(x: CGFloat, y: CGFloat){
@@ -93,6 +95,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     func getLocation() -> CLLocation? {
         return self.locationManager.location
+    }
+    
+    func createPopOver(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Text", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Paint", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.test()}))
+        present(alert, animated: true)
+    }
+    
+    func test(){
+        self.performSeg
     }
 
 }
