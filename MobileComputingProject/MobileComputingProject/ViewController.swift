@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController, UIScrollViewDelegate {
+class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate {
     @IBOutlet weak var floorPlanView: UIImageView!
     @IBOutlet weak var floorPlanScrollView: UIScrollView!
+    var locationManager: CLLocationManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         floorPlanView.isUserInteractionEnabled = true
         floorPlanView.addGestureRecognizer(addPinRecognizer)
         
+        // Setup location manager for retrieving GPS position
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            locationManager.startUpdatingLocation()
+        }
         
         do {
             let url = URL(string:"https://i.imgur.com/DkvC9R6.png")
@@ -62,6 +70,11 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         } catch {
             print(error)
         }
+    }
+    
+    func getLocation(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) -> CLLocationCoordinate2D {
+        print(manager.location!.coordinate)
+        return manager.location!.coordinate
     }
 
 }
