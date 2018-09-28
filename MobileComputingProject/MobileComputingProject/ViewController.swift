@@ -90,6 +90,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
             view.image = image
             
+            // Add a gesture recognizer to every created pin to move it
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(movePinRecognizer)
@@ -101,14 +102,21 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
+    // Moving pins
+    // Offset is stored when gesture began, but same for every change of the gesture
     var movePoiOffsetX:CGFloat = 0
     var movePoiOffsetY:CGFloat = 0
     @objc func poiTapped(gesture: UILongPressGestureRecognizer) {
+        // On LongPress begin, give haptic feedback (vibration) and save offset
         if gesture.state == .began {
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
             movePoiOffsetX = gesture.location(in: gesture.view).x
             movePoiOffsetY = gesture.location(in: gesture.view).y
         }
+        // On LongPress change
+        // Get LongPress position
+        // Calculate new position for po (tap - offset)
+        // set poi to new position
         else if gesture.state == .changed {
             let view = gesture.view
             
