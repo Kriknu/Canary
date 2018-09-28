@@ -15,6 +15,9 @@ Group project for the course CIU196 Mobile Interaction, Fall 2018
 5. Change Bundle Identifyer (just add two random numbers after the input field)
 6. Press try again
 
+*** RUN PROJECT ***
+1. Open MobileComputingProject.xcworkspace
+  // This file enables us to use pods e.g. Firebase
 *** KNOWN ISSUES ***
 - Be part of a development team
 - Update bundle identifier in order to install it on a non-developer license,

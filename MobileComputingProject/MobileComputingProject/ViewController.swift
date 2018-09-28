@@ -69,14 +69,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     @objc func imageTapped(gesture: UITapGestureRecognizer) {
-        let point = gesture.location(in: gesture.view)
-        print("X: ")
-        print(point.x)
-        print("Y: ")
-        print(point.y)
-        print("latitude: \(latitude) || longitude: \(longitude)")
-        //addPoi(x: point.x, y: point.y)
-        createPopOver()
+        if gesture.state == .began {
+            let point = gesture.location(in: gesture.view)
+            print("X: ")
+            print(point.x)
+            print("Y: ")
+            print(point.y)
+            print("latitude: \(latitude) || longitude: \(longitude)")
+            addPoi(x: point.x, y: point.y)
+        }
     }
     
     func addPoi(x: CGFloat, y: CGFloat){
@@ -86,10 +87,28 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let image = UIImage(data: data)
             let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
             view.image = image
+            
+            let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
+            view.isUserInteractionEnabled = true
+            view.addGestureRecognizer(movePinRecognizer)
+            print("bbbbbbb")
+
             self.floorPlanView.addSubview(view)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
         } catch {
             print(error)
+        }
+    }
+    
+    @objc func poiTapped(gesture: UITapGestureRecognizer) {
+        print("aaaaaa")
+        if gesture.state == .began {
+            let point = gesture.location(in: gesture.view)
+            print("X: ")
+            print(point.x)
+            print("Y: ")
+            print(point.y)
+            print("latitude: \(latitude) || longitude: \(longitude)")
         }
     }
     
