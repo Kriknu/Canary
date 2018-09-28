@@ -58,15 +58,18 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         print(point.x)
         print("Y: ")
         print(point.y)
+        addPoi(x: point.x, y: point.y)
     }
     
-    func addPoi(){
+    func addPoi(x: CGFloat, y: CGFloat){
         do {
-            let url = URL(string:"https://i.imgur.com/eaoBRfx.png")
+            let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
             let data = try Data.init(contentsOf: url!)
             let image = UIImage(data: data)
-            let view = UIImageView(image: image)
+            let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
+            view.image = image
             self.floorPlanView.addSubview(view)
+            UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
         } catch {
             print(error)
         }
