@@ -68,13 +68,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     @objc func imageTapped(gesture: UITapGestureRecognizer) {
-        let point = gesture.location(in: gesture.view)
-        print("X: ")
-        print(point.x)
-        print("Y: ")
-        print(point.y)
-        print("latitude: \(latitude) || longitude: \(longitude)")
-        addPoi(x: point.x, y: point.y)
+        if gesture.state == .began {
+            let point = gesture.location(in: gesture.view)
+            print("X: ")
+            print(point.x)
+            print("Y: ")
+            print(point.y)
+            print("latitude: \(latitude) || longitude: \(longitude)")
+            addPoi(x: point.x, y: point.y)
+        }
     }
     
     func addPoi(x: CGFloat, y: CGFloat){

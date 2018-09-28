@@ -17,13 +17,16 @@ class Library {
             return floorPlans.count
         }
     }
-    
     var floorPlans = [String: String]()
     
+    var longitude: Double
+    var latitude: Double
     
-    init(name: String, id: Int){
+    init(name: String, id: Int, long: Double, lat: Double){
         self.name = name
-        self.id = id;
+        self.id = id
+        self.longitude = long
+        self.latitude = lat
     }
     
     func addFloorPlan(nameOfFloor: String, urlToPicture: String) -> Bool{
