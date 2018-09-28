@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import FirebaseStorage
 
 class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate {
     
@@ -76,7 +77,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             print("Y: ")
             print(point.y)
             print("latitude: \(latitude) || longitude: \(longitude)")
-            addPoi(x: point.x, y: point.y)
+            //addPoi(x: point.x, y: point.y)
+            createPopOver()
         }
     }
     
@@ -120,13 +122,30 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Text", style: UIAlertActionStyle.default, handler: nil))
         alert.addAction(UIAlertAction(title: "Paint", style: UIAlertActionStyle.default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.test()}))
+        alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.uploadImageToFirebase()}))
         present(alert, animated: true)
     }
     
-    func test(){
-        self.performSeg
+    func uploadImageToFirebase(){
+        do {
+            let storage = Storage.storage()
+            let storageReference = storage.reference()
+            let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
+            let data = try Data.init(contentsOf: url!)
+            let image = UIImage(data: data)
+            let pngImage = UIImagePNGRepresentation(image!)
+            var imageRef = storageReference.child("images/lol.png")
+            _ = imageRef.putData(data, metadata:nil, completion:{(metadata,error) in
+                guard let metadata = metadata else{
+                    print(error)
+                    return
+                }
+                let downloadUrl = metadata
+                print(downloadUrl)
+            })
+        } catch{
+            
+        }
     }
-
 }
 
