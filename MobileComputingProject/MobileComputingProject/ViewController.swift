@@ -91,7 +91,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(movePinRecognizer)
-            print("bbbbbbb")
 
             self.floorPlanView.addSubview(view)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
@@ -100,15 +99,23 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
-    @objc func poiTapped(gesture: UITapGestureRecognizer) {
-        print("aaaaaa")
+    var movePoiOffsetX:CGFloat = 0
+    var movePoiOffsetY:CGFloat = 0
+    @objc func poiTapped(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
-            let point = gesture.location(in: gesture.view)
-            print("X: ")
-            print(point.x)
-            print("Y: ")
-            print(point.y)
-            print("latitude: \(latitude) || longitude: \(longitude)")
+            UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
+            movePoiOffsetX = gesture.location(in: gesture.view).x
+            movePoiOffsetY = gesture.location(in: gesture.view).y
+        }
+        else if gesture.state == .changed {
+            let view = gesture.view
+            
+            let floorPlanX = gesture.location(in: floorPlanView).x
+            let floorPlanY = gesture.location(in: floorPlanView).y
+            let newX = floorPlanX - movePoiOffsetX
+            let newY = floorPlanY - movePoiOffsetY
+            
+            view!.frame = CGRect(x: newX, y: newY, width: 48, height: 48)
         }
     }
     
@@ -125,7 +132,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     func test(){
-        self.performSeg
+        
     }
 
 }
