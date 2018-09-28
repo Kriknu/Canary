@@ -10,20 +10,43 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Paint View Controller-->
         <scene sceneID="946-sT-sTR">
             <objects>
-                <viewController id="kQ1-qK-hE6" sceneMemberID="viewController">
+                <viewController id="kQ1-qK-hE6" customClass="PaintViewController" customModule="MobileComputingProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FTh-A8-9DY">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lpT-gX-AqB" userLabel="mainImageView">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NFE-Du-c1g" userLabel="tempImageView">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="NFE-Du-c1g" firstAttribute="top" secondItem="FTh-A8-9DY" secondAttribute="top" id="3sW-37-C7m"/>
+                            <constraint firstItem="NFE-Du-c1g" firstAttribute="leading" secondItem="W5x-xj-90R" secondAttribute="leading" id="6SV-u7-oGj"/>
+                            <constraint firstItem="lpT-gX-AqB" firstAttribute="trailing" secondItem="W5x-xj-90R" secondAttribute="trailing" id="OwS-uA-uxz"/>
+                            <constraint firstItem="lpT-gX-AqB" firstAttribute="top" secondItem="FTh-A8-9DY" secondAttribute="top" id="ZFg-7Y-iuu"/>
+                            <constraint firstItem="lpT-gX-AqB" firstAttribute="leading" secondItem="W5x-xj-90R" secondAttribute="leading" id="hLq-rX-q3u"/>
+                            <constraint firstItem="NFE-Du-c1g" firstAttribute="trailing" secondItem="W5x-xj-90R" secondAttribute="trailing" id="kxn-dT-BXg"/>
+                            <constraint firstAttribute="bottom" secondItem="lpT-gX-AqB" secondAttribute="bottom" id="sGk-HV-p4N"/>
+                            <constraint firstAttribute="bottom" secondItem="NFE-Du-c1g" secondAttribute="bottom" id="yAt-Ae-9kR"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="W5x-xj-90R"/>
                     </view>
+                    <connections>
+                        <outlet property="mainImageView" destination="NFE-Du-c1g" id="xG2-ez-DX6"/>
+                        <outlet property="tempImageView" destination="lpT-gX-AqB" id="7Cl-Sq-wut"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b3P-ag-3HF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="928" y="-705"/>
+            <point key="canvasLocation" x="927.536231884058" y="-705.13392857142856"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">

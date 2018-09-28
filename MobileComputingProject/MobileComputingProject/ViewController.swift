@@ -76,7 +76,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             print("Y: ")
             print(point.y)
             print("latitude: \(latitude) || longitude: \(longitude)")
-            addPoi(x: point.x, y: point.y)
+            //addPoi(x: point.x, y: point.y)
+            createPopOver()
         }
     }
     
@@ -125,7 +126,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     func test(){
-        self.performSeg
+        self.performSegue(withIdentifier: "paintSegue", sender: self)
     }
 
 }

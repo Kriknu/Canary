@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C1914B6215E5CB800DDF46F /* PaintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1914B5215E5CB800DDF46F /* PaintViewController.swift */; };
 		9C1B6D38214A9A25006F0FE5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1B6D37214A9A25006F0FE5 /* AppDelegate.swift */; };
 		9C1B6D3A214A9A25006F0FE5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1B6D39214A9A25006F0FE5 /* ViewController.swift */; };
 		9C1B6D3D214A9A25006F0FE5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C1B6D3B214A9A25006F0FE5 /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		05821A33FE7D48E978F21191 /* Pods-MobileComputingProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileComputingProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileComputingProject/Pods-MobileComputingProject.debug.xcconfig"; sourceTree = "<group>"; };
 		1868579BE947F79F414091C5 /* Pods-MobileComputingProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileComputingProject.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileComputingProject/Pods-MobileComputingProject.release.xcconfig"; sourceTree = "<group>"; };
+		9C1914B5215E5CB800DDF46F /* PaintViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaintViewController.swift; sourceTree = "<group>"; };
 		9C1B6D34214A9A25006F0FE5 /* MobileComputingProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileComputingProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C1B6D37214A9A25006F0FE5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C1B6D39214A9A25006F0FE5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				F6383D37215E3C0E008FD856 /* GoogleService-Info.plist */,
 				9C535FFA215C0366006C7BB1 /* Helper Files */,
 				9C1B6D39214A9A25006F0FE5 /* ViewController.swift */,
+				9C1914B5215E5CB800DDF46F /* PaintViewController.swift */,
 				9C1B6D3B214A9A25006F0FE5 /* Main.storyboard */,
 				9C535FFD215C046D006C7BB1 /* Model */,
 			);
@@ -245,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C1B6D3A214A9A25006F0FE5 /* ViewController.swift in Sources */,
+				9C1914B6215E5CB800DDF46F /* PaintViewController.swift in Sources */,
 				9C535FFF215C06A2006C7BB1 /* Library.swift in Sources */,
 				9C536004215E0B2F006C7BB1 /* Message.swift in Sources */,
 				9C535FFC215C041F006C7BB1 /* CanaryModel.swift in Sources */,
