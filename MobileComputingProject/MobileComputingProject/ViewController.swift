@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import FirebaseStorage
 
 class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate {
     
@@ -89,10 +90,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
             view.image = image
             
+            // Add a gesture recognizer to every created pin to move it
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(movePinRecognizer)
-            print("bbbbbbb")
 
             self.floorPlanView.addSubview(view)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
@@ -101,15 +102,30 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
-    @objc func poiTapped(gesture: UITapGestureRecognizer) {
-        print("aaaaaa")
+    // Moving pins
+    // Offset is stored when gesture began, but same for every change of the gesture
+    var movePoiOffsetX:CGFloat = 0
+    var movePoiOffsetY:CGFloat = 0
+    @objc func poiTapped(gesture: UILongPressGestureRecognizer) {
+        // On LongPress begin, give haptic feedback (vibration) and save offset
         if gesture.state == .began {
-            let point = gesture.location(in: gesture.view)
-            print("X: ")
-            print(point.x)
-            print("Y: ")
-            print(point.y)
-            print("latitude: \(latitude) || longitude: \(longitude)")
+            UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
+            movePoiOffsetX = gesture.location(in: gesture.view).x
+            movePoiOffsetY = gesture.location(in: gesture.view).y
+        }
+        // On LongPress change
+        // Get LongPress position
+        // Calculate new position for po (tap - offset)
+        // set poi to new position
+        else if gesture.state == .changed {
+            let view = gesture.view
+            
+            let floorPlanX = gesture.location(in: floorPlanView).x
+            let floorPlanY = gesture.location(in: floorPlanView).y
+            let newX = floorPlanX - movePoiOffsetX
+            let newY = floorPlanY - movePoiOffsetY
+            
+            view!.frame = CGRect(x: newX, y: newY, width: 48, height: 48)
         }
     }
     
@@ -125,9 +141,31 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         present(alert, animated: true)
     }
     
+
     func test(){
         self.performSegue(withIdentifier: "paintSegue", sender: self)
     }
 
+    func uploadImageToFirebase(){
+        do {
+            let storage = Storage.storage()
+            let storageReference = storage.reference()
+            let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
+            let data = try Data.init(contentsOf: url!)
+            let image = UIImage(data: data)
+            let pngImage = UIImagePNGRepresentation(image!)
+            var imageRef = storageReference.child("images/lol.png")
+            _ = imageRef.putData(data, metadata:nil, completion:{(metadata,error) in
+                guard let metadata = metadata else{
+                    print(error)
+                    return
+                }
+                let downloadUrl = metadata
+                print(downloadUrl)
+            })
+        } catch{
+            
+        }
+    }
 }
 
