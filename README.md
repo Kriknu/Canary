@@ -22,3 +22,14 @@ Group project for the course CIU196 Mobile Interaction, Fall 2018
 - Be part of a development team
 - Update bundle identifier in order to install it on a non-developer license,
     it also has to be accepted on the phone
+
+*** ISSUES RUNNING ON PHONE ***
+If there is an issue stating "Certificate has either expired or has been revoked"follow these steps:
+
+1. Clean project - Product --> Clean
+2. XCode Menu --> Preferences
+3. Select account (Left side of window)
+4. Manage Certificates
+5. Press plus sign in the bottom left corner of the window
+6. Done, done, done
+7. Run 
