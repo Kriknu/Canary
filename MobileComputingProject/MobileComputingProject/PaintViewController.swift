@@ -28,7 +28,7 @@ class PaintViewController: UIViewController {
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         saveButton.setTitle("Post", for: .normal)
         saveButton.backgroundColor = UIColor.init(red: 230, green: 150, blue: 0, alpha: 0.8)
-        saveButton.addTarget(self, action: #selector(PaintViewController.uploadImageToFirebase), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(PaintViewController.saveImage), for: .touchUpInside)
         view.bringSubview(toFront: saveButton)
         // Do any additional setup after loading the view.
     }
@@ -101,6 +101,12 @@ class PaintViewController: UIViewController {
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         tempImageView.image = nil
+    }
+
+    @objc func saveImage(){
+        //TODO: Add error handling if we fail to upload image
+        self.uploadImageToFirebase()
+        self.performSegue(withIdentifier: "mainView", sender: self)
     }
 
     @objc func uploadImageToFirebase(){
