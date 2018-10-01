@@ -75,6 +75,7 @@
                         <outlet property="navigationMenu" destination="b29-Gy-X7R" id="iw7-dD-bb6"/>
                         <outlet property="paintView" destination="GSj-LH-q8m" id="zYs-QE-M1V"/>
                         <outlet property="tempImageView" destination="lpT-gX-AqB" id="7Cl-Sq-wut"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="mainView" id="a1z-YG-0fJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b3P-ag-3HF" userLabel="First Responder" sceneMemberID="firstResponder"/>

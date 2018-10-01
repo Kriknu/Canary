@@ -15,7 +15,7 @@ class PaintViewController: UIViewController {
     @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var paintView: UIView!
     @IBOutlet weak var navigationMenu: UINavigationBar!
-    @IBOutlet weak var doneButton: ßUIBarButtonItem!
+    @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     
@@ -28,10 +28,12 @@ class PaintViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         //self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         //saveButton.setTitle("Post", for: .normal)
         //saveButton.backgroundColor = UIColor.init(red: 230, green: 150, blue: 0, alpha: 0.8)
-        //saveButton.addTarget(self, action: #selector(PaintViewController.uploadImageToFirebase), for: .touchUpInside)
+        doneButton.action = #selector(PaintViewController.saveImage)
+        cancelButton.action = #selector(PaintViewController.doSegueBack)
         view.bringSubview(toFront: navigationMenu)
         // Do any additional setup after loading the view.
     }
@@ -101,6 +103,16 @@ class PaintViewController: UIViewController {
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         tempImageView.image = nil
+    }
+
+    @objc func saveImage(){
+        //TODO: Add error handling if we fail to upload image
+        self.uploadImageToFirebase()
+        self.doSegueBack()
+    }
+    
+    @objc func doSegueBack(){
+        self.performSegue(withIdentifier: "mainView", sender: self)
     }
 
     @objc func uploadImageToFirebase(){
