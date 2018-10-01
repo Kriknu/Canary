@@ -13,8 +13,11 @@ class PaintViewController: UIViewController {
 
     @IBOutlet weak var tempImageView: UIImageView!
     @IBOutlet weak var mainImageView: UIImageView!
-    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var paintView: UIView!
+    @IBOutlet weak var navigationMenu: UINavigationBar!
+    @IBOutlet weak var doneButton: ßUIBarButtonItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    
     
     
     var lastPoint = CGPoint.zero
@@ -25,11 +28,11 @@ class PaintViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        saveButton.setTitle("Post", for: .normal)
-        saveButton.backgroundColor = UIColor.init(red: 230, green: 150, blue: 0, alpha: 0.8)
-        saveButton.addTarget(self, action: #selector(PaintViewController.uploadImageToFirebase), for: .touchUpInside)
-        view.bringSubview(toFront: saveButton)
+        //self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        //saveButton.setTitle("Post", for: .normal)
+        //saveButton.backgroundColor = UIColor.init(red: 230, green: 150, blue: 0, alpha: 0.8)
+        //saveButton.addTarget(self, action: #selector(PaintViewController.uploadImageToFirebase), for: .touchUpInside)
+        view.bringSubview(toFront: navigationMenu)
         // Do any additional setup after loading the view.
     }
     
@@ -70,7 +73,7 @@ class PaintViewController: UIViewController {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
         // Hide saveButton when drawing
-        saveButton.isHidden = true
+        //saveButton.isHidden = true
         
         guard let touch = touches.first else {
             return
@@ -78,7 +81,7 @@ class PaintViewController: UIViewController {
         
         // 6
         swiped = true
-        let currentPoint = touch.location(in: paintView)
+        let currentPoint = touch.location(in: tempImageView)
         drawLine(from: lastPoint, to: currentPoint)
         
         // 7
@@ -86,14 +89,11 @@ class PaintViewController: UIViewController {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // Hide saveButton when drawing
-        saveButton.isHidden = false
         if !swiped {
             // draw a single point
             drawLine(from: lastPoint, to: lastPoint)
         }
         
-        saveButton.isHidden = false
         // Merge tempImageView into mainImageView
         UIGraphicsBeginImageContext(mainImageView.frame.size)
         mainImageView.image?.draw(in: paintView.bounds, blendMode: .normal, alpha: 1.0)
