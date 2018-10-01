@@ -13,6 +13,8 @@ class PaintViewController: UIViewController {
 
     @IBOutlet weak var tempImageView: UIImageView!
     @IBOutlet weak var mainImageView: UIImageView!
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var paintView: UIView!
     
     
     var lastPoint = CGPoint.zero
@@ -20,7 +22,6 @@ class PaintViewController: UIViewController {
     var brushWidth: CGFloat = 10.0
     var opacity: CGFloat = 1.0
     var swiped = false
-    var saveButton: UIButton = UIButton(frame: CGRect(x: 150, y: 500, width: 120, height: 50))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,16 +38,16 @@ class PaintViewController: UIViewController {
             return
         }
         swiped = false
-        lastPoint = touch.location(in: view)
+        lastPoint = touch.location(in: paintView)
     }
 
     func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
     // 1
-    UIGraphicsBeginImageContext(view.frame.size)
+    UIGraphicsBeginImageContext(paintView.frame.size)
     guard let context = UIGraphicsGetCurrentContext() else {
     return
     }
-    tempImageView.image?.draw(in: view.bounds)
+    tempImageView.image?.draw(in: paintView.bounds)
     
     // 2
     context.move(to: fromPoint)
@@ -74,7 +75,7 @@ class PaintViewController: UIViewController {
         
         // 6
         swiped = true
-        let currentPoint = touch.location(in: view)
+        let currentPoint = touch.location(in: paintView)
         drawLine(from: lastPoint, to: currentPoint)
         
         // 7
@@ -90,8 +91,8 @@ class PaintViewController: UIViewController {
         saveButton.isHidden = false
         // Merge tempImageView into mainImageView
         UIGraphicsBeginImageContext(mainImageView.frame.size)
-        mainImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: 1.0)
-        tempImageView?.image?.draw(in: view.bounds, blendMode: .normal, alpha: opacity)
+        mainImageView.image?.draw(in: paintView.bounds, blendMode: .normal, alpha: 1.0)
+        tempImageView?.image?.draw(in: paintView.bounds, blendMode: .normal, alpha: opacity)
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
@@ -99,6 +100,7 @@ class PaintViewController: UIViewController {
     }
 
     @objc func uploadImageToFirebase(){
+        print("Uploading...")
         do {
             print("Do we trigger this function?")
             let storage = Storage.storage()
@@ -108,7 +110,7 @@ class PaintViewController: UIViewController {
             let image = UIImage(data: data)
             */
             let image = self.mainImageView.image
-            let pngImage: Data? = UIImagePNGRepresentation(image!)
+            let pngImage: Data? = UIImagePNGRepresentation(image!)					
             var imageRef = storageReference.child("images/test.png")
             _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
                 guard let metadata = metadata else{
