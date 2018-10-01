@@ -26,6 +26,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             return Double(self.getLocation()?.coordinate.latitude ?? 0);
         }
     }
+
+    // Trashcan
+    var trashCanView:UIImageView = UIImageView()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +61,22 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             print(error)
         }
         print("started")
+        
+        // Load trashcan icon
+        do {
+            let url = URL(string:"https://i.imgur.com/jhav5sW.png")
+            let data = try Data.init(contentsOf: url!)
+            let image = UIImage(data: data)
+            let viewX = UIScreen.main.bounds.width / 2 - 64 / 2
+            let viewY = UIScreen.main.bounds.height - 96
+            trashCanView = UIImageView(frame: CGRect(x: viewX, y: viewY, width: 64, height: 64))
+            trashCanView.image = image
+            view.addSubview(trashCanView)
+            trashCanView.isHidden = true
+            trashCanView.isUserInteractionEnabled = false
+        } catch {
+            print(error)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -100,17 +120,21 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             print(error)
         }
     }
-    
+
     // Moving pins
     // Offset is stored when gesture began, but same for every change of the gesture
     var movePoiOffsetX:CGFloat = 0
     var movePoiOffsetY:CGFloat = 0
     @objc func poiTapped(gesture: UILongPressGestureRecognizer) {
-        // On LongPress begin, give haptic feedback (vibration) and save offset
+        // On LongPress begin
+        // Give haptic feedback (vibration)
+        // Save offset
+        // Show trash icon
         if gesture.state == .began {
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
             movePoiOffsetX = gesture.location(in: gesture.view).x
             movePoiOffsetY = gesture.location(in: gesture.view).y
+            trashCanView.isHidden = false
         }
         // On LongPress change
         // Get LongPress position
@@ -125,6 +149,17 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let newY = floorPlanY - movePoiOffsetY
             
             view!.frame = CGRect(x: newX, y: newY, width: 48, height: 48)
+        }
+        // If LongPress ended
+        // And Poi dragged to trash
+        // Delete Poi, hide trash
+        else if gesture.state == .ended {
+            if (trashCanView.frame.intersects(view.convert(gesture.view!.frame, from: floorPlanView))) {
+                // FIXME: Check if user has right to delete Poi
+                gesture.view!.removeFromSuperview()
+                // FIXME: Send delete request to firebase when deleting Poi
+            }
+            trashCanView.isHidden = true
         }
     }
     

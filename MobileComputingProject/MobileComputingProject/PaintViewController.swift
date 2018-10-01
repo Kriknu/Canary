@@ -29,7 +29,7 @@ class PaintViewController: UIViewController {
         saveButton.setTitle("Post", for: .normal)
         saveButton.backgroundColor = UIColor.init(red: 230, green: 150, blue: 0, alpha: 0.8)
         saveButton.addTarget(self, action: #selector(PaintViewController.uploadImageToFirebase), for: .touchUpInside)
-        //self.buttonView.addSubview(saveButton)
+        view.bringSubview(toFront: saveButton)
         // Do any additional setup after loading the view.
     }
     
@@ -42,33 +42,36 @@ class PaintViewController: UIViewController {
     }
 
     func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
-    // 1
-    UIGraphicsBeginImageContext(paintView.frame.size)
-    guard let context = UIGraphicsGetCurrentContext() else {
-    return
+        // 1
+        UIGraphicsBeginImageContext(paintView.frame.size)
+        guard let context = UIGraphicsGetCurrentContext() else {
+        return
+        }
+        tempImageView.image?.draw(in: paintView.bounds)
+        
+        // 2
+        context.move(to: fromPoint)
+        context.addLine(to: toPoint)
+        
+        // 3
+        context.setLineCap(.round)
+        context.setBlendMode(.normal)
+        context.setLineWidth(brushWidth)
+        context.setStrokeColor(color.cgColor)
+        
+        // 4
+        context.strokePath()
+        
+        // 5
+        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        tempImageView.alpha = opacity
+        UIGraphicsEndImageContext()
     }
-    tempImageView.image?.draw(in: paintView.bounds)
     
-    // 2
-    context.move(to: fromPoint)
-    context.addLine(to: toPoint)
-    
-    // 3
-    context.setLineCap(.round)
-    context.setBlendMode(.normal)
-    context.setLineWidth(brushWidth)
-    context.setStrokeColor(color.cgColor)
-    
-    // 4
-    context.strokePath()
-    
-    // 5
-    tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-    tempImageView.alpha = opacity
-    UIGraphicsEndImageContext()
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
+        // Hide saveButton when drawing
+        saveButton.isHidden = true
+        
         guard let touch = touches.first else {
             return
         }
@@ -83,6 +86,8 @@ class PaintViewController: UIViewController {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Hide saveButton when drawing
+        saveButton.isHidden = false
         if !swiped {
             // draw a single point
             drawLine(from: lastPoint, to: lastPoint)
@@ -95,7 +100,6 @@ class PaintViewController: UIViewController {
         tempImageView?.image?.draw(in: paintView.bounds, blendMode: .normal, alpha: opacity)
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
         tempImageView.image = nil
     }
 
@@ -110,7 +114,7 @@ class PaintViewController: UIViewController {
             let image = UIImage(data: data)
             */
             let image = self.mainImageView.image
-            let pngImage: Data? = UIImagePNGRepresentation(image!)					
+            let pngImage: Data? = UIImagePNGRepresentation(image!)
             var imageRef = storageReference.child("images/test.png")
             _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
                 guard let metadata = metadata else{
