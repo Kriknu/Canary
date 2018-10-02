@@ -11,39 +11,181 @@ import FirebaseStorage
 
 class PaintViewController: UIViewController {
 
+    // Paint Views
     @IBOutlet weak var tempImageView: UIImageView!
     @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var paintView: UIView!
+    
+    // Top Navigation
     @IBOutlet weak var navigationMenu: UINavigationBar!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
+    // Settings & Misc
+    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var opacityLabel: UILabel!
+    @IBOutlet weak var sizeLabel: UILabel!
+    @IBOutlet weak var paletteView: UIView!
+    @IBOutlet weak var buttonContainer: UIView!
+    @IBOutlet weak var specificSettingsView: UIView!
+    @IBOutlet weak var settingsView: UIView!
+    @IBOutlet weak var resetButton: UIButton!
     
-    
+    // Actions
+    @IBAction func settingsToggleAction(_ sender: UIButton) {
+        // Make specific settings view visible
+        if specificSettingsView.isHidden {
+            specificSettingsView.isHidden = false
+            view.bringSubview(toFront: specificSettingsView)
+        } else {
+            specificSettingsView.isHidden = true
+        }
+    }
+    @IBAction func opacitySlider(_ sender: UISlider) {
+        opacity = CGFloat(sender.value)
+        opacityLabel.text = "Opacity: \(Int(sender.value * 100)) %"
+        setupSettingsButton()
+    }
+    @IBAction func sizeSlider(_ sender: UISlider) {
+        brushWidth = CGFloat(sender.value*20 + 1)
+        sizeLabel.text = "Size: \(Int(sender.value*100)) %"
+        setupSettingsButton()
+    }
+
     var lastPoint = CGPoint.zero
     var color = UIColor.black
     var brushWidth: CGFloat = 10.0
     var opacity: CGFloat = 1.0
     var swiped = false
     
+    let colors: [(CGFloat, CGFloat, CGFloat)] = [
+        (0 / 255, 0 / 255, 0 / 255),                        // black
+        (0 / 255, 214.0 / 255, 198.0 / 255),                // turquoise
+        (255.0 / 255, 0 / 255, 0 / 255),                    // red
+        (0 / 255, 255.0 / 255, 0 / 255),                    // green
+        (0 / 255, 0 / 255, 255.0 / 255),                    // blue
+        (255.0 / 255, 204.0 / 255, 0 / 255),                // yellow
+        (11.0 / 255, 0 / 255, 103.0 / 255),                 // purple
+        (255.0 / 255, 255.0 / 255, 255.0 / 255)             // white
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        //saveButton.setTitle("Post", for: .normal)
-        //saveButton.backgroundColor = UIColor.init(red: 230, green: 150, blue: 0, alpha: 0.8)
+        
+        initComponents();
+        //setupSettingsButtons()
+        
         doneButton.action = #selector(PaintViewController.saveImage)
-        cancelButton.action = #selector(PaintViewController.doSegueBack)
-        view.bringSubview(toFront: navigationMenu)
+        cancelButton.action = #selector(PaintViewController.doSegueBack	)
+        view.bringSubview(toFront: settingsView)
+        
+        //view.bringSubview(toFront: navigationMenu)
+        //view.bringSubview(toFront: paletteView)
+        //view.bringSubview(toFront: slider)
         // Do any additional setup after loading the view.
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Hide necessary views
+        settingsView.isHidden = true
+        specificSettingsView.isHidden = true
+        
+        
         guard let touch = touches.first else {
             return
         }
         swiped = false
         lastPoint = touch.location(in: paintView)
+    }
+    
+    func initComponents(){
+        setupPaletteFrame()
+        setupResetButton()
+        setupSpecificSettings()
+        setupSettingsButton()
+    }
+    
+    func setupSpecificSettings(){
+        setupSettingsButton()
+        specificSettingsView.layer.cornerRadius = 20
+        specificSettingsView.layer.masksToBounds = true
+        setupOpacityComponents()
+        setupSizeComponents()
+    }
+    
+    func setupSettingsButton(){
+        buttonContainer.backgroundColor = .clear
+        let x = (buttonContainer.frame.width - brushWidth) / 2
+        let y = (buttonContainer.frame.height - brushWidth) / 2
+        settingsButton.frame = CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: brushWidth, height: brushWidth))
+        settingsButton.layer.cornerRadius = settingsButton.frame.width / 2
+        settingsButton.backgroundColor = color
+        buttonContainer.layer.cornerRadius = buttonContainer.frame.width / 2
+        buttonContainer.layer.borderColor = color.cgColor
+        buttonContainer.layer.borderWidth = 2
+    }
+    
+    func setupOpacityComponents(){
+        opacityLabel.text = "Opacity: 50 %"
+        opacity = 0.5
+    }
+    
+    func setupSizeComponents(){
+        sizeLabel.text = "Size: 50 %"
+        brushWidth = 10.5;
+    }
+    
+    func setupResetButton(){
+        
+    }
+    
+    func setupPaletteFrame(){
+        let colSize = (specificSettingsView.frame.width-40) / 8.0;
+        var i = 0
+        for entry in colors {
+            let iAsFloat = CGFloat(i)
+            let colorSelectView = UIControl(frame: CGRect(x: iAsFloat*colSize, y: 0, width: colSize, height: colSize))
+            let colorSpot = UIView(frame: CGRect(x: colSize/4.0, y: colSize/4.0, width: colSize/2.0, height: colSize/2.0))
+            colorSpot.backgroundColor = UIColor(displayP3Red: entry.0, green: entry.1, blue: entry.2, alpha: 1.0)
+            colorSpot.layer.borderWidth = 1.0
+            colorSpot.layer.borderColor = UIColor.black.cgColor
+            colorSpot.layer.cornerRadius = colSize/4.0
+            colorSelectView.addSubview(colorSpot)
+            
+            // Add listener and info used for color selection
+            colorSelectView.isUserInteractionEnabled = true
+            var ac:Selector?
+            if i == 0 {
+                ac = #selector(setBlackColor)
+                print("black selector done")
+            }else if i == 1 {
+                ac = #selector(setWhiteColor)
+                print("white selector done")
+            }else if i == 2 {
+                ac = #selector(setRedColor)
+                print("red selector done")
+            }else if i == 3 {
+                ac = #selector(setGreenColor)
+                print("green selector done")
+            }else if i == 4 {
+                ac = #selector(setBlueColor)
+                print("blue selector done")
+            }else if i == 5 {
+                ac = #selector(setYellowColor)
+                print("yellow selector done")
+            }else if i == 6 {
+                ac = #selector(setPurpleColor)
+                print("purple selector done")
+            }else {
+                ac = #selector(setCyanColor)
+                print("cyan selector done")
+            }
+            let gest: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: ac)
+            gest.numberOfTapsRequired = 1
+            colorSelectView.addGestureRecognizer(gest)
+            i+=1
+            paletteView.addSubview(colorSelectView)
+        }
     }
 
     func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
@@ -91,6 +233,10 @@ class PaintViewController: UIViewController {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Show necessary views
+        settingsView.isHidden = false
+        specificSettingsView.isHidden = false
+        
         if !swiped {
             // draw a single point
             drawLine(from: lastPoint, to: lastPoint)
@@ -150,5 +296,80 @@ class PaintViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    @objc func setBlackColor(){
+        color = UIColor.init(red: colors[0].0, green: colors[0].1, blue: colors[0].2, alpha: 1.0)
+        setupSettingsButton()
+        print("Black")
+    }
+    @objc func setWhiteColor(){
+        color = UIColor.init(red: colors[1].0, green: colors[1].1, blue: colors[1].2, alpha: 1.0)
+        print("White")
+        setupSettingsButton()
+    }
+    @objc func setRedColor(){
+        color = UIColor.init(red: colors[2].0, green: colors[2].1, blue: colors[2].2, alpha: 1.0)
+        print("Red")
+        setupSettingsButton()
+    }
+    @objc func setGreenColor(){
+        color = UIColor.init(red: colors[3].0, green: colors[3].1, blue: colors[3].2, alpha: 1.0)
+        print("Green")
+        setupSettingsButton()
+    }
+    @objc func setBlueColor(){
+        color = UIColor.init(red: colors[4].0, green: colors[4].1, blue: colors[4].2, alpha: 1.0)
+        print("Blue")
+        setupSettingsButton()
+    }
+    @objc func setYellowColor(){
+        color = UIColor.init(red: colors[5].0, green: colors[5].1, blue: colors[5].2, alpha: 1.0)
+        print("Yellow")
+        setupSettingsButton()
+    }
+    @objc func setPurpleColor(){
+        color = UIColor.init(red: colors[6].0, green: colors[6].1, blue: colors[6].2, alpha: 1.0)
+        print("Purple")
+        setupSettingsButton()
+    }
+    @objc func setCyanColor(){
+        color = UIColor.init(red: colors[7].0, green: colors[7].1, blue: colors[7].2, alpha: 1.0)
+        print("Cyan")
+        setupSettingsButton()
+    }
+    
+    // Actions
+    @IBAction func resetButtonAction(_ sender: UIButton) {
+        print("Resetting...")
+    }
+    @IBAction func sliderValueChanged(_ sender: UISlider) {
+        opacity = CGFloat(sender.value)
+    }
+/*
+    @IBAction func opacityButtonAction(_ sender: UIButton) {
+        // Will work as a toggle button
+        
+        // Make sure the "other specific settings" are hidden
+        //paletteView.isHidden = true;
+        // something something size
+        
+        //Make color visible if invis
+        if !slider.isHidden {
+            slider.isHidden = true
+            specificSettingsView.isHidden = true
+        }else {
+            slider.isHidden = false;
+            settingsView.bringSubview(toFront: slider)
+            specificSettingsView.isHidden = false
+            view.bringSubview(toFront: specificSettingsView)
+        }
+    }
+    
+    // Visual Setups
+    func setupSettingsButtons(){
+        opacitySettingsButton.backgroundColor = color
+        opacitySettingsButton.layer.cornerRadius = opacitySettingsButton.frame.width / 2
+        //opacitySettingsButton.layer.borderColor = .clear
+        opacitySettingsButton.layer.borderWidth = 1
+    }*/
 }
