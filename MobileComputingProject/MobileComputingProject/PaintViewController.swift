@@ -78,10 +78,6 @@ class PaintViewController: UIViewController {
         doneButton.action = #selector(PaintViewController.saveImage)
         cancelButton.action = #selector(PaintViewController.doSegueBack	)
         view.bringSubview(toFront: settingsView)
-        
-        //view.bringSubview(toFront: navigationMenu)
-        //view.bringSubview(toFront: paletteView)
-        //view.bringSubview(toFront: slider)
         // Do any additional setup after loading the view.
     }
     
@@ -136,7 +132,8 @@ class PaintViewController: UIViewController {
     }
     
     func setupResetButton(){
-        
+        resetButton.layer.cornerRadius = resetButton.frame.width / 2
+        resetButton.layer.borderWidth = 1
     }
     
     func setupPaletteFrame(){
@@ -231,11 +228,28 @@ class PaintViewController: UIViewController {
         // 7
         lastPoint = currentPoint
     }
+    
+    func getImageName() -> String {
+        let prefix = UIDevice.current.identifierForVendor!.uuidString
+        let date = Date()
+        let calender = Calendar.current
+        let components = calender.dateComponents([.year,.month,.day,.hour,.minute,.second], from: date)
+        
+        let year = components.year
+        let month = components.month
+        let day = components.day
+        let hour = components.hour
+        let minute = components.minute
+        let second = components.second
+        
+        let suffix = String(year!) + "-" + String(month!) + "-" + String(day!) + " " + String(hour!)  + ":" + String(minute!) + ":" +  String(second!)
+        
+        return "images/\(prefix)-\(suffix).png"
+    }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Show necessary views
         settingsView.isHidden = false
-        specificSettingsView.isHidden = false
         
         if !swiped {
             // draw a single point
@@ -273,7 +287,7 @@ class PaintViewController: UIViewController {
             */
             let image = self.mainImageView.image
             let pngImage: Data? = UIImagePNGRepresentation(image!)
-            var imageRef = storageReference.child("images/test.png")
+            let imageRef = storageReference.child(getImageName())
             _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
                 guard let metadata = metadata else{
                     print(error)
@@ -340,36 +354,10 @@ class PaintViewController: UIViewController {
     
     // Actions
     @IBAction func resetButtonAction(_ sender: UIButton) {
-        print("Resetting...")
+        mainImageView.image = nil
     }
     @IBAction func sliderValueChanged(_ sender: UISlider) {
         opacity = CGFloat(sender.value)
     }
-/*
-    @IBAction func opacityButtonAction(_ sender: UIButton) {
-        // Will work as a toggle button
-        
-        // Make sure the "other specific settings" are hidden
-        //paletteView.isHidden = true;
-        // something something size
-        
-        //Make color visible if invis
-        if !slider.isHidden {
-            slider.isHidden = true
-            specificSettingsView.isHidden = true
-        }else {
-            slider.isHidden = false;
-            settingsView.bringSubview(toFront: slider)
-            specificSettingsView.isHidden = false
-            view.bringSubview(toFront: specificSettingsView)
-        }
-    }
-    
-    // Visual Setups
-    func setupSettingsButtons(){
-        opacitySettingsButton.backgroundColor = color
-        opacitySettingsButton.layer.cornerRadius = opacitySettingsButton.frame.width / 2
-        //opacitySettingsButton.layer.borderColor = .clear
-        opacitySettingsButton.layer.borderWidth = 1
-    }*/
+
 }

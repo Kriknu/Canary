@@ -115,7 +115,7 @@
                                         <subviews>
                                             <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dww-10-vBp" userLabel="CenterButton">
                                                 <rect key="frame" x="5" y="5" width="30" height="30"/>
-                                                <color key="backgroundColor" red="0.77398337189999999" green="0.78164657360000001" blue="0.78164657360000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="9EF-po-0ve"/>
                                                     <constraint firstAttribute="width" constant="30" id="EkN-Uz-6o2"/>
