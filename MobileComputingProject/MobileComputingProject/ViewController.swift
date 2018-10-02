@@ -170,13 +170,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     func createPopOver(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Text", style: UIAlertActionStyle.default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Paint", style: UIAlertActionStyle.default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.test()}))
+        alert.addAction(UIAlertAction(title: "Paint", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.segueToPaintTool()}))
+        alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: nil))
         present(alert, animated: true)
     }
-    
-
-    func test(){
+    func segueToPaintTool(){
         self.performSegue(withIdentifier: "paintSegue", sender: self)
     }
 
