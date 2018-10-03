@@ -151,8 +151,8 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="Paint" id="S8Q-17-Qmc">
-                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="v35-Ra-6uz" userLabel="CancelButton"/>
-                                        <barButtonItem key="rightBarButtonItem" title="Done" id="mRN-oM-NCT" userLabel="DoneButton"/>
+                                        <barButtonItem key="leftBarButtonItem" tag="1" title="Cancel" id="v35-Ra-6uz" userLabel="CancelButton"/>
+                                        <barButtonItem key="rightBarButtonItem" tag="2" title="Done" id="mRN-oM-NCT" userLabel="DoneButton"/>
                                     </navigationItem>
                                 </items>
                             </navigationBar>

@@ -10,7 +10,9 @@ import UIKit
 import FirebaseStorage
 
 class PaintViewController: UIViewController {
-
+    // Canary Model
+    let canaryModel: CanaryModel = CanaryModel.sharedInstance
+    
     // Paint Views
     @IBOutlet weak var tempImageView: UIImageView!
     @IBOutlet weak var mainImageView: UIImageView!
@@ -154,28 +156,20 @@ class PaintViewController: UIViewController {
             var ac:Selector?
             if i == 0 {
                 ac = #selector(setBlackColor)
-                print("black selector done")
             }else if i == 1 {
                 ac = #selector(setWhiteColor)
-                print("white selector done")
             }else if i == 2 {
                 ac = #selector(setRedColor)
-                print("red selector done")
             }else if i == 3 {
                 ac = #selector(setGreenColor)
-                print("green selector done")
             }else if i == 4 {
                 ac = #selector(setBlueColor)
-                print("blue selector done")
             }else if i == 5 {
                 ac = #selector(setYellowColor)
-                print("yellow selector done")
             }else if i == 6 {
                 ac = #selector(setPurpleColor)
-                print("purple selector done")
             }else {
                 ac = #selector(setCyanColor)
-                print("cyan selector done")
             }
             let gest: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: ac)
             gest.numberOfTapsRequired = 1
@@ -229,23 +223,7 @@ class PaintViewController: UIViewController {
         lastPoint = currentPoint
     }
     
-    func getImageName() -> String {
-        let prefix = UIDevice.current.identifierForVendor!.uuidString
-        let date = Date()
-        let calender = Calendar.current
-        let components = calender.dateComponents([.year,.month,.day,.hour,.minute,.second], from: date)
-        
-        let year = components.year
-        let month = components.month
-        let day = components.day
-        let hour = components.hour
-        let minute = components.minute
-        let second = components.second
-        
-        let suffix = String(year!) + "-" + String(month!) + "-" + String(day!) + " " + String(hour!)  + ":" + String(minute!) + ":" +  String(second!)
-        
-        return "images/\(prefix)-\(suffix).png"
-    }
+    
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Show necessary views
@@ -267,7 +245,10 @@ class PaintViewController: UIViewController {
 
     @objc func saveImage(){
         //TODO: Add error handling if we fail to upload image
-        self.uploadImageToFirebase()
+        //let imageName = getImageName()
+        //canaryModel.getClosestLibrary(lat: <#T##Double#>, long: <#T##Double#>)
+        //self.uploadImageToFirebase(imageName)
+        canaryModel.addMessage(mainImageView.image)
         self.doSegueBack()
     }
     
@@ -275,31 +256,7 @@ class PaintViewController: UIViewController {
         self.performSegue(withIdentifier: "mainView", sender: self)
     }
 
-    @objc func uploadImageToFirebase(){
-        print("Uploading...")
-        do {
-            print("Do we trigger this function?")
-            let storage = Storage.storage()
-            let storageReference = storage.reference()
-            /*let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
-            let data = try Data.init(contentsOf: url!)
-            let image = UIImage(data: data)
-            */
-            let image = self.mainImageView.image
-            let pngImage: Data? = UIImagePNGRepresentation(image!)
-            let imageRef = storageReference.child(getImageName())
-            _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
-                guard let metadata = metadata else{
-                    print(error)
-                    return
-                }
-                let downloadUrl = metadata
-                print(downloadUrl)
-            })
-        } catch{
-            print(error)
-        }
-    }
+    
 
     /*
     // MARK: - Navigation
@@ -359,5 +316,4 @@ class PaintViewController: UIViewController {
     @IBAction func sliderValueChanged(_ sender: UISlider) {
         opacity = CGFloat(sender.value)
     }
-
 }

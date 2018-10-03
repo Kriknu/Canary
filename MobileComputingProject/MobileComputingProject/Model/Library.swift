@@ -14,10 +14,10 @@ class Library {
     var id: Int
     var nbrOfFloors: Int{
         get{
-            return floorPlans.count
+            return floors.count
         }
     }
-    var floorPlans = [String: String]()
+    var floors: [Floor] = []
     
     var longitude: Double
     var latitude: Double
@@ -29,10 +29,16 @@ class Library {
         self.latitude = lat
     }
     
-    func addFloorPlan(nameOfFloor: String, urlToPicture: String) -> Bool{
-        let oldCount = floorPlans.count
-        floorPlans[nameOfFloor] = urlToPicture
-        let newCount = floorPlans.count
+    func addFloor(nameOfFloor: String, urlToPicture: String) -> Bool{
+        let oldCount = floors.count
+        floors.append(Floor(nameOfFloor, url: urlToPicture))
+        let newCount = floors.count
         return oldCount < newCount
     }
+    
+    func getFloor() -> Floor{
+        return floors[0] //Dummy value for now :TODO
+    }
+    
+    
 }

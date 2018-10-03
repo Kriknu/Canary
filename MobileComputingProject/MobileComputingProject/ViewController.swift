@@ -14,18 +14,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     @IBOutlet weak var floorPlanView: UIImageView!
     @IBOutlet weak var floorPlanScrollView: UIScrollView!
     
-    // GPS
-    var locationManager: CLLocationManager = CLLocationManager()
-    var longitude: Double {
-        get{
-            return Double(self.getLocation()?.coordinate.longitude ?? 0);
-        }
-    }
-    var latitude: Double {
-        get{
-            return Double(self.getLocation()?.coordinate.latitude ?? 0);
-        }
-    }
+    // Singleton Model
+    var canaryModel: CanaryModel = CanaryModel.sharedInstance
 
     // Trashcan
     var trashCanView:UIImageView = UIImageView()
@@ -34,27 +24,31 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        ///////////////////////
+        // ***************** //
+        // *** LOAD DATA *** //
+        // ***************** //
+        ///////////////////////
+        
+        // 1. Load floor plan
+        let floorImageURL = canaryModel.getClosestLibrary().getFloor().urlToFloorPlan
+        
+        // 2. Load messages
+        for message in canaryModel.getClosestLibrary().getFloor().messages {
+            addPoi(x: CGFloat(message.x), y: CGFloat(message.y))
+        }
+        
         // Scroll level specification
-        self.floorPlanScrollView.minimumZoomScale = 1.0
-        self.floorPlanScrollView.maximumZoomScale = 6.0
+        self.floorPlanScrollView.minimumZoomScale = 0.0
+        self.floorPlanScrollView.maximumZoomScale = 10.0
         
         // Setup gesture recognition
-        let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(imageTapped))
+        let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         floorPlanView.isUserInteractionEnabled = true
         floorPlanView.addGestureRecognizer(addPinRecognizer)
         
-        // Setup location manager for retrieving GPS position
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.startUpdatingLocation()
-        }else{
-            print("Location services not enabled")
-        }
-        
         do {
-            let url = URL(string:"https://i.imgur.com/DkvC9R6.png")
+            let url = URL(string:floorImageURL)
             let data = try Data.init(contentsOf: url!)
             self.floorPlanView.image = UIImage(data: data)
         }catch{
@@ -62,20 +56,21 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
         print("started")
         
-        // Load trashcan icon
-        do {
-            let url = URL(string:"https://i.imgur.com/jhav5sW.png")
-            let data = try Data.init(contentsOf: url!)
-            let image = UIImage(data: data)
-            let viewX = UIScreen.main.bounds.width / 2 - 64 / 2
-            let viewY = UIScreen.main.bounds.height - 96
-            trashCanView = UIImageView(frame: CGRect(x: viewX, y: viewY, width: 64, height: 64))
-            trashCanView.image = image
-            view.addSubview(trashCanView)
-            trashCanView.isHidden = true
-            trashCanView.isUserInteractionEnabled = false
-        } catch {
-            print(error)
+        setupTrashcan()
+    }
+    
+    /*
+        Saves the location of the point
+    */
+    @objc func addMessage(gesture: UITapGestureRecognizer){
+        if gesture.state == .began {
+            // Save coordinates for model to fetch
+            let point = gesture.location(in: gesture.view)
+            canaryModel.longPressXCoord = Double(point.x)
+            canaryModel.longPressXCoord = Double(point.y)
+            
+            //Create menu for type of message to add
+            createPopOver()
         }
     }
 
@@ -86,19 +81,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.floorPlanView
-    }
-    
-    @objc func imageTapped(gesture: UITapGestureRecognizer) {
-        if gesture.state == .began {
-            let point = gesture.location(in: gesture.view)
-            print("X: ")
-            print(point.x)
-            print("Y: ")
-            print(point.y)
-            print("latitude: \(latitude) || longitude: \(longitude)")
-            //addPoi(x: point.x, y: point.y)
-            createPopOver()
-        }
     }
     
     func addPoi(x: CGFloat, y: CGFloat){
@@ -163,9 +145,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
-    func getLocation() -> CLLocation? {
-        return self.locationManager.location
-    }
+    
     
     func createPopOver(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -174,8 +154,27 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: nil))
         present(alert, animated: true)
     }
+    
     func segueToPaintTool(){
         self.performSegue(withIdentifier: "paintSegue", sender: self)
+    }
+    
+    func setupTrashcan(){
+        // Load trashcan icon
+        do {
+            let url = URL(string:"https://i.imgur.com/jhav5sW.png")
+            let data = try Data.init(contentsOf: url!)
+            let image = UIImage(data: data)
+            let viewX = UIScreen.main.bounds.width / 2 - 64 / 2
+            let viewY = UIScreen.main.bounds.height - 96
+            trashCanView = UIImageView(frame: CGRect(x: viewX, y: viewY, width: 64, height: 64))
+            trashCanView.image = image
+            view.addSubview(trashCanView)
+            trashCanView.isHidden = true
+            trashCanView.isUserInteractionEnabled = false
+        } catch {
+            print(error)
+        }
     }
 
 }

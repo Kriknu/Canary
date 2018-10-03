@@ -11,47 +11,151 @@
         Singleton instance, a handler for all data
  */
 import Foundation
+import CoreLocation
+import FirebaseStorage
 
-class CanaryModel {
+class CanaryModel: NSObject, CLLocationManagerDelegate{
     static let sharedInstance  = CanaryModel()
+    var libraryID = 0;
     
-    var libraries = [Int: Library]()
-    var createdLibraries = 0
-    
-    func getLibrary(byID id:Int) -> Library?{
-        return libraries[id]
+    // GPS
+    var locationManager: CLLocationManager = CLLocationManager()
+    var longitude: Double {
+        get{return Double(self.getLocation()?.coordinate.longitude ?? 0)}
+    }
+    var latitude: Double {
+        get{return Double(self.getLocation()?.coordinate.latitude ?? 0)}
     }
     
-    func createLibrary(name: String){
-        let tmpLibrary = Library(name: name, id: createdLibraries, long: 1.0, lat: 1.0)
-        libraries[createdLibraries] = tmpLibrary
-        createdLibraries += 1
+    // Model stuff
+    var libraries: [Library] = []
+    var currentFloor = 0
+    var longPressXCoord = -1.0
+    var longPressYCoord = -1.0
+    
+    // Functions
+    
+    
+    func getLibrary(byName name: String) -> Library?{
+        for lib in libraries {
+            if lib.name == name {return lib}
+        }
+        return nil
     }
     
-    func deleteLibrary(){
+    
+    
+    func deleteLibrary(byID id: Int){
         //TODO
     }
     
     /*
      Untested method
      */
-    func getClosestLibrary(lat: Double, long: Double) -> Library?{
+    func getClosestLibrary() -> Library{
         var closestDistanceFound = 100000000000.0
-        var closestLibrary: Library?
-        for (_, lib) in libraries {
-            let deltaLat = pow((lib.latitude - lat), 2)
-            let deltaLong = pow((lib.longitude - long), 2)
+        var closestLibrary: Library
+        for lib in libraries {
+            let deltaLat = pow((lib.latitude - latitude), 2)
+            let deltaLong = pow((lib.longitude - longitude), 2)
             let distance = sqrt(deltaLat+deltaLong)
             
             if distance < closestDistanceFound {
                 closestDistanceFound = distance
-                closestLibrary = lib
+                return lib
             }
         }
-        return closestLibrary
+        return libraries[0]
     }
     
+    func getLocation() -> CLLocation? {
+        return self.locationManager.location
+    }
     
+    func uploadImageToFirebase(_ imageName: String, img: UIImage?){
+        print("Uploading...")
+        do {
+            print("Do we trigger this function?")
+            let storage = Storage.storage()
+            let storageReference = storage.reference()
+            let fileName = imageName
+            
+            let image = img
+            let pngImage: Data? = UIImagePNGRepresentation(image!)
+            let imageRef = storageReference.child(fileName)
+            _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
+                guard let metadata = metadata else{
+                    //print(error)
+                    return
+                }
+                //let downloadUrl = metadata.url
+                //print(downloadUrl)
+            })
+            let tmpRef = storageReference.child(fileName)
+            tmpRef.downloadURL { url, error in
+                if let error = error {
+                    // Handle any errors
+                    print("Some error getting URL")
+                } else {
+                    // Get the download URL for 'images/stars.jpg'
+                    print(url?.absoluteString)
+                }
+            }
+        } catch{
+            print(error)
+        }
+    }
     
-    private init() {}
+    func getImageName() -> String {
+        let prefix = UIDevice.current.identifierForVendor!.uuidString
+        let date = Date()
+        let calender = Calendar.current
+        let components = calender.dateComponents([.year,.month,.day,.hour,.minute,.second], from: date)
+        
+        let year = components.year
+        let month = components.month
+        let day = components.day
+        let hour = components.hour
+        let minute = components.minute
+        let second = components.second
+        
+        let suffix = String(year!) + "-" + String(month!) + "-" + String(day!) + " " + String(hour!)  + ":" + String(minute!) + ":" +  String(second!)
+        return "images/\(prefix)-\(suffix).png"
+    }
+    
+    func addMessage(_ img: UIImage?){
+        let data = getImageName()
+        getClosestLibrary().getFloor().addMessage(x: longPressXCoord, y: longPressYCoord, url: data)
+    }
+    
+    func addFloor(name: String, data: String){
+        getClosestLibrary().addFloor(nameOfFloor: name, urlToPicture: data)
+    }
+    
+    func addLibrary(name: String, lat: Double, lon: Double){
+        let tmpLibrary = Library(name: name, id: libraryID, long: lon, lat: lat)
+        libraries.append(tmpLibrary)
+        libraryID += 1
+    }
+    
+    // *** PRIVATE CONSTRUCTOR *** //
+    
+    private override init() {
+        super.init()
+        // Setup location manager for retrieving GPS position
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+        }else{
+            print("Location services not enabled")
+        }
+        
+        // *** DUMMY VALUES BEGIN *** //
+        addLibrary(name: "Kuggen", lat: 0.0, lon: 0.0)
+        addFloor(name: "Andra Våningen", data: "https://firebasestorage.googleapis.com/v0/b/canary-e717d.appspot.com/o/floorplans%2FFloorplan_v3.png?alt=media&token=a251150b-ebed-4932-b304-bd736dc3dea9")
+        // **** DUMMY VALUES END **** //
+        
+    }
 }
