@@ -12,10 +12,12 @@ class Message {
     var x: Double
     var y: Double
     var urlToMessage: String
+    let id: Int
     
-    init(x: Double, y: Double, url:String){
+    init(x: Double, y: Double, url:String, id: Int){
         self.x = x
         self.y = y
-        self.urlToMessage = url        
+        self.urlToMessage = url
+        self.id = id
     }
 }

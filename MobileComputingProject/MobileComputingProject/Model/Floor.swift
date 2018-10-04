@@ -18,7 +18,7 @@ class Floor {
         self.urlToFloorPlan = url
     }
     
-    func addMessage(x: Double, y: Double, url: String){
-        messages.append(Message(x: x, y: y, url: url))
+    func addMessage(x: Double, y: Double, url: String, id: Int){
+        messages.append(Message(x: x, y: y, url: url, id: id))
     }
 }

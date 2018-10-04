@@ -41,8 +41,17 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     // Model stuff
     var libraries: [Library] = []
     var currentFloor = 0
-    var longPressXCoord = -1.0
-    var longPressYCoord = -1.0
+    
+    // Vars changed for creating message #ShitCodeDontHate
+    var latestLongPressXCoord = -1.0
+    var latestLongPressYCoord = -1.0
+    var latestID = -1;
+    
+    // lazy meaning that this wont get initialized until value is fetched the first time
+    lazy var messageId = getClosestLibrary().getFloor().messages.count
+    
+    // Connection between a Library and it's UIView (aka, the pin/poi)
+    var libraryViews: Dictionary = [UIView: Library]()
     
     // Functions
     
@@ -141,9 +150,9 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         return "images/\(prefix)-\(suffix).png"
     }
     
-    func addMessage(_ img: UIImage?){
+    func addMessage(){
         let data = getImageName()
-        getClosestLibrary().getFloor().addMessage(x: longPressXCoord, y: longPressYCoord, url: data)
+        getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: data, id: latestID)
     }
     
     func addFloor(name: String, data: String){
@@ -154,6 +163,16 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         let tmpLibrary = Library(name: name, id: libraryID, long: lon, lat: lat)
         libraries.append(tmpLibrary)
         libraryID += 1
+    }
+    
+    func getMessage(_ byId: Int) -> Message?{
+        let msg: Message? = nil
+        for message in getClosestLibrary().getFloor().messages {
+            if message.id == byId{
+                return message
+            }
+        }
+        return msg
     }
     
     // *** PRIVATE CONSTRUCTOR *** //
