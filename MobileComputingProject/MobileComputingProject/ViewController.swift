@@ -41,8 +41,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         print(canaryModel.getClosestLibrary().getFloor().messages.count)
         
         // Scroll level specification
-        self.floorPlanScrollView.minimumZoomScale = 0.0
-        self.floorPlanScrollView.maximumZoomScale = 10.0
+        self.floorPlanScrollView.minimumZoomScale = 0.4
+        self.floorPlanScrollView.maximumZoomScale = 2.0
+        self.floorPlanView.cen
         
         // Setup gesture recognition
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
@@ -61,8 +62,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         if gesture.state == .began {
             // Save coordinates for model to fetch
             let point = gesture.location(in: gesture.view)
-            self.canaryModel.latestLongPressXCoord = Double(point.x)
-            self.canaryModel.latestLongPressXCoord = Double(point.y)
+            self.canaryModel.latestLongPressXCoord = Float(point.x)
+            self.canaryModel.latestLongPressXCoord = Float(point.y)
             let strTag = "\(String(UUID().hashValue))\(String(canaryModel.messageId))"
             let tmpTag = Int(strTag)
             self.canaryModel.latestID = tmpTag ?? -1
@@ -130,8 +131,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let newY = floorPlanY - movePoiOffsetY
             
             let tmpMessage = canaryModel.getMessage(view!.tag)
-            tmpMessage?.x = Double(newX)
-            tmpMessage?.y = Double(newY)
+            tmpMessage?.x = Float(newX)
+            tmpMessage?.y = Float(newY)
             view!.frame = CGRect(x: newX, y: newY, width: 48, height: 48)
         }
         // If LongPress ended

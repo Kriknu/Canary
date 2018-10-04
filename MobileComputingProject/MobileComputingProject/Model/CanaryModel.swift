@@ -32,8 +32,8 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     var currentFloor = 0
     
     // Vars changed for creating message #ShitCodeDontHate
-    var latestLongPressXCoord = -1.0
-    var latestLongPressYCoord = -1.0
+    var latestLongPressXCoord: Float = -1.0
+    var latestLongPressYCoord: Float = -1.0
     var latestID = -1;
     
     // lazy meaning that this wont get initialized until value is fetched the first time

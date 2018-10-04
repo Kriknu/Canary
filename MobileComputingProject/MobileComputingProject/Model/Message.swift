@@ -9,12 +9,12 @@
 import Foundation
 
 class Message {
-    var x: Double
-    var y: Double
+    var x: Float
+    var y: Float
     var urlToMessage: String
     let id: Int
     
-    init(x: Double, y: Double, url:String, id: Int){
+    init(x: Float, y: Float, url:String, id: Int){
         self.x = x
         self.y = y
         self.urlToMessage = url
