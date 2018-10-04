@@ -33,3 +33,9 @@ If there is an issue stating "Certificate has either expired or has been revoked
 5. Press plus sign in the bottom left corner of the window
 6. Done, done, done
 7. Run 
+
+*** Database structure ***
+I have added a file called database_structure.json. This file is only used as an reference guide for us 
+when making queries to the database.
+Tutorial for the database: https://www.raywenderlich.com/3-firebase-tutorial-getting-started
+
