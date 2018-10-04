@@ -1,0 +1,17 @@
+{
+  Library: [{
+    name: "",
+    long: 0,
+    lat: 0,
+    floors: [{
+      name: ""
+      content: ""
+      messages: [{
+        x: 0,
+        y: 0,
+        content: ""
+        user: ""
+      }]
+    }]
+  }]
+}
