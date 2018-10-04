@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import FirebaseUI
 
 class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate {
     
@@ -46,14 +47,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         floorPlanView.isUserInteractionEnabled = true
         floorPlanView.addGestureRecognizer(addPinRecognizer)
-        
-        do {
-            let url = URL(string:floorImageURL)
-            let data = try Data.init(contentsOf: url!)
-            self.floorPlanView.image = UIImage(data: data)
-        }catch{
-            print(error)
-        }
+        self.floorPlanView.sd_setImage(with: canaryModel.downloadImageFromFirebase("floorplans/Floorplan_v3.png"))
         print("started")
         
         setupTrashcan()

@@ -72,6 +72,13 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         return self.locationManager.location
     }
     
+    func downloadImageFromFirebase(_ path: String) -> StorageReference {
+        let storage = Storage.storage()
+        let reference = storage.reference()
+        let imageReference = reference.child(path)
+        return imageReference
+    }
+
     func uploadImageToFirebase(_ imageName: String, img: UIImage?){
         print("Uploading...")
         do {

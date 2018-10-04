@@ -8,4 +8,5 @@ target 'MobileComputingProject' do
   # Pods for MobileComputingProject
   pod 'Firebase/Core'
   pod 'Firebase/Storage'
+  pod 'FirebaseUI/Storage'
 end
