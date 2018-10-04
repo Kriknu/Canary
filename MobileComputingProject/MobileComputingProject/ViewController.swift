@@ -18,6 +18,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     // Singleton Model
     var canaryModel: CanaryModel = CanaryModel.sharedInstance
 
+
     // Trashcan
     var trashCanView:UIImageView = UIImageView()
 
@@ -50,9 +51,29 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         self.floorPlanView.sd_setImage(with: canaryModel.downloadImageFromFirebase("floorplans/Floorplan_v3.png"))
         print("started")
         
+        // Test query in order to write to database
+        let dbQuery: NSDictionary = [
+            "name": "Lol",
+            "long":10,
+            "lat":5,
+            "floors":[
+                "name": 1,
+                "content":
+                "reference to image",
+                "messages":[
+                    "x": 0,
+                    "y": 0,
+                    "content": "Reference to drawing",
+                    "user": "userID"
+                ]
+            ]
+        ]
+        canaryModel.writeToDatabase(path: "Library", value: dbQuery)
+
         setupTrashcan()
     }
-    
+
+
     /*
         Saves the location of the point
     */

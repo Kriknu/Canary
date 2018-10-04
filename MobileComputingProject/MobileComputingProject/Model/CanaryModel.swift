@@ -12,12 +12,23 @@
  */
 import Foundation
 import CoreLocation
+import FirebaseDatabase
 import FirebaseStorage
 
 class CanaryModel: NSObject, CLLocationManagerDelegate{
     static let sharedInstance  = CanaryModel()
     var libraryID = 0;
     
+    // Database
+    func writeToDatabase(path: String, value: NSDictionary){
+        let ref = Database.database().reference()
+        ref.child(path).setValue(value)
+    }
+
+    func readFromDatabase(){
+        //TODO: See how we fetch items from database
+    }
+
     // GPS
     var locationManager: CLLocationManager = CLLocationManager()
     var longitude: Double {
