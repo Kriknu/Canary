@@ -248,7 +248,7 @@ class PaintViewController: UIViewController {
         //let imageName = getImageName()
         //canaryModel.getClosestLibrary(lat: <#T##Double#>, long: <#T##Double#>)
         //self.uploadImageToFirebase(imageName)
-        canaryModel.addMessage(mainImageView.image)
+        self.canaryModel.addMessage()
         self.doSegueBack()
     }
     

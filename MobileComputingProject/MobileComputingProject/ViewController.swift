@@ -35,8 +35,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         
         // 2. Load messages
         for message in canaryModel.getClosestLibrary().getFloor().messages {
-            addPoi(x: CGFloat(message.x), y: CGFloat(message.y))
+            self.addPoi(x: CGFloat(message.x), y: CGFloat(message.y))
         }
+        print(canaryModel.getClosestLibrary().getFloor().messages.count)
         
         // Scroll level specification
         self.floorPlanScrollView.minimumZoomScale = 0.0
@@ -66,8 +67,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         if gesture.state == .began {
             // Save coordinates for model to fetch
             let point = gesture.location(in: gesture.view)
-            canaryModel.longPressXCoord = Double(point.x)
-            canaryModel.longPressXCoord = Double(point.y)
+            self.canaryModel.latestLongPressXCoord = Double(point.x)
+            self.canaryModel.latestLongPressXCoord = Double(point.y)
+            let strTag = "\(String(UUID().hashValue))\(String(canaryModel.messageId))"
+            let tmpTag = Int(strTag)
+            self.canaryModel.latestID = tmpTag ?? -1
             
             //Create menu for type of message to add
             createPopOver()
@@ -90,6 +94,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let image = UIImage(data: data)
             let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
             view.image = image
+            view.tag = self.canaryModel.latestID
             
             // Add a gesture recognizer to every created pin to move it
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
@@ -130,6 +135,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let newX = floorPlanX - movePoiOffsetX
             let newY = floorPlanY - movePoiOffsetY
             
+            let tmpMessage = canaryModel.getMessage(view!.tag)
+            tmpMessage?.x = Double(newX)
+            tmpMessage?.y = Double(newY)
             view!.frame = CGRect(x: newX, y: newY, width: 48, height: 48)
         }
         // If LongPress ended
