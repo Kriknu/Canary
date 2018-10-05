@@ -25,17 +25,17 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         ref.child(path).setValue(value)
     }
 
-    func readFromDatabase(path: String) -> NSDictionary?{
+    func readFromDatabase(path: String, completion: @escaping (NSDictionary) -> Void) {
         //TODO: Make this work async
         var dbResponse: NSDictionary?
         let ref = Database.database().reference()
         ref.child(path).observeSingleEvent(of: .value, with: {(snapshot) in
             let value = snapshot.value as? NSDictionary
             dbResponse = value
+            completion(dbResponse!)
         }) {(error) in
             print(error.localizedDescription)
         }
-        return dbResponse
     }
 
     // GPS
@@ -111,7 +111,20 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         return self.locationManager.location
     }
     
-    func downloadImageFromFirebase(_ path: String) -> StorageReference {
+    func downloadImageFromFirebase(_ path: String, completion: @escaping (UIImage) -> Void) {
+        let storageReference: StorageReference = downloadImageReferenceFromFirebase(path)
+        storageReference.getData(maxSize: 1*1024*1024) {data, error in
+            if let error = error {
+                // Uh-oh, an error occurred!
+            } else {
+                // Data for "images/island.jpg" is returned
+                let image = UIImage(data: data!)
+                completion(image!)
+            }
+        }
+    }
+
+    func downloadImageReferenceFromFirebase(_ path: String) -> StorageReference {
         let storage = Storage.storage()
         let reference = storage.reference()
         let imageReference = reference.child(path)
