@@ -29,9 +29,11 @@ class PaintViewController: UIViewController {
     @IBOutlet weak var sizeLabel: UILabel!
     @IBOutlet weak var paletteView: UIView!
     @IBOutlet weak var buttonContainer: UIView!
+    @IBOutlet weak var brushColor: UIImageView!
     @IBOutlet weak var specificSettingsView: UIView!
     @IBOutlet weak var settingsView: UIView!
     @IBOutlet weak var resetButton: UIButton!
+    @IBOutlet weak var paintDot: UIView!
     
     // Actions
     @IBAction func settingsToggleAction(_ sender: UIButton) {
@@ -56,7 +58,7 @@ class PaintViewController: UIViewController {
 
     var lastPoint = CGPoint.zero
     var color = UIColor.black
-    var brushWidth: CGFloat = 10.0
+    var brushWidth: CGFloat = 11
     var opacity: CGFloat = 1.0
     var swiped = false
     
@@ -67,15 +69,14 @@ class PaintViewController: UIViewController {
         (0 / 255, 255.0 / 255, 0 / 255),                    // green
         (0 / 255, 0 / 255, 255.0 / 255),                    // blue
         (255.0 / 255, 204.0 / 255, 0 / 255),                // yellow
-        (11.0 / 255, 0 / 255, 103.0 / 255),                 // purple
+        (184.0 / 255, 0 / 255, 172.0 / 255),                // purple
         (255.0 / 255, 255.0 / 255, 255.0 / 255)             // white
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initComponents();
-        //setupSettingsButtons()
+        initComponents()
         
         doneButton.action = #selector(PaintViewController.saveImage)
         cancelButton.action = #selector(PaintViewController.doSegueBack	)
@@ -104,7 +105,6 @@ class PaintViewController: UIViewController {
     }
     
     func setupSpecificSettings(){
-        setupSettingsButton()
         specificSettingsView.layer.cornerRadius = 20
         specificSettingsView.layer.masksToBounds = true
         setupOpacityComponents()
@@ -112,15 +112,15 @@ class PaintViewController: UIViewController {
     }
     
     func setupSettingsButton(){
-        buttonContainer.backgroundColor = .clear
         let x = (buttonContainer.frame.width - brushWidth) / 2
-        let y = (buttonContainer.frame.height - brushWidth) / 2
-        settingsButton.frame = CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: brushWidth, height: brushWidth))
-        settingsButton.layer.cornerRadius = settingsButton.frame.width / 2
-        settingsButton.backgroundColor = color
-        buttonContainer.layer.cornerRadius = buttonContainer.frame.width / 2
-        buttonContainer.layer.borderColor = color.cgColor
-        buttonContainer.layer.borderWidth = 2
+        let y = 0 - (brushWidth / 2) + 44
+        
+        paintDot.frame = CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: brushWidth, height: brushWidth))
+        paintDot.alpha = opacity
+        paintDot.layer.cornerRadius = brushWidth / 2
+        paintDot.backgroundColor = color
+        
+        brushColor.alpha = opacity
     }
     
     func setupOpacityComponents(){
@@ -130,7 +130,6 @@ class PaintViewController: UIViewController {
     
     func setupSizeComponents(){
         sizeLabel.text = "Size: 50 %"
-        brushWidth = 10.5;
     }
     
     func setupResetButton(){
@@ -157,7 +156,7 @@ class PaintViewController: UIViewController {
             if i == 0 {
                 ac = #selector(setBlackColor)
             }else if i == 1 {
-                ac = #selector(setWhiteColor)
+                ac = #selector(setTurquoiseColor)
             }else if i == 2 {
                 ac = #selector(setRedColor)
             }else if i == 3 {
@@ -169,7 +168,7 @@ class PaintViewController: UIViewController {
             }else if i == 6 {
                 ac = #selector(setPurpleColor)
             }else {
-                ac = #selector(setCyanColor)
+                ac = #selector(setWhiteColor)
             }
             let gest: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: ac)
             gest.numberOfTapsRequired = 1
@@ -276,41 +275,49 @@ class PaintViewController: UIViewController {
     
     @objc func setBlackColor(){
         color = UIColor.init(red: colors[0].0, green: colors[0].1, blue: colors[0].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushBlack")
         setupSettingsButton()
         print("Black")
     }
     @objc func setWhiteColor(){
         color = UIColor.init(red: colors[1].0, green: colors[1].1, blue: colors[1].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushWhite")
         print("White")
         setupSettingsButton()
     }
     @objc func setRedColor(){
         color = UIColor.init(red: colors[2].0, green: colors[2].1, blue: colors[2].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushRed")
         print("Red")
         setupSettingsButton()
     }
     @objc func setGreenColor(){
         color = UIColor.init(red: colors[3].0, green: colors[3].1, blue: colors[3].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushGreen")
         print("Green")
         setupSettingsButton()
     }
     @objc func setBlueColor(){
         color = UIColor.init(red: colors[4].0, green: colors[4].1, blue: colors[4].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushBlue")
         print("Blue")
         setupSettingsButton()
     }
     @objc func setYellowColor(){
         color = UIColor.init(red: colors[5].0, green: colors[5].1, blue: colors[5].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushYellow")
         print("Yellow")
         setupSettingsButton()
     }
     @objc func setPurpleColor(){
         color = UIColor.init(red: colors[6].0, green: colors[6].1, blue: colors[6].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushPurple")
         print("Purple")
         setupSettingsButton()
     }
-    @objc func setCyanColor(){
+    @objc func setTurquoiseColor(){
         color = UIColor.init(red: colors[7].0, green: colors[7].1, blue: colors[7].2, alpha: 1.0)
+        brushColor.image = UIImage(named: "BrushTurquoise")
         print("Cyan")
         setupSettingsButton()
     }
@@ -318,8 +325,5 @@ class PaintViewController: UIViewController {
     // Actions
     @IBAction func resetButtonAction(_ sender: UIButton) {
         mainImageView.image = nil
-    }
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
-        opacity = CGFloat(sender.value)
     }
 }

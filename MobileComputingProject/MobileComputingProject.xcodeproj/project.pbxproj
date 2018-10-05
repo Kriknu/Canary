@@ -22,6 +22,7 @@
 		D33ECBE2CC804D1C8E63877B /* Pods_MobileComputingProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA10D3149EC0F6271E87C549 /* Pods_MobileComputingProject.framework */; };
 		EB322BE821675FC5007F2378 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB322BE721675FC5007F2378 /* LoadingViewController.swift */; };
 		EB322BEE21677103007F2378 /* loading_screen_04.json in Resources */ = {isa = PBXBuildFile; fileRef = EB322BED21677103007F2378 /* loading_screen_04.json */; };
+		EBCBB0F82167869D00C0F22B /* TextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCBB0F72167869D00C0F22B /* TextViewController.swift */; };
 		F6383D38215E3C0E008FD856 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6383D37215E3C0E008FD856 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		DA10D3149EC0F6271E87C549 /* Pods_MobileComputingProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileComputingProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB322BE721675FC5007F2378 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		EB322BED21677103007F2378 /* loading_screen_04.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading_screen_04.json; sourceTree = "<group>"; };
+		EBCBB0F72167869D00C0F22B /* TextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewController.swift; sourceTree = "<group>"; };
 		F6383D37215E3C0E008FD856 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +100,7 @@
 				EB322BE721675FC5007F2378 /* LoadingViewController.swift */,
 				EB322BED21677103007F2378 /* loading_screen_04.json */,
 				9C1914B5215E5CB800DDF46F /* PaintViewController.swift */,
+				EBCBB0F72167869D00C0F22B /* TextViewController.swift */,
 				9C1B6D3B214A9A25006F0FE5 /* Main.storyboard */,
 				9C8656382164EDCE00D39C57 /* Views */,
 				9C535FFD215C046D006C7BB1 /* Model */,
@@ -281,6 +284,7 @@
 				9C535FFF215C06A2006C7BB1 /* Library.swift in Sources */,
 				9C536004215E0B2F006C7BB1 /* Message.swift in Sources */,
 				9C535FFC215C041F006C7BB1 /* CanaryModel.swift in Sources */,
+				EBCBB0F82167869D00C0F22B /* TextViewController.swift in Sources */,
 				EB322BE821675FC5007F2378 /* LoadingViewController.swift in Sources */,
 				9C86563C2164EE2F00D39C57 /* PointOfInterest.swift in Sources */,
 				9C8656372164ABBB00D39C57 /* Floor.swift in Sources */,
