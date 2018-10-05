@@ -244,10 +244,16 @@ class PaintViewController: UIViewController {
 
     @objc func saveImage(){
         //TODO: Add error handling if we fail to upload image
-        //let imageName = getImageName()
+        /*
+         1.
+         Get device ID
+         2. Add Incrementer
+         3.
+         */
+        let imageName = self.canaryModel.getImageName()
         //canaryModel.getClosestLibrary(lat: <#T##Double#>, long: <#T##Double#>)
-        //self.uploadImageToFirebase(imageName)
-        self.canaryModel.addMessage()
+        self.canaryModel.uploadImageToFirebase(imageName, img: self.mainImageView.image)
+        self.canaryModel.addMessage(imageName: imageName)
         self.doSegueBack()
     }
     

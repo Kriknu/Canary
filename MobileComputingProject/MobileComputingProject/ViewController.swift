@@ -223,32 +223,45 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         if shouldRepaintToOverview()  {
             print("GIEF Overview")
             for subview in floorPlanView.subviews {
-                // Fix to display the other icon instead
-                // TODO: BRYT UT TILL EN FUNKTION
+                repaintView(view: subview, standardImage: true)
 
             }
         }else if shouldRepaintToDetailedView() {
             print("GIEF Detail")
             for subview in floorPlanView.subviews {
-                canaryModel.downloadImageFromFirebase("images/test.png", completion: {data in
-                    // Here we set the values when we need to create gui items
-                    let detailedImage: UIImage = data
-                    let tmpOrigin = subview.frame.origin
-                    var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 100, height: 100)))
-                    newView.image = data
-                    newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
-                    newView.layer.cornerRadius = 10
-                    newView.layer.borderWidth = 1
-                    newView.layer.borderColor = UIColor.black.cgColor
-                    subview.removeFromSuperview()
-                    self.floorPlanView.addSubview(newView)
-                    //subview.backgroundColor = UIColor(patternImage: detailedImage)
-                })
+                repaintView(view: subview, standardImage: false)
             }
         }
         lastZoomLevel = self.floorPlanScrollView.zoomScale
     }
     
+    func repaintView(view: UIView, standardImage: Bool){
+        var url: String
+        if(standardImage){
+            url = "assets/speakbubble.png"
+        } else {
+            let message = canaryModel.getMessage(view.tag)
+            url = (message?.urlToMessage)!
+        }
+        canaryModel.downloadImageFromFirebase(url, completion: {data in
+            // Here we set the values when we need to create gui items
+            let detailedImage: UIImage = data
+            let tmpOrigin = view.frame.origin
+            var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 48, height: 48)))
+            newView.image = data
+            if(!standardImage){
+                newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+                newView.layer.cornerRadius = 10
+                newView.layer.borderWidth = 1
+                newView.layer.borderColor = UIColor.black.cgColor
+            }
+            newView.tag = view.tag
+            view.removeFromSuperview()
+            self.floorPlanView.addSubview(newView)
+            //subview.backgroundColor = UIColor(patternImage: detailedImage)
+        })
+    }
+
     func shouldRepaintToOverview() -> Bool{
         return lastZoomLevel > zoomLevelTreshhold && floorPlanScrollView.zoomScale < zoomLevelTreshhold
     }

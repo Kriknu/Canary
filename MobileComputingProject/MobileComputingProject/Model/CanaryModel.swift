@@ -115,6 +115,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         let storageReference: StorageReference = downloadImageReferenceFromFirebase(path)
         storageReference.getData(maxSize: 1*1024*1024) {data, error in
             if let error = error {
+                print(error)
                 // Uh-oh, an error occurred!
             } else {
                 // Data for "images/island.jpg" is returned
@@ -182,9 +183,9 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         return "images/\(prefix)-\(suffix).png"
     }
     
-    func addMessage(){
-        let data = getImageName()
-        getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: data, id: latestID)
+    func addMessage(imageName: String){
+        print("Does this fire ever?")
+        getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: imageName, id: latestID)
     }
     
     func addFloor(name: String, data: String){
