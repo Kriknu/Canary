@@ -11,7 +11,7 @@ import Lottie
 
 class LoadingViewController: UIViewController {
     
-    var animationView: LOTAnimationView = LOTAnimationView(name: "loading_screen_03");
+    var animationView: LOTAnimationView = LOTAnimationView(name: "loading_screen_04");
 
     override func viewDidLoad() {
         super.viewDidLoad()
