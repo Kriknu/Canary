@@ -188,12 +188,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         alert.addAction(UIAlertAction(title: "Text", style: UIAlertActionStyle.default, handler:
             {(alert: UIAlertAction!) in self.segueToTextTool()}))
         alert.addAction(UIAlertAction(title: "Paint", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.segueToPaintTool()}))
-        alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.segueToCameraTool()}))
         present(alert, animated: true)
     }
     
     func segueToPaintTool(){
         self.performSegue(withIdentifier: "paintSegue", sender: self)
+    }
+    
+    func segueToCameraTool(){
+        self.performSegue(withIdentifier: "cameraSegue", sender: self)
     }
     
     func segueToTextTool(){
