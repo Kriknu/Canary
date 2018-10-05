@@ -37,6 +37,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         
         // 2. Load messages
         for message in canaryModel.getClosestLibrary().getFloor().messages {
+            print("Message X: \(message.x) || Message Y: \(message.y)")
             self.addPoi(x: CGFloat(message.x), y: CGFloat(message.y))
         }
         print(canaryModel.getClosestLibrary().getFloor().messages.count)
@@ -44,14 +45,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         // Scroll level specification
         self.floorPlanScrollView.minimumZoomScale = 0.4
         self.floorPlanScrollView.maximumZoomScale = 2.0
-        self.floorPlanView.cen
+        //self.floorPlanView.cen
         
         // Setup gesture recognition
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         floorPlanView.isUserInteractionEnabled = true
         floorPlanView.addGestureRecognizer(addPinRecognizer)
         self.floorPlanView.sd_setImage(with: canaryModel.downloadImageFromFirebase("floorplans/Floorplan_v3.png"))
-        print("started")
         
         // Test query in order to write to database
         let dbQuery: NSDictionary = [
@@ -84,7 +84,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             // Save coordinates for model to fetch
             let point = gesture.location(in: gesture.view)
             self.canaryModel.latestLongPressXCoord = Float(point.x)
-            self.canaryModel.latestLongPressXCoord = Float(point.y)
+            self.canaryModel.latestLongPressYCoord = Float(point.y)
             let strTag = "\(String(UUID().hashValue))\(String(canaryModel.messageId))"
             let tmpTag = Int(strTag)
             self.canaryModel.latestID = tmpTag ?? -1
@@ -116,7 +116,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(movePinRecognizer)
-
+            print("View X: \(view.frame.origin.x) || View Y: \(view.frame.origin.y)")
             self.floorPlanView.addSubview(view)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
         } catch {
