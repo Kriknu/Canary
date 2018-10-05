@@ -78,6 +78,16 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         //TODO
     }
     
+    func deleteMessage(_ withId: Int) -> Bool{
+        let tmpMsg = getMessage(withId)
+        if tmpMsg == nil {
+            return false
+        }
+        getClosestLibrary().getFloor().messages.remove(tmpMsg!)
+        //TODO: Remove the message from FIREBASE
+        return true;
+    }
+    
     /*
      Untested method
      */

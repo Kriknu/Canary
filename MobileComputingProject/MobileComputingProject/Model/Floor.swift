@@ -10,7 +10,7 @@ import Foundation
 
 class Floor {
     var urlToFloorPlan: String
-    var messages: [Message] = []
+    var messages: Set<Message> = []
     let name: String
     
     init(_ name: String, url: String) {
@@ -19,6 +19,6 @@ class Floor {
     }
     
     func addMessage(x: Float, y: Float, url: String, id: Int){
-        messages.append(Message(x: x, y: y, url: url, id: id))
+        messages.insert(Message(x: x, y: y, url: url, id: id))
     }
 }
