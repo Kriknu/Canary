@@ -45,7 +45,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         // Scroll level specification
         self.floorPlanScrollView.minimumZoomScale = 0.4
         self.floorPlanScrollView.maximumZoomScale = 2.0
-        //self.floorPlanView.cen
         
         // Setup gesture recognition
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
@@ -70,8 +69,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                 ]
             ]
         ]
-        canaryModel.writeToDatabase(path: "Library", value: dbQuery)
-
+        //canaryModel.writeToDatabase(path: "Library/Gluggen", value: dbQuery)
+        //TODO: Make an async call
+        let response = canaryModel.readFromDatabase(path: "Library/Gluggen")
         setupTrashcan()
     }
 
