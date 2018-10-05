@@ -270,6 +270,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="ZHP-zv-b3p"/>
                     </view>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="mainScreen" id="eXH-NP-Mmn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oPF-DS-ceG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -325,5 +328,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Fdu-pv-F8u"/>
+        <segue reference="a1z-YG-0fJ"/>
     </inferredMetricsTieBreakers>
 </document>

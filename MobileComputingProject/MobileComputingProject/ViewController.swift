@@ -18,9 +18,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     // Singleton Model
     var canaryModel: CanaryModel = CanaryModel.sharedInstance
 
-
     // Trashcan
     var trashCanView:UIImageView = UIImageView()
+    
+    
+    var zoomLevelTreshhold: CGFloat = 1.5
+    var lastZoomLevel: CGFloat = 0.0
 
     
     override func viewDidLoad() {
@@ -210,6 +213,30 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         } catch {
             print(error)
         }
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        //print("Zoom done")
+        if shouldRepaintToOverview()  {
+            print("GIEF DETAILS")
+            for subview in floorPlanView.subviews {
+                subview.backgroundColor = UIColor.blue
+            }
+        }else if shouldRepaintToDetailedView() {
+            print("GIEF OVERVIEW")
+            for subview in floorPlanView.subviews {
+                subview.backgroundColor = UIColor.red
+            }
+        }
+        lastZoomLevel = self.floorPlanScrollView.zoomScale
+    }
+    
+    func shouldRepaintToDetailedView() -> Bool{
+        return lastZoomLevel > zoomLevelTreshhold && floorPlanScrollView.zoomScale < zoomLevelTreshhold
+    }
+    
+    func shouldRepaintToOverview() -> Bool{
+        return lastZoomLevel < zoomLevelTreshhold && floorPlanScrollView.zoomScale > zoomLevelTreshhold
     }
 
 }
