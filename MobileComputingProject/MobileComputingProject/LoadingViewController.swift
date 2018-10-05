@@ -11,6 +11,8 @@ import Lottie
 
 class LoadingViewController: UIViewController {
     
+    var timer: Timer!
+    
     var animationView: LOTAnimationView = LOTAnimationView(name: "loading_screen_03");
 
     override func viewDidLoad() {
@@ -25,10 +27,14 @@ class LoadingViewController: UIViewController {
         animationView.loopAnimation = true
         
         animationView.play()
+        
+        timer = Timer.scheduledTimer(timeInterval: 4.5, target: self, selector: #selector(goToMainScreen), userInfo: nil, repeats: true)
 
     }
     
-
+    @objc func goToMainScreen(){
+        performSegue(withIdentifier: "mainScreen", sender: self)
+    }
     /*
     // MARK: - Navigation
 

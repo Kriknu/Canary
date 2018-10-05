@@ -206,6 +206,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             print(error)
         }
     }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        print("Zoom done")
+    }
 
 }
 
