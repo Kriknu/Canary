@@ -9,24 +9,33 @@
 import UIKit
 
 class TextViewController: UIViewController {
-
+    
+    @IBOutlet weak var textInputField: UITextView!
+    @IBOutlet weak var createTextBTN: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        textInputField.clipsToBounds = true
+        textInputField.layer.cornerRadius = 10.0
         
-
+        textInputField.becomeFirstResponder()
         // Do any additional setup after loading the view.
+        
+        createTextBTN.addTarget(self, action: #selector(didButtonClick), for: .touchUpInside)
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func didButtonClick(_ sender: UIButton){
+        //TODO: Add functionality to uppload the image and create a pin
+        self.doSegueBack()
     }
-    */
-
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    @objc func doSegueBack(){
+        self.performSegue(withIdentifier: "createTextBack", sender: self)
+    }
 }
