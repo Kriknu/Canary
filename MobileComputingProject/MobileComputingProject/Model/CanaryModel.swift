@@ -25,17 +25,17 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         ref.child(path).setValue(value)
     }
 
-    func readFromDatabase(path: String) -> NSDictionary?{
+    func readFromDatabase(path: String, completion: @escaping (NSDictionary) -> Void) {
         //TODO: Make this work async
         var dbResponse: NSDictionary?
         let ref = Database.database().reference()
         ref.child(path).observeSingleEvent(of: .value, with: {(snapshot) in
             let value = snapshot.value as? NSDictionary
             dbResponse = value
+            completion(dbResponse!)
         }) {(error) in
             print(error.localizedDescription)
         }
-        return dbResponse
     }
 
     // GPS

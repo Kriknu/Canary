@@ -71,7 +71,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         ]
         //canaryModel.writeToDatabase(path: "Library/Gluggen", value: dbQuery)
         //TODO: Make an async call
-        let response = canaryModel.readFromDatabase(path: "Library/Gluggen")
+        let response = canaryModel.readFromDatabase(path: "Library", completion:{data in
+            // Here we set the values when we need to create gui items
+            print(data)
+        })
         setupTrashcan()
     }
 
