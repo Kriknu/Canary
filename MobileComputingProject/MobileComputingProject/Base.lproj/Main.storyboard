@@ -236,6 +236,30 @@
             </objects>
             <point key="canvasLocation" x="927.536231884058" y="-705.13392857142856"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="6gC-Ab-bV5">
+            <objects>
+                <viewController id="ivU-pM-vwf" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pzL-bf-dA6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XdC-Lc-OHh">
+                                <rect key="frame" x="179" y="290" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="d5z-og-v59"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YDE-2T-EtF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1548" y="19"/>
+        </scene>
         <!--Loading View Controller-->
         <scene sceneID="rEh-pU-XIY">
             <objects>
@@ -291,6 +315,7 @@
                         <outlet property="floorPlanScrollView" destination="o4N-1n-IG3" id="bIM-cR-E5r"/>
                         <outlet property="floorPlanView" destination="mch-Rm-86a" id="q2q-mR-6Rf"/>
                         <segue destination="kQ1-qK-hE6" kind="showDetail" identifier="paintSegue" id="Fdu-pv-F8u"/>
+                        <segue destination="ivU-pM-vwf" kind="showDetail" identifier="textSegue" id="TjA-0h-UDu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
