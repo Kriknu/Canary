@@ -4,8 +4,13 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+<<<<<<< HEAD
 	<key>NSCameraUsageDescription</key>
 	<string>accept to be able to post pictures</string>
+=======
+	<key>CFBundleDisplayName</key>
+	<string>Canary</string>
+>>>>>>> aae6e2930465a84a49fd03c3bb84c94fcc4e0a22
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
