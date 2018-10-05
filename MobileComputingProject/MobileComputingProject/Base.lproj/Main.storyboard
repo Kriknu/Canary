@@ -261,18 +261,12 @@
                     <view key="view" contentMode="scaleToFill" id="NhM-my-APS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Finding Library ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mhg-G4-xzG">
-                                <rect key="frame" x="89" y="286" width="236" height="39"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="ZHP-zv-b3p"/>
                     </view>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="mainScreen" id="eXH-NP-Mmn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oPF-DS-ceG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -329,4 +323,8 @@
         <image name="BrushBlack" width="88" height="132"/>
         <image name="Paintbrush" width="69" height="213"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Fdu-pv-F8u"/>
+        <segue reference="a1z-YG-0fJ"/>
+    </inferredMetricsTieBreakers>
 </document>

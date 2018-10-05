@@ -18,9 +18,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     // Singleton Model
     var canaryModel: CanaryModel = CanaryModel.sharedInstance
 
-
     // Trashcan
     var trashCanView:UIImageView = UIImageView()
+    
+    
+    var zoomLevelTreshhold: CGFloat = 1.5
+    var lastZoomLevel: CGFloat = 0.0
 
     
     override func viewDidLoad() {
@@ -50,7 +53,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         floorPlanView.isUserInteractionEnabled = true
         floorPlanView.addGestureRecognizer(addPinRecognizer)
-        self.floorPlanView.sd_setImage(with: canaryModel.downloadImageFromFirebase("floorplans/Floorplan_v3.png"))
+        self.floorPlanView.sd_setImage(with: canaryModel.downloadImageReferenceFromFirebase("floorplans/Floorplan_v3.png"))
         
         // Test query in order to write to database
         let dbQuery: NSDictionary = [
@@ -71,7 +74,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         ]
         //canaryModel.writeToDatabase(path: "Library/Gluggen", value: dbQuery)
         //TODO: Make an async call
-        let response = canaryModel.readFromDatabase(path: "Library/Gluggen")
+        let response = canaryModel.readFromDatabase(path: "Library", completion:{data in
+            // Here we set the values when we need to create gui items
+            print(data)
+        })
         setupTrashcan()
     }
 
@@ -205,6 +211,45 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         } catch {
             print(error)
         }
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        //print("Zoom done")
+        if shouldRepaintToOverview()  {
+            print("GIEF Overview")
+            for subview in floorPlanView.subviews {
+                // Fix to display the other icon instead
+                // TODO: BRYT UT TILL EN FUNKTION
+
+            }
+        }else if shouldRepaintToDetailedView() {
+            print("GIEF Detail")
+            for subview in floorPlanView.subviews {
+                canaryModel.downloadImageFromFirebase("images/test.png", completion: {data in
+                    // Here we set the values when we need to create gui items
+                    let detailedImage: UIImage = data
+                    let tmpOrigin = subview.frame.origin
+                    var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 100, height: 100)))
+                    newView.image = data
+                    newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+                    newView.layer.cornerRadius = 10
+                    newView.layer.borderWidth = 1
+                    newView.layer.borderColor = UIColor.black.cgColor
+                    subview.removeFromSuperview()
+                    self.floorPlanView.addSubview(newView)
+                    //subview.backgroundColor = UIColor(patternImage: detailedImage)
+                })
+            }
+        }
+        lastZoomLevel = self.floorPlanScrollView.zoomScale
+    }
+    
+    func shouldRepaintToOverview() -> Bool{
+        return lastZoomLevel > zoomLevelTreshhold && floorPlanScrollView.zoomScale < zoomLevelTreshhold
+    }
+    
+    func shouldRepaintToDetailedView() -> Bool{
+        return lastZoomLevel < zoomLevelTreshhold && floorPlanScrollView.zoomScale > zoomLevelTreshhold
     }
 
 }
