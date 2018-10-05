@@ -225,7 +225,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }else if shouldRepaintToDetailedView() {
             print("GIEF Detail")
             for subview in floorPlanView.subviews {
-                canaryModel.downloadImageFromFirebase("images/test.png", completion: {data in
+                let message = canaryModel.getMessage(subview.tag)
+                print("This is my message: \((message?.urlToMessage)!)")
+                let url = (message?.urlToMessage)!
+                canaryModel.downloadImageFromFirebase(url, completion: {data in
                     // Here we set the values when we need to create gui items
                     let detailedImage: UIImage = data
                     let tmpOrigin = subview.frame.origin
@@ -235,6 +238,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                     newView.layer.cornerRadius = 10
                     newView.layer.borderWidth = 1
                     newView.layer.borderColor = UIColor.black.cgColor
+                    newView.tag = subview.tag
                     subview.removeFromSuperview()
                     self.floorPlanView.addSubview(newView)
                     //subview.backgroundColor = UIColor(patternImage: detailedImage)
