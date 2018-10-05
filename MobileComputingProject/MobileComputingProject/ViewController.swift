@@ -154,7 +154,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let tmpMessage = canaryModel.getMessage(view!.tag)
             tmpMessage?.x = Float(newX)
             tmpMessage?.y = Float(newY)
-            view!.frame = CGRect(x: newX, y: newY, width: 48, height: 48)
+            let tmpPoint = CGPoint(x: newX, y: newY)
+            view!.frame.origin = tmpPoint
+            if trashCanView.frame.intersects(self.view.convert(view!.frame, from: floorPlanView)) {
+                print("INTERSECTION FOUND")
+                // TODO: Fix visuals so that the user knows they are about to delete a poi
+            }
         }
         // If LongPress ended
         // And Poi dragged to trash
@@ -165,6 +170,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                 gesture.view!.removeFromSuperview()
                 // FIXME: Send delete request to firebase when deleting Poi
             }
+            canaryModel.deleteMessage(gesture.view!.tag)
             trashCanView.isHidden = true
         }
     }
