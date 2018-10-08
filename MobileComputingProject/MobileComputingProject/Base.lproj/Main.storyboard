@@ -400,7 +400,7 @@
                         <viewLayoutGuide key="safeArea" id="s35-0t-zhy"/>
                     </view>
                     <connections>
-                        <outlet property="capturePreviewView" destination="FaP-Ig-1o1" id="tbZ-p2-kHB"/>
+                        <outlet property="previewView" destination="FaP-Ig-1o1" id="tca-zY-5au"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BJ5-9T-GUz" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -251,13 +251,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             // Here we set the values when we need to create gui items
             let detailedImage: UIImage = data
             let tmpOrigin = view.frame.origin
-            var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 48, height: 48)))
-            newView.image = data
+            //var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 48, height: 48)))
+            var newView = DetailedViewShape(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 200, height: 200)))
+            newView.backgroundColor = UIColor(patternImage: data)
             if(!standardImage){
-                newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
-                newView.layer.cornerRadius = 10
-                newView.layer.borderWidth = 1
-                newView.layer.borderColor = UIColor.black.cgColor
+                //newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+                //newView.layer.cornerRadius = 10
+                //newView.layer.borderWidth = 1
+                //newView.layer.borderColor = UIColor.black.cgColor
             }
             newView.tag = view.tag
             view.removeFromSuperview()
