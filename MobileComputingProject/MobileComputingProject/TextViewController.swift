@@ -38,4 +38,7 @@ class TextViewController: UIViewController {
     @objc func doSegueBack(){
         self.performSegue(withIdentifier: "createTextBack", sender: self)
     }
+    @IBAction func closeTextView(_ sender: Any) {
+        self.performSegue(withIdentifier: "closeTextView", sender: self)
+    }
 }
