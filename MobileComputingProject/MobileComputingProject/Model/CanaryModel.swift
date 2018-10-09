@@ -19,10 +19,11 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     static let sharedInstance  = CanaryModel()
     var libraryID = 0;
     
+    let databaseRef = Database.database().reference()
+    
     // Database
     func writeToDatabase(path: String, value: NSDictionary){
-        let ref = Database.database().reference()
-        ref.child(path).setValue(value)
+        databaseRef.child(path).setValue(value)
     }
 
     func readFromDatabase(path: String, completion: @escaping (NSDictionary) -> Void) {
@@ -143,6 +144,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
             let image = img
             let pngImage: Data? = UIImagePNGRepresentation(image!)
             let imageRef = storageReference.child(fileName)
+            print("Uploading file with filename: \(fileName)")
             _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
                 guard let metadata = metadata else{
                     //print(error)
@@ -152,7 +154,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
                 //print(downloadUrl)
             })
             let tmpRef = storageReference.child(fileName)
-            tmpRef.downloadURL { url, error in
+            /*tmpRef.downloadURL { url, error in
                 if let error = error {
                     // Handle any errors
                     print("Some error getting URL")
@@ -160,11 +162,12 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
                     // Get the download URL for 'images/stars.jpg'
                     print(url?.absoluteString)
                 }
-            }
+            }*/
         } catch{
             print(error)
         }
     }
+    
     
     func getImageName() -> String {
         let prefix = UIDevice.current.identifierForVendor!.uuidString
@@ -184,8 +187,25 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     }
     
     func addMessage(imageName: String){
-        print("Does this fire ever?")
-        getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: imageName, id: latestID)
+        let tmpMessage = getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: imageName, id: latestID)
+        let info: NSDictionary = ["id": String(tmpMessage.id),
+                    "x": String(tmpMessage.x),
+                    "y": String(tmpMessage.y),
+                    "url": tmpMessage.urlToMessage]
+        //Create a unique entry path
+        let date = Date()
+        let calender = Calendar.current
+        let components = calender.dateComponents([.year,.month,.day], from: date)
+        let year = components.year
+        let month = components.month
+        let day = components.day
+        let dateString = "\(year!)-\(month!)-\(day!)"
+        
+        let uniqueID = databaseRef.child("messages/\(dateString)").childByAutoId().key
+        
+        let tmpPath = "messages/\(dateString)/\(uniqueID!)"
+        
+        writeToDatabase(path: tmpPath, value: info)
     }
     
     func addFloor(name: String, data: String){

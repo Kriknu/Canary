@@ -245,21 +245,32 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             url = "assets/speakbubble.png"
         } else {
             let message = canaryModel.getMessage(view.tag)
+            print("Downloading from url: \((message?.urlToMessage)!)")
             url = (message?.urlToMessage)!
         }
         canaryModel.downloadImageFromFirebase(url, completion: {data in
             // Here we set the values when we need to create gui items
             let detailedImage: UIImage = data
-            let tmpOrigin = view.frame.origin
-            //var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 48, height: 48)))
-            var newView = DetailedViewShape(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 200, height: 200)))
-            newView.backgroundColor = UIColor(patternImage: data)
-            if(!standardImage){
-                //newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
-                //newView.layer.cornerRadius = 10
-                //newView.layer.borderWidth = 1
-                //newView.layer.borderColor = UIColor.black.cgColor
-            }
+            //let tmpOrigin = view.frame.origin
+            /*var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 48, height: 48)))
+            newView.image = detailedImage
+            */
+            var tmpOrigin = CGPoint(x: view.frame.origin.x - 80, y: view.frame.origin.y - 80)
+            var newView = DetailedViewShape(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 80, height: 80)))
+            var tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 100, height: 50)))
+            //tmpImg.autoresizingMask = UIViewAutoresizing(rawValue: UIViewAutoresizing.flexibleBottomMargin.rawValue | UIViewAutoresizing.flexibleHeight.rawValue | UIViewAutoresizing.flexibleRightMargin.rawValue | UIViewAutoresizing.flexibleLeftMargin.rawValue | UIViewAutoresizing.flexibleTopMargin.rawValue | UIViewAutoresizing.flexibleWidth.rawValue)
+            tmpImg.contentMode = UIViewContentMode.scaleAspectFit
+            tmpImg.image = detailedImage
+            newView.backgroundColor = UIColor.clear
+            newView.addSubview(tmpImg)
+            newView.bringSubview(toFront: tmpImg)
+            
+            /*if(!standardImage){
+                newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+                newView.layer.cornerRadius = 10
+                newView.layer.borderWidth = 1
+                newView.layer.borderColor = UIColor.black.cgColor
+            }*/
             newView.tag = view.tag
             view.removeFromSuperview()
             self.floorPlanView.addSubview(newView)
