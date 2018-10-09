@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import FirebaseUI
+import Firebase
 
 class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate {
     
@@ -38,10 +39,40 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         // 1. Load floor plan
         let floorImageURL = canaryModel.getClosestLibrary().getFloor().urlToFloorPlan
         
-        // 2. Load messages
+        // 2. Fetch message references from database
+        let dbMessages = [Message]()
+        let date = Date()
+        let calender = Calendar.current
+        let components = calender.dateComponents([.year,.month,.day], from: date)
+        let year = components.year
+        let month = components.month
+        let day = components.day
+        let dateString = "\(year!)-\(month!)-\(day!)"
+        
+        //let path = "messages/\(self.canaryModel.getClosestLibrary().name)/\(self.canaryModel.getClosestLibrary().getFloor().name)/\(dateString)"
+        let path = "Library/\(self.canaryModel.getClosestLibrary().name)/floors/\(self.canaryModel.getClosestLibrary().getFloor().name)/messages/\(dateString)"
+        let dbReference = Database.database().reference().child(path)
+        
+        dbReference.observe(DataEventType.value, with:{(snapshot) in
+            if snapshot.childrenCount > 0 {
+                for msgs in snapshot.children.allObjects as! [DataSnapshot] {
+                    let messageObject = msgs.value as? [String: String]
+                    let msgX = messageObject?["x"]
+                    let msgY = messageObject?["y"]
+                    let msgID = messageObject?["id"]
+                    let msgURL = messageObject?["url"]
+                    if self.canaryModel.getMessage(Int(msgID!)!) == nil {
+                        self.canaryModel.getClosestLibrary().getFloor().messages.insert(Message(x: Float(truncating: NumberFormatter().number(from: msgX!)!), y: Float(truncating: NumberFormatter().number(from: msgY!)!), url: msgURL!, id: Int(msgID!)!))
+                    }
+                }
+            }
+        })
+        
+        // 3. Load messages
         for message in canaryModel.getClosestLibrary().getFloor().messages {
             print("Message X: \(message.x) || Message Y: \(message.y)")
-            self.addPoi(x: CGFloat(message.x), y: CGFloat(message.y))
+            print("URL: \(message.urlToMessage)")
+            self.addPoi(x: CGFloat(message.x), y: CGFloat(message.y), tag: message.id)
         }
         print(canaryModel.getClosestLibrary().getFloor().messages.count)
         
@@ -109,14 +140,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         return self.floorPlanView
     }
     
-    func addPoi(x: CGFloat, y: CGFloat){
+    func addPoi(x: CGFloat, y: CGFloat, tag: Int){
         do {
             let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
             let data = try Data.init(contentsOf: url!)
             let image = UIImage(data: data)
             let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
             view.image = image
-            view.tag = self.canaryModel.latestID
+            view.tag = tag
             
             // Add a gesture recognizer to every created pin to move it
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
@@ -241,6 +272,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     func repaintView(view: UIView, standardImage: Bool){
         var url: String
+        print("view.tag = \(view.tag)")
         if(standardImage){
             url = "assets/speakbubble.png"
         } else {
@@ -251,26 +283,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         canaryModel.downloadImageFromFirebase(url, completion: {data in
             // Here we set the values when we need to create gui items
             let detailedImage: UIImage = data
-            //let tmpOrigin = view.frame.origin
-            /*var newView:UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 48, height: 48)))
-            newView.image = detailedImage
-            */
             var tmpOrigin = CGPoint(x: view.frame.origin.x - 80, y: view.frame.origin.y - 80)
             var newView = DetailedViewShape(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 80, height: 80)))
             var tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 100, height: 50)))
-            //tmpImg.autoresizingMask = UIViewAutoresizing(rawValue: UIViewAutoresizing.flexibleBottomMargin.rawValue | UIViewAutoresizing.flexibleHeight.rawValue | UIViewAutoresizing.flexibleRightMargin.rawValue | UIViewAutoresizing.flexibleLeftMargin.rawValue | UIViewAutoresizing.flexibleTopMargin.rawValue | UIViewAutoresizing.flexibleWidth.rawValue)
             tmpImg.contentMode = UIViewContentMode.scaleAspectFit
             tmpImg.image = detailedImage
             newView.backgroundColor = UIColor.clear
             newView.addSubview(tmpImg)
             newView.bringSubview(toFront: tmpImg)
-            
-            /*if(!standardImage){
-                newView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
-                newView.layer.cornerRadius = 10
-                newView.layer.borderWidth = 1
-                newView.layer.borderColor = UIColor.black.cgColor
-            }*/
             newView.tag = view.tag
             view.removeFromSuperview()
             self.floorPlanView.addSubview(newView)

@@ -201,9 +201,9 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         let day = components.day
         let dateString = "\(year!)-\(month!)-\(day!)"
         
-        let uniqueID = databaseRef.child("messages/\(dateString)").childByAutoId().key
+        let uniqueID = databaseRef.child("Library/\(getClosestLibrary().name)/floors/\(getClosestLibrary().getFloor().name)/messages/\(dateString)").childByAutoId().key
         
-        let tmpPath = "messages/\(dateString)/\(uniqueID!)"
+        let tmpPath = "Library/\(getClosestLibrary().name)/floors/\(getClosestLibrary().getFloor().name)/messages/\(dateString)/\(uniqueID!)"
         
         writeToDatabase(path: tmpPath, value: info)
     }
