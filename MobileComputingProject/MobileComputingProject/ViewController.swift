@@ -76,7 +76,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.floorPlanView
     }
-    
+
     func addPois(){
         let msgs = self.canaryModel.getClosestLibrary().getFloor().messages
         for message in msgs {
@@ -152,7 +152,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
-    
+    func addDropShadowToPOI(view: UIView) {
+        //Add drop shadow to POI
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 1)
+        view.layer.shadowOpacity = 0.5
+        view.layer.shadowRadius = 1.0
+        view.clipsToBounds = false
+    }
     
     func createPopOver(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -249,6 +256,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             newView.bringSubview(toFront: tmpImg)
             newView.tag = view.tag
             view.removeFromSuperview()
+            self.addDropShadowToPOI(view: newView)
             self.floorPlanView.addSubview(newView)
             //subview.backgroundColor = UIColor(patternImage: detailedImage)
         })
