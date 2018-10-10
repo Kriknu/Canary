@@ -57,12 +57,21 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             if snapshot.childrenCount > 0 {
                 for msgs in snapshot.children.allObjects as! [DataSnapshot] {
                     let messageObject = msgs.value as? [String: String]
-                    let msgX = messageObject?["x"]
-                    let msgY = messageObject?["y"]
-                    let msgID = messageObject?["id"]
+                    let msgX = Float(truncating: NumberFormatter().number(from: (messageObject?["x"])!)!)
+                    let msgY = Float(truncating: NumberFormatter().number(from: (messageObject?["y"])!)!)
+                    let msgID = Int((messageObject?["id"])!)!
                     let msgURL = messageObject?["url"]
-                    if self.canaryModel.getMessage(Int(msgID!)!) == nil {
-                        self.canaryModel.getClosestLibrary().getFloor().messages.insert(Message(x: Float(truncating: NumberFormatter().number(from: msgX!)!), y: Float(truncating: NumberFormatter().number(from: msgY!)!), url: msgURL!, id: Int(msgID!)!))
+                    let msgTypeStr = messageObject?["type"]
+                    var msgType = MessageType.DRAWING
+                    if msgTypeStr == "TEXT" {
+                        msgType = MessageType.TEXT
+                    }else if msgTypeStr == "DRAWING"{
+                        msgType = MessageType.DRAWING
+                    }else if msgTypeStr == "PHOTO" {
+                        msgType = MessageType.PHOTO
+                    }
+                    if self.canaryModel.getMessage(msgID) == nil {
+                        self.canaryModel.getClosestLibrary().getFloor().messages.insert(Message(x: msgX, y: msgY, url: msgURL!, id: msgID, type: msgType))
                     }
                 }
             }
@@ -258,12 +267,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         if shouldRepaintToOverview()  {
             print("GIEF Overview")
             for subview in floorPlanView.subviews {
+                subview.removeFromSuperview()
                 repaintView(view: subview, standardImage: true)
-
             }
         }else if shouldRepaintToDetailedView() {
             print("GIEF Detail")
             for subview in floorPlanView.subviews {
+                subview.removeFromSuperview()
                 repaintView(view: subview, standardImage: false)
             }
         }
@@ -274,7 +284,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         var url: String
         print("view.tag = \(view.tag)")
         if(standardImage){
-            url = "assets/speakbubble.png"
+            if self.canaryModel.getMessage(view.tag)?.type.rawValue == "TEXT" {
+                url = "assets/text_bubble.png"
+            }else if self.canaryModel.getMessage(view.tag)?.type.rawValue == "PHOTO" {
+                url = "assets/photo_bubble.png"
+            }else if self.canaryModel.getMessage(view.tag)?.type.rawValue == "DRAWING" {
+                url = "assets/drawing_bubble.png"
+            }else{
+                url = "assets/empty_bubble.png"
+            }
         } else {
             let message = canaryModel.getMessage(view.tag)
             print("Downloading from url: \((message?.urlToMessage)!)")

@@ -186,12 +186,13 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         return "images/\(prefix)-\(suffix).png"
     }
     
-    func addMessage(imageName: String){
-        let tmpMessage = getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: imageName, id: latestID)
+    func addMessage(imageName: String, type: MessageType){
+        let tmpMessage = getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: imageName, id: latestID, type: type)
         let info: NSDictionary = ["id": String(tmpMessage.id),
                     "x": String(tmpMessage.x),
                     "y": String(tmpMessage.y),
-                    "url": tmpMessage.urlToMessage]
+                    "url": tmpMessage.urlToMessage,
+                    "type": type.rawValue]
         //Create a unique entry path
         let date = Date()
         let calender = Calendar.current

@@ -446,7 +446,7 @@
     </scenes>
     <resources>
         <image name="BrushBlack" width="88" height="132"/>
-        <image name="Paintbrush" width="69" height="213"/>
+        <image name="Paintbrush" width="88" height="132"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="AfX-mz-Ove"/>

@@ -17,15 +17,23 @@ class Message: Equatable, Hashable {
     var x: Float
     var y: Float
     var urlToMessage: String
+    var type: MessageType
     let id: Int
     var hashValue: Int {
         return id
     }
     
-    init(x: Float, y: Float, url:String, id: Int){
+    init(x: Float, y: Float, url:String, id: Int, type: MessageType){
         self.x = x
         self.y = y
         self.urlToMessage = url
         self.id = id
+        self.type = type
     }
+}
+
+enum MessageType: String {
+    case TEXT = "TEXT"
+    case PHOTO = "PHOTO"
+    case DRAWING = "DRAWING"
 }

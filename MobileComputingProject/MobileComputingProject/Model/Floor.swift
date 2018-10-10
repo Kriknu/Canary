@@ -18,8 +18,8 @@ class Floor {
         self.urlToFloorPlan = url
     }
     
-    func addMessage(x: Float, y: Float, url: String, id: Int) -> Message{
-        let tmpMsg = Message(x: x, y: y, url: url, id: id)
+    func addMessage(x: Float, y: Float, url: String, id: Int, type: MessageType) -> Message{
+        let tmpMsg = Message(x: x, y: y, url: url, id: id, type: type)
         messages.insert(tmpMsg)
         return tmpMsg
     }
