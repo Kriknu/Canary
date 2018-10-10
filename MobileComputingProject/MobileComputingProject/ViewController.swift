@@ -30,7 +30,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     var zoomLevelTreshhold: CGFloat = 1.5
     var lastZoomLevel: CGFloat = 0.0
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +78,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         self.floorPlanView.isUserInteractionEnabled = true
         self.floorPlanView.addGestureRecognizer(addPinRecognizer)
-        self.floorPlanView.sd_setImage(with: canaryModel.downloadImageReferenceFromFirebase("floorplans/Floorplan_v3.png"))
+        self.floorPlanView.sd_setImage(with: canaryModel.downloadImageReferenceFromFirebase("floorplans/Floorplan_v4.png"))
         
         self.setupTrashcan()
     }
