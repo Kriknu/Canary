@@ -161,13 +161,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(movePinRecognizer)
-
-            //Add drop shadow to POI
-            view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOffset = CGSize(width: 0, height: 1)
-            view.layer.shadowOpacity = 0.5
-            view.layer.shadowRadius = 1.0
-            view.clipsToBounds = false
+            
+            self.addDropShadowToPOI(view: view)
             
             print("View X: \(view.frame.origin.x) || View Y: \(view.frame.origin.y)")
             self.floorPlanView.addSubview(view)
@@ -226,7 +221,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
-    
+    func addDropShadowToPOI(view: UIView) {
+        //Add drop shadow to POI
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 1)
+        view.layer.shadowOpacity = 0.5
+        view.layer.shadowRadius = 1.0
+        view.clipsToBounds = false
+    }
     
     func createPopOver(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -321,6 +323,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             newView.bringSubview(toFront: tmpImg)
             newView.tag = view.tag
             view.removeFromSuperview()
+            self.addDropShadowToPOI(view: newView)
             self.floorPlanView.addSubview(newView)
             //subview.backgroundColor = UIColor(patternImage: detailedImage)
         })
