@@ -81,7 +81,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         for message in canaryModel.getClosestLibrary().getFloor().messages {
             print("Message X: \(message.x) || Message Y: \(message.y)")
             print("URL: \(message.urlToMessage)")
-            self.addPoi(x: CGFloat(message.x), y: CGFloat(message.y), tag: message.id)
+            self.addPoi(x: CGFloat(message.x), y: CGFloat(message.y), tag: message.id, type: message.type)
         }
         print(canaryModel.getClosestLibrary().getFloor().messages.count)
         
@@ -149,25 +149,22 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         return self.floorPlanView
     }
     
-    func addPoi(x: CGFloat, y: CGFloat, tag: Int){
-        do {
-            let url = URL(string:"https://cdn.pixabay.com/photo/2014/06/17/08/45/bubble-370270_960_720.png")
-            let data = try Data.init(contentsOf: url!)
-            let image = UIImage(data: data)
+    func addPoi(x: CGFloat, y: CGFloat, tag: Int, type: MessageType){
+        let url = getPoiImageUrl(type.rawValue)
+        var image: UIImage = UIImage()
+        canaryModel.downloadImageFromFirebase(url, completion: {data in
+            image = data
             let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
             view.image = image
             view.tag = tag
-            
             // Add a gesture recognizer to every created pin to move it
-            let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(poiTapped))
+            let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(movePinRecognizer)
             print("View X: \(view.frame.origin.x) || View Y: \(view.frame.origin.y)")
             self.floorPlanView.addSubview(view)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
-        } catch {
-            print(error)
-        }
+        })
     }
 
     // Moving pins
@@ -280,19 +277,23 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         lastZoomLevel = self.floorPlanScrollView.zoomScale
     }
     
+    func getPoiImageUrl(_ type: String) -> String{
+        if type == "TEXT" {
+            return "assets/text_bubble.png"
+        }else if  type == "PHOTO" {
+            return "assets/photo_bubble.png"
+        }else if type == "DRAWING" {
+            return "assets/drawing_bubble.png"
+        }else{
+            return "assets/empty_bubble.png"
+        }
+    }
+
     func repaintView(view: UIView, standardImage: Bool){
         var url: String
         print("view.tag = \(view.tag)")
         if(standardImage){
-            if self.canaryModel.getMessage(view.tag)?.type.rawValue == "TEXT" {
-                url = "assets/text_bubble.png"
-            }else if self.canaryModel.getMessage(view.tag)?.type.rawValue == "PHOTO" {
-                url = "assets/photo_bubble.png"
-            }else if self.canaryModel.getMessage(view.tag)?.type.rawValue == "DRAWING" {
-                url = "assets/drawing_bubble.png"
-            }else{
-                url = "assets/empty_bubble.png"
-            }
+            url = getPoiImageUrl((self.canaryModel.getMessage(view.tag)?.type.rawValue)!)
         } else {
             let message = canaryModel.getMessage(view.tag)
             print("Downloading from url: \((message?.urlToMessage)!)")
@@ -301,7 +302,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         canaryModel.downloadImageFromFirebase(url, completion: {data in
             // Here we set the values when we need to create gui items
             let detailedImage: UIImage = data
-            var tmpOrigin = CGPoint(x: view.frame.origin.x - 80, y: view.frame.origin.y - 80)
+            var tmpOrigin = CGPoint(x: view.frame.origin.x, y: view.frame.origin.y)
+            print("origin: \(tmpOrigin)")
             var newView = DetailedViewShape(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 80, height: 80)))
             var tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 100, height: 50)))
             tmpImg.contentMode = UIViewContentMode.scaleAspectFit
