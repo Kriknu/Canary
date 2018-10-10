@@ -236,7 +236,13 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             {(alert: UIAlertAction!) in self.segueToTextTool()}))
         alert.addAction(UIAlertAction(title: "Paint", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.segueToPaintTool()}))
         alert.addAction(UIAlertAction(title: "Photo", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.segueToCameraTool()}))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {(alert: UIAlertAction!) in self.alertControllerBackgroundTapped()}))
         present(alert, animated: true)
+    }
+    
+    @objc func alertControllerBackgroundTapped() {
+        //TODO: Add functionality to dismiss temp-POI
+        print("TAP TAP TAP !!! CLICK CLICK CLICK!!!")
     }
     
     func segueToPaintTool(){
