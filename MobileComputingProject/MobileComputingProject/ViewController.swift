@@ -80,24 +80,25 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     func addPois(){
         let msgs = self.canaryModel.getClosestLibrary().getFloor().messages
         for message in msgs {
-            let url = getPoiImageUrl(message.type.rawValue)
-            var image: UIImage = UIImage()
-            canaryModel.downloadImageFromFirebase(url, completion: {data in
-                image = data
-                let x = CGFloat(message.x)
-                let y = CGFloat(message.y)
-                let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
-                view.image = image
-                view.tag = message.id
-                print("Tag: \(message.id)")
-                // Add a gesture recognizer to every created pin to move it
-                let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
-                view.isUserInteractionEnabled = true
-                view.addGestureRecognizer(movePinRecognizer)
-                //print("View X: \(view.frame.origin.x) || View Y: \(view.frame.origin.y)")
-                self.floorPlanView.addSubview(view)
-                UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
-            })
+            let x = CGFloat(message.x)
+            let y = CGFloat(message.y)
+            let bubbleWidth:CGFloat = 72
+            let bubbleHeight:CGFloat = 84
+            let iconWidth:CGFloat = 48
+            let iconHeight:CGFloat = 48
+            let bubble = UIImageView(frame: CGRect(x: x, y: y, width: bubbleWidth, height: bubbleHeight))
+            bubble.image = UIImage(named: "Bubble")
+            let image: UIImage = getPoiImageUrl(message.type.rawValue)
+            let view = UIImageView(frame: CGRect(x: (bubbleWidth-iconWidth)/2, y: (bubbleWidth-iconHeight)/2, width: iconWidth, height: iconHeight))
+            view.image = image
+            bubble.tag = message.id
+            // Add a gesture recognizer to every created pin to move it
+            let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
+            bubble.isUserInteractionEnabled = true
+            bubble.addGestureRecognizer(movePinRecognizer)
+            bubble.addSubview(view)
+            self.floorPlanView.addSubview(bubble)
+            UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
         }
     }
 
@@ -212,27 +213,28 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             print("GIEF Overview")
             for subview in floorPlanView.subviews {
                 subview.removeFromSuperview()
-                repaintView(view: subview, standardImage: true)
             }
+            self.addPois()
         }else if shouldRepaintToDetailedView() {
             print("GIEF Detail")
             for subview in floorPlanView.subviews {
-                subview.removeFromSuperview()
+                subview.subviews[0].removeFromSuperview()
                 repaintView(view: subview, standardImage: false)
             }
         }
         lastZoomLevel = self.floorPlanScrollView.zoomScale
     }
-    
-    func getPoiImageUrl(_ type: String) -> String{
+
+    func getPoiImageUrl(_ type: String) -> UIImage{
         if type == "TEXT" {
-            return "assets/text_bubble.png"
+            return UIImage(named: "TextIcon")!
         }else if  type == "PHOTO" {
-            return "assets/photo_bubble.png"
+            return UIImage(named: "ImageIcon")!
         }else if type == "DRAWING" {
-            return "assets/drawing_bubble.png"
+            return UIImage(named: "DrawingIcon")!
         }else{
-            return "assets/empty_bubble.png"
+            //TODO: Change this to the '...' icon, whatever it is called
+            return UIImage(named: "TextIcon")!
         }
     }
 
@@ -240,32 +242,31 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         var url: String
         print("view.tag = \(view.tag)")
         if(standardImage){
-            url = getPoiImageUrl((self.canaryModel.getMessage(view.tag)?.type.rawValue)!)
+            let image: UIImage = getPoiImageUrl((self.canaryModel.getMessage(view.tag)?.type.rawValue)!)
+            self.addPoiView(view: view, image: image)
         } else {
             print(self.canaryModel.getClosestLibrary().getFloor().messages.count)
             let message = self.canaryModel.getMessage(view.tag)
             print("Message: \(message)")
             print("Downloading from url: \((message?.urlToMessage)!)")
             url = (message?.urlToMessage)!
+            canaryModel.downloadImageFromFirebase(url, completion: {data in
+                let detailedImage: UIImage = data
+                self.addPoiView(view: view, image:detailedImage)
+            })
         }
-        canaryModel.downloadImageFromFirebase(url, completion: {data in
-            // Here we set the values when we need to create gui items
-            let detailedImage: UIImage = data
-            var tmpOrigin = CGPoint(x: view.frame.origin.x, y: view.frame.origin.y)
-            print("origin: \(tmpOrigin)")
-            var newView = DetailedViewShape(frame: CGRect(origin: tmpOrigin, size: CGSize(width: 80, height: 80)))
-            var tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 100, height: 50)))
-            tmpImg.contentMode = UIViewContentMode.scaleAspectFit
-            tmpImg.image = detailedImage
-            newView.backgroundColor = UIColor.clear
-            newView.addSubview(tmpImg)
-            newView.bringSubview(toFront: tmpImg)
-            newView.tag = view.tag
-            view.removeFromSuperview()
-            self.addDropShadowToPOI(view: newView)
-            self.floorPlanView.addSubview(newView)
-            //subview.backgroundColor = UIColor(patternImage: detailedImage)
-        })
+
+    }
+
+    func addPoiView(view: UIView, image: UIImage){
+        let tmpImageWidth:CGFloat = 56
+        let tmpImageHeight:CGFloat = 56
+        var tmpOrigin = CGPoint(x: (view.frame.width - tmpImageWidth)/2, y: (view.frame.width - tmpImageWidth)/2)
+        print("origin: \(tmpOrigin)")
+        var tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: tmpImageWidth, height: tmpImageHeight)))
+        tmpImg.contentMode = UIViewContentMode.scaleAspectFit
+        tmpImg.image = image
+        view.addSubview(tmpImg)
     }
 
     func shouldRepaintToOverview() -> Bool{
