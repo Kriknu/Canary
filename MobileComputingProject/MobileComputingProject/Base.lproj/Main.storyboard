@@ -339,6 +339,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zan-Bj-D1D" userLabel="MinimapView">
+                                <rect key="frame" x="284" y="54" width="120" height="120"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="LkW-gG-bbg"/>
+                                    <constraint firstAttribute="height" constant="120" id="rDt-f3-KrD"/>
+                                </constraints>
+                            </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o4N-1n-IG3">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
@@ -362,8 +370,10 @@
                         <constraints>
                             <constraint firstItem="o4N-1n-IG3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3a3-Zp-0Da"/>
                             <constraint firstItem="o4N-1n-IG3" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="3uF-nV-cLH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Zan-Bj-D1D" secondAttribute="trailing" constant="10" id="7zw-Di-5Fg"/>
                             <constraint firstItem="o4N-1n-IG3" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="REF-PV-0f7"/>
                             <constraint firstAttribute="bottom" secondItem="o4N-1n-IG3" secondAttribute="bottom" id="cxW-kR-Z9H"/>
+                            <constraint firstItem="Zan-Bj-D1D" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="ie1-xD-KII"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -371,6 +381,7 @@
                     <connections>
                         <outlet property="floorPlanScrollView" destination="o4N-1n-IG3" id="bIM-cR-E5r"/>
                         <outlet property="floorPlanView" destination="mch-Rm-86a" id="q2q-mR-6Rf"/>
+                        <outlet property="minimapView" destination="Zan-Bj-D1D" id="OK6-VG-GDJ"/>
                         <segue destination="kQ1-qK-hE6" kind="showDetail" identifier="paintSegue" id="Fdu-pv-F8u"/>
                         <segue destination="ivU-pM-vwf" kind="showDetail" identifier="textSegue" id="TjA-0h-UDu"/>
                         <segue destination="ibC-Dg-WjZ" kind="showDetail" identifier="cameraSegue" id="2GM-fD-qGd"/>
@@ -449,6 +460,7 @@
         <image name="Paintbrush" width="88" height="132"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="AfX-mz-Ove"/>
+        <segue reference="Fdu-pv-F8u"/>
+        <segue reference="a1z-YG-0fJ"/>
     </inferredMetricsTieBreakers>
 </document>

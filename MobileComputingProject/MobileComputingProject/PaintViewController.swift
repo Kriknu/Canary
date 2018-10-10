@@ -37,6 +37,9 @@ class PaintViewController: UIViewController {
     @IBOutlet weak var opacitySlider: UISlider!
     @IBOutlet weak var sizeSlider: UISlider!
     
+    // Bool stating whether image has been edits and thus have something to save
+    var isImageEdited: Bool = false;
+    
     // Actions
     @IBAction func settingsToggleAction(_ sender: UIButton) {
         // Make specific settings view visible
@@ -90,6 +93,7 @@ class PaintViewController: UIViewController {
         initComponents()
         
         doneButton.action = #selector(PaintViewController.saveImage)
+        doneButton.isEnabled = false
         cancelButton.action = #selector(PaintViewController.doSegueBack	)
         view.bringSubview(toFront: settingsView)
         // Do any additional setup after loading the view.
@@ -255,6 +259,8 @@ class PaintViewController: UIViewController {
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         tempImageView.image = nil
+        isImageEdited = true
+        doneButton.isEnabled = true
     }
 
     @objc func saveImage(){
@@ -338,6 +344,8 @@ class PaintViewController: UIViewController {
     
     // Actions
     @IBAction func resetButtonAction(_ sender: UIBarButtonItem) {
+        isImageEdited = false
+        doneButton.isEnabled = false;
         mainImageView.image = nil
     }
 }
