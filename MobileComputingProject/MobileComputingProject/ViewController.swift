@@ -161,6 +161,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
             view.isUserInteractionEnabled = true
             view.addGestureRecognizer(movePinRecognizer)
+
+            //Add drop shadow to POI
+            view.layer.shadowColor = UIColor.black.cgColor
+            view.layer.shadowOffset = CGSize(width: 0, height: 1)
+            view.layer.shadowOpacity = 0.5
+            view.layer.shadowRadius = 1.0
+            view.clipsToBounds = false
+            
             print("View X: \(view.frame.origin.x) || View Y: \(view.frame.origin.y)")
             self.floorPlanView.addSubview(view)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
