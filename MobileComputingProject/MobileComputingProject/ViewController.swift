@@ -34,14 +34,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let floorImageURL = canaryModel.getClosestLibrary().getFloor().urlToFloorPlan
 
         // 2. Setup Message Observer
-        setupFirebaseMessageObserver()
-        
-        // 3. Load messages
-        for message in canaryModel.getClosestLibrary().getFloor().messages {
-            print("Message X: \(message.x) || Message Y: \(message.y)")
-            print("URL: \(message.urlToMessage)")
-            self.addPoi(x: CGFloat(message.x), y: CGFloat(message.y), tag: message.id, type: message.type)
-        }
+        self.setupFirebaseMessageObserver()
         
         // Scroll Zoom-level specification
         self.floorPlanScrollView.minimumZoomScale = 0.4
@@ -49,11 +42,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         
         // Setup gesture recognition
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
-        floorPlanView.isUserInteractionEnabled = true
-        floorPlanView.addGestureRecognizer(addPinRecognizer)
+        self.floorPlanView.isUserInteractionEnabled = true
+        self.floorPlanView.addGestureRecognizer(addPinRecognizer)
         self.floorPlanView.sd_setImage(with: canaryModel.downloadImageReferenceFromFirebase("floorplans/Floorplan_v3.png"))
         
-        setupTrashcan()
+        self.setupTrashcan()
     }
 
 
@@ -84,22 +77,28 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         return self.floorPlanView
     }
     
-    func addPoi(x: CGFloat, y: CGFloat, tag: Int, type: MessageType){
-        let url = getPoiImageUrl(type.rawValue)
-        var image: UIImage = UIImage()
-        canaryModel.downloadImageFromFirebase(url, completion: {data in
-            image = data
-            let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
-            view.image = image
-            view.tag = tag
-            // Add a gesture recognizer to every created pin to move it
-            let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
-            view.isUserInteractionEnabled = true
-            view.addGestureRecognizer(movePinRecognizer)
-            print("View X: \(view.frame.origin.x) || View Y: \(view.frame.origin.y)")
-            self.floorPlanView.addSubview(view)
-            UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
-        })
+    func addPois(){
+        let msgs = self.canaryModel.getClosestLibrary().getFloor().messages
+        for message in msgs {
+            let url = getPoiImageUrl(message.type.rawValue)
+            var image: UIImage = UIImage()
+            canaryModel.downloadImageFromFirebase(url, completion: {data in
+                image = data
+                let x = CGFloat(message.x)
+                let y = CGFloat(message.y)
+                let view = UIImageView(frame: CGRect(x: x, y: y, width: 48, height: 48))
+                view.image = image
+                view.tag = message.id
+                print("Tag: \(message.id)")
+                // Add a gesture recognizer to every created pin to move it
+                let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
+                view.isUserInteractionEnabled = true
+                view.addGestureRecognizer(movePinRecognizer)
+                //print("View X: \(view.frame.origin.x) || View Y: \(view.frame.origin.y)")
+                self.floorPlanView.addSubview(view)
+                UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
+            })
+        }
     }
 
     // Moving pins
@@ -230,7 +229,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         if(standardImage){
             url = getPoiImageUrl((self.canaryModel.getMessage(view.tag)?.type.rawValue)!)
         } else {
-            let message = canaryModel.getMessage(view.tag)
+            print(self.canaryModel.getClosestLibrary().getFloor().messages.count)
+            let message = self.canaryModel.getMessage(view.tag)
             print("Message: \(message)")
             print("Downloading from url: \((message?.urlToMessage)!)")
             url = (message?.urlToMessage)!
@@ -263,6 +263,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     func setupFirebaseMessageObserver(){
+        //Clear Messages
+        self.canaryModel.getClosestLibrary().getFloor().messages = Set<Message>()
+        
         let date = Date()
         let calender = Calendar.current
         let components = calender.dateComponents([.year,.month,.day], from: date)
@@ -291,12 +294,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                     }else if msgTypeStr == "PHOTO" {
                         msgType = MessageType.PHOTO
                     }
-                    
-                    //Clear message
-                    self.canaryModel.getClosestLibrary().getFloor().messages = Set<Message>()
-                    
                     //Add messages from snapshot
-                    self.canaryModel.getClosestLibrary().getFloor().messages.insert(Message(x: msgX, y: msgY, url: msgURL!, id: msgID, type: msgType))
+                    let tmpMsg = Message(x: msgX, y: msgY, url: msgURL!, id: msgID, type: msgType)
+                    self.canaryModel.getClosestLibrary().getFloor().messages.insert(tmpMsg)
+                    print("Added message with ID: \(msgID)")
+                    print("Size of messages: \(self.canaryModel.getClosestLibrary().getFloor().messages.count)")
+                    self.addPois()
                 }
             }
         })
