@@ -57,8 +57,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             if snapshot.childrenCount > 0 {
                 for msgs in snapshot.children.allObjects as! [DataSnapshot] {
                     let messageObject = msgs.value as? [String: String]
-                    let msgX = Float(truncating: NumberFormatter().number(from: (messageObject?["x"])!)!)
-                    let msgY = Float(truncating: NumberFormatter().number(from: (messageObject?["y"])!)!)
+                    let msgX = (messageObject? ["x"] as NSString?)!.floatValue
+                    let msgY = (messageObject? ["y"] as NSString?)!.floatValue
                     let msgID = Int((messageObject?["id"])!)!
                     let msgURL = messageObject?["url"]
                     let msgTypeStr = messageObject?["type"]
