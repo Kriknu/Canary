@@ -22,6 +22,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     // Trashcan
     var trashCanView:UIImageView = UIImageView()
     
+    // Minimap
+    @IBOutlet weak var minimapView: UIView!
+    var minimapCurrentView: UIImageView!
+    
+    
     
     var zoomLevelTreshhold: CGFloat = 1.5
     var lastZoomLevel: CGFloat = 0.0
@@ -35,6 +40,36 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
 
         // 2. Setup Message Observer
         self.setupFirebaseMessageObserver()
+        
+        // 3. Setup Minimap
+        view.bringSubview(toFront: minimapView)
+        var tmpMinimapImage = UIImage()
+        do {
+            let tmpUrl = URL(string:"https://firebasestorage.googleapis.com/v0/b/canary-e717d.appspot.com/o/floorplans%2FFloorplan_v4.png?alt=media&token=4f9736ce-288d-41e9-bf17-eb1c2268e50b")
+            let tmpData = try Data.init(contentsOf: tmpUrl!)
+            tmpMinimapImage = UIImage(data: tmpData)!
+        }catch{
+            print("Error getting Minimap image")
+        }
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: minimapView.frame.width, height: minimapView.frame.width))
+        imageView.image = tmpMinimapImage
+        imageView.alpha = 0.5
+        minimapView.contentMode = .scaleToFill
+        minimapView.backgroundColor = .clear
+        minimapView.layer.borderWidth = 0.5
+        minimapView.layer.borderColor = UIColor.lightGray.cgColor
+        
+        // Minimap marker
+        print(self.view.frame.width)
+        print(self.view.frame.height)
+        let tmpWidth = self.view.frame.width / (11*floorPlanScrollView.zoomScale)
+        let tmpHeight = self.view.frame.height / (11*floorPlanScrollView.zoomScale)
+        minimapCurrentView = UIImageView(frame: CGRect(x: 0, y: 0, width: tmpWidth, height: tmpHeight))
+        minimapCurrentView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+        
+        minimapView.addSubview(imageView)
+        minimapView.addSubview(minimapCurrentView)
+        minimapView.isUserInteractionEnabled = false
         
         // Scroll Zoom-level specification
         self.floorPlanScrollView.minimumZoomScale = 0.4
@@ -208,7 +243,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        //print("Zoom done")
+        print("Zoomlevel: \(floorPlanScrollView.zoomScale)")
+        minimapCurrentView.frame.size = CGSize(width: self.view.frame.width / (10*floorPlanScrollView.zoomScale), height: self.view.frame.height / (10*floorPlanScrollView.zoomScale))
+        setMinimapMarkerPos()
         if shouldRepaintToOverview()  {
             print("GIEF Overview")
             for subview in floorPlanView.subviews {
@@ -225,6 +262,29 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         lastZoomLevel = self.floorPlanScrollView.zoomScale
     }
 
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView){
+        setMinimapMarkerPos()
+    }
+    
+    func setMinimapMarkerPos(){
+        var tmpX = floorPlanScrollView.contentOffset.x / (11*floorPlanScrollView.zoomScale)
+        var tmpY = (floorPlanScrollView.contentOffset.y+44.0) / (11*floorPlanScrollView.zoomScale)
+        if tmpX < 0 {
+            tmpX = 0
+        }
+        if tmpX + minimapCurrentView.frame.width > minimapView.frame.width {
+            tmpX = minimapView.frame.width - minimapCurrentView.frame.width
+        }
+        if tmpY < 0 {
+            tmpY = 0
+        }
+        if tmpY + minimapCurrentView.frame.height > minimapView.frame.height {
+            tmpY = minimapView.frame.height - minimapCurrentView.frame.height
+        }
+        minimapCurrentView.frame.origin = CGPoint(x: tmpX, y: tmpY)
+    }
+    
     func getPoiImageUrl(_ type: String) -> UIImage{
         if type == "TEXT" {
             return UIImage(named: "TextIcon")!
@@ -240,7 +300,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
 
     func repaintView(view: UIView, standardImage: Bool){
         var url: String
-        print("view.tag = \(view.tag)")
+        //print("view: \(view)")
         if(standardImage){
             let image: UIImage = getPoiImageUrl((self.canaryModel.getMessage(view.tag)?.type.rawValue)!)
             self.addPoiView(view: view, image: image)
