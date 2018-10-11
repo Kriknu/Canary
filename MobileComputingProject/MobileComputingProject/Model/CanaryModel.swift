@@ -16,9 +16,11 @@ import FirebaseDatabase
 import FirebaseStorage
 
 class CanaryModel: NSObject, CLLocationManagerDelegate{
+    // Singleton "getter"
     static let sharedInstance  = CanaryModel()
     var libraryID = 0;
     
+
     let databaseRef = Database.database().reference()
     
     // Database

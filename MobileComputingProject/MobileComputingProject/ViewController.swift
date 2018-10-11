@@ -26,66 +26,44 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     @IBOutlet weak var minimapView: UIView!
     var minimapCurrentView: UIImageView!
     
-    
-    
+    // Zoom levels
     var zoomLevelTreshhold: CGFloat = 1.5
     var lastZoomLevel: CGFloat = 0.0
+    
+    // Moving pins
+    // Offset is stored when gesture began, but same for every change of the gesture
+    var movePoiOffsetX:CGFloat = 0
+    var movePoiOffsetY:CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 1. Load floor plan
+        // 1. Setup Floorplan and scrollview
         let floorImageURL = canaryModel.getClosestLibrary().getFloor().urlToFloorPlan
-
-        // 2. Setup Message Observer
-        self.setupFirebaseMessageObserver()
-        
-        // 3. Setup Minimap
-        view.bringSubview(toFront: minimapView)
-        var tmpMinimapImage = UIImage()
-        do {
-            let tmpUrl = URL(string:"https://firebasestorage.googleapis.com/v0/b/canary-e717d.appspot.com/o/floorplans%2FFloorplan_v4.png?alt=media&token=4f9736ce-288d-41e9-bf17-eb1c2268e50b")
-            let tmpData = try Data.init(contentsOf: tmpUrl!)
-            tmpMinimapImage = UIImage(data: tmpData)!
-        }catch{
-            print("Error getting Minimap image")
-        }
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: minimapView.frame.width, height: minimapView.frame.width))
-        imageView.image = tmpMinimapImage
-        imageView.alpha = 0.5
-        minimapView.contentMode = .scaleToFill
-        minimapView.backgroundColor = .clear
-        minimapView.layer.borderWidth = 0.5
-        minimapView.layer.borderColor = UIColor.lightGray.cgColor
-        
-        // Minimap marker
-        print(self.view.frame.width)
-        print(self.view.frame.height)
-        let tmpWidth = self.view.frame.width / (11*floorPlanScrollView.zoomScale)
-        let tmpHeight = self.view.frame.height / (11*floorPlanScrollView.zoomScale)
-        minimapCurrentView = UIImageView(frame: CGRect(x: 0, y: 0, width: tmpWidth, height: tmpHeight))
-        minimapCurrentView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
-        
-        minimapView.addSubview(imageView)
-        minimapView.addSubview(minimapCurrentView)
-        minimapView.isUserInteractionEnabled = false
-        
-        // Scroll Zoom-level specification
-        self.floorPlanScrollView.minimumZoomScale = 0.4
-        self.floorPlanScrollView.maximumZoomScale = 2.0
-        
-        // Setup gesture recognition
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         self.floorPlanView.isUserInteractionEnabled = true
         self.floorPlanView.addGestureRecognizer(addPinRecognizer)
         self.floorPlanView.sd_setImage(with: canaryModel.downloadImageReferenceFromFirebase("floorplans/Floorplan_v4.png"))
+        self.floorPlanScrollView.minimumZoomScale = 0.4
+        self.floorPlanScrollView.maximumZoomScale = 2.0
         
+        // 2. Setup Message Observer
+        self.setupFirebaseMessageObserver()
+        
+        // 3. Setup Minimap
+        self.setupMinimap()
+        
+        // Setup trashcan
         self.setupTrashcan()
     }
 
 
     /*
-        Saves the location of the point
+    Method called by the LongTapRecognizer on the floorplanview. Saves the coordinates of the long tap and creates a
+    unique ID in the canarymodel, and when a message is actually created (e.g. some painting has been done) the
+    PaintViewController can tell the model to create a message and the X,Y coords are available. This should be
+    done using bundle information since storing a temporary variable is Bad. After saving the coordinates and the ID,
+    it triggers a popover meny where the user can choose between painting, taking a picture or writing a message.
     */
     @objc func addMessage(gesture: UITapGestureRecognizer){
         if gesture.state == .began {
@@ -111,6 +89,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         return self.floorPlanView
     }
 
+    /*
+     A POI (Point of interest) is the graphical representation of a Message. This method is called for each message that should
+     painted out of the map. It takes care of adding the proper gesture recognizers.
+     */
     func addPois(){
         let msgs = self.canaryModel.getClosestLibrary().getFloor().messages
         for message in msgs {
@@ -136,10 +118,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
 
-    // Moving pins
-    // Offset is stored when gesture began, but same for every change of the gesture
-    var movePoiOffsetX:CGFloat = 0
-    var movePoiOffsetY:CGFloat = 0
+    /*
+     Method called upon when a long press occurs on a POI, i.e. a user wants to move the POI. If the user drags the POI and releases it over
+     the trashcan, the POI (and message) is removed. TODO: Remove the message from the DB
+     */
     @objc func poiTapped(gesture: UILongPressGestureRecognizer) {
         // On LongPress begin
         // Give haptic feedback (vibration)
@@ -211,6 +193,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         print("TAP TAP TAP !!! CLICK CLICK CLICK!!!")
     }
     
+    /*
+     Transations to other viewcontrollers
+     */
     func segueToPaintTool(){
         self.performSegue(withIdentifier: "paintSegue", sender: self)
     }
@@ -241,6 +226,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
     }
     
+    /*
+     Called upon when a zooming events occurs
+     */
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         //print("Zoomlevel: \(floorPlanScrollView.zoomScale)")
         minimapCurrentView.frame.size = CGSize(width: self.view.frame.width / (10*floorPlanScrollView.zoomScale), height: self.view.frame.height / (10*floorPlanScrollView.zoomScale))
@@ -261,11 +249,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         lastZoomLevel = self.floorPlanScrollView.zoomScale
     }
 
-    
+    /*
+     Called upon when panning occurs in the floorplanscrollview
+    */
     func scrollViewDidScroll(_ scrollView: UIScrollView){
         setMinimapMarkerPos()
     }
     
+    /*
+     Draws the red marker on the minimap dependant on where the user is currently looking at the map
+     */
     func setMinimapMarkerPos(){
         var tmpX = floorPlanScrollView.contentOffset.x / (11*floorPlanScrollView.zoomScale)
         var tmpY = (floorPlanScrollView.contentOffset.y+44.0) / (11*floorPlanScrollView.zoomScale)
@@ -334,6 +327,37 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     func shouldRepaintToDetailedView() -> Bool{
         return lastZoomLevel < zoomLevelTreshhold && floorPlanScrollView.zoomScale > zoomLevelTreshhold
+    }
+    
+    func setupMinimap(){
+        view.bringSubview(toFront: minimapView)
+        var tmpMinimapImage = UIImage()
+        do {
+            let tmpUrl = URL(string:"https://firebasestorage.googleapis.com/v0/b/canary-e717d.appspot.com/o/floorplans%2FFloorplan_v4.png?alt=media&token=4f9736ce-288d-41e9-bf17-eb1c2268e50b")
+            let tmpData = try Data.init(contentsOf: tmpUrl!)
+            tmpMinimapImage = UIImage(data: tmpData)!
+        }catch{
+            print("Error getting Minimap image")
+        }
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: minimapView.frame.width, height: minimapView.frame.width))
+        imageView.image = tmpMinimapImage
+        imageView.alpha = 0.5
+        minimapView.contentMode = .scaleToFill
+        minimapView.backgroundColor = .clear
+        minimapView.layer.borderWidth = 0.5
+        minimapView.layer.borderColor = UIColor.lightGray.cgColor
+        
+        // Minimap marker
+        print(self.view.frame.width)
+        print(self.view.frame.height)
+        let tmpWidth = self.view.frame.width / (11*floorPlanScrollView.zoomScale)
+        let tmpHeight = self.view.frame.height / (11*floorPlanScrollView.zoomScale)
+        minimapCurrentView = UIImageView(frame: CGRect(x: 0, y: 0, width: tmpWidth, height: tmpHeight))
+        minimapCurrentView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+        
+        minimapView.addSubview(imageView)
+        minimapView.addSubview(minimapCurrentView)
+        minimapView.isUserInteractionEnabled = false
     }
     
     func setupFirebaseMessageObserver(){
