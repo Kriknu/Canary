@@ -245,7 +245,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         
         // *** DUMMY VALUES BEGIN *** //
         addLibrary(name: "Kuggen", lat: 0.0, lon: 0.0)
-        addFloor(name: "Andra Våningen", data: "https://firebasestorage.googleapis.com/v0/b/canary-e717d.appspot.com/o/floorplans%2FFloorplan_v3.png?alt=media&token=a251150b-ebed-4932-b304-bd736dc3dea9")
+        addFloor(name: "Andra Våningen", data: "https://firebasestorage.googleapis.com/v0/b/canary-e717d.appspot.com/o/floorplans%2FFloorplan_v4.png?alt=media&token=4f9736ce-288d-41e9-bf17-eb1c2268e50b")
         // **** DUMMY VALUES END **** //
         
     }

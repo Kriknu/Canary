@@ -242,7 +242,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        print("Zoomlevel: \(floorPlanScrollView.zoomScale)")
+        //print("Zoomlevel: \(floorPlanScrollView.zoomScale)")
         minimapCurrentView.frame.size = CGSize(width: self.view.frame.width / (10*floorPlanScrollView.zoomScale), height: self.view.frame.height / (10*floorPlanScrollView.zoomScale))
         setMinimapMarkerPos()
         if shouldRepaintToOverview()  {
@@ -301,10 +301,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         if(standardImage){
             url = getPoiImageUrl((self.canaryModel.getMessage(view.tag)?.type.rawValue)!)
         } else {
-            print(self.canaryModel.getClosestLibrary().getFloor().messages.count)
+            //print(self.canaryModel.getClosestLibrary().getFloor().messages.count)
             let message = self.canaryModel.getMessage(view.tag)
-            print("Message: \(message)")
-            print("Downloading from url: \((message?.urlToMessage)!)")
+            //print("Message: \(message)")
+            //print("Downloading from url: \((message?.urlToMessage)!)")
             url = (message?.urlToMessage)!
         }
         canaryModel.downloadImageFromFirebase(url, completion: {data in
@@ -370,8 +370,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                     //Add messages from snapshot
                     let tmpMsg = Message(x: msgX, y: msgY, url: msgURL!, id: msgID, type: msgType)
                     self.canaryModel.getClosestLibrary().getFloor().messages.insert(tmpMsg)
-                    print("Added message with ID: \(msgID)")
-                    print("Size of messages: \(self.canaryModel.getClosestLibrary().getFloor().messages.count)")
+                    //print("Added message with ID: \(msgID)")
+                    //print("Size of messages: \(self.canaryModel.getClosestLibrary().getFloor().messages.count)")
                     self.addPois()
                 }
             }
