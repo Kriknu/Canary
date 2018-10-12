@@ -15,6 +15,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     @IBOutlet weak var floorPlanView: UIImageView!
     @IBOutlet weak var floorPlanScrollView: UIScrollView!
+    @IBOutlet weak var titleLabel: UILabel!
+    
     
     // Singleton Model
     var canaryModel: CanaryModel = CanaryModel.sharedInstance
@@ -41,7 +43,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 1. Setup Floorplan and scrollview
+        // 1. Setup Floorplan, Library Name, and scrollview
         let floorImageURL = canaryModel.getClosestLibrary().getFloor().urlToFloorPlan
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         self.floorPlanView.isUserInteractionEnabled = true
@@ -49,6 +51,14 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         self.floorPlanView.sd_setImage(with: canaryModel.downloadImageReferenceFromFirebase("floorplans/Floorplan_v4.png"))
         self.floorPlanScrollView.minimumZoomScale = 0.4
         self.floorPlanScrollView.maximumZoomScale = 2.0
+        
+        titleLabel.layer.shadowColor = UIColor.white.cgColor
+        titleLabel.layer.shadowRadius = 4.0
+        titleLabel.layer.shadowOpacity = 1.0
+        titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
+        titleLabel.layer.masksToBounds = false
+
+        
         
         // 2. Setup Message Observer
         self.setupFirebaseMessageObserver()
