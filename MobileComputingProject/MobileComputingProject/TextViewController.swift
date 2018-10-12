@@ -37,11 +37,17 @@ class TextViewController: UIViewController {
         textInputField.becomeFirstResponder()
         // Do any additional setup after loading the view.
         
-        createTextBTN.addTarget(self, action: #selector(didButtonClick), for: .touchUpInside)
-        
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+
+    @objc func doSegueBack(){
+        self.performSegue(withIdentifier: "closeTextView", sender: self)
     }
     
-    @objc func didButtonClick(_ sender: UIButton){
+    @objc func closeTextView(_ sender: Any) {
         //TODO: Fetch the text from the textview - Done
         let text: String = textInputField.text
         print("Text: \(text)")
@@ -57,21 +63,6 @@ class TextViewController: UIViewController {
         //TODO: Upload image to firebase - Done
         //TODO: Upload it to correct folder with correct name
         self.canaryModel.uploadImageToFirebase("text/test.png", img: newImage)
-        //TODO: Create a pin
-        self.doSegueBack()
-
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    @objc func doSegueBack(){
-        self.performSegue(withIdentifier: "closeTextView", sender: self)
-    }
-    
-    @objc func closeTextView(_ sender: Any) {
-        //TODO: Add functionality to uppload the image and create a pin
         self.performSegue(withIdentifier: "closeTextView", sender: self)
     }
 }
