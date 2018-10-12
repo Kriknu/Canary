@@ -35,6 +35,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     var movePoiOffsetX:CGFloat = 0
     var movePoiOffsetY:CGFloat = 0
     
+    // Temporary button for showing where user are creating a POI
+    var placeholderPOI: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 64, height: 76))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,8 +56,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         // 3. Setup Minimap
         self.setupMinimap()
         
-        // Setup trashcan
+        // 4. Setup trashcan
         self.setupTrashcan()
+        
+        // 5. Placeholder Pin
+        self.floorPlanView.addSubview(placeholderPOI)
+        if let tmpImg = UIImage(named: "MoreBubble")?.image(alpha: 0.3) {
+            self.placeholderPOI.backgroundColor = UIColor(patternImage: tmpImg)
+        }
+        floorPlanView.bringSubview(toFront: placeholderPOI)
+        placeholderPOI.isHidden = true
     }
 
 
@@ -74,6 +85,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let strTag = "\(String(UUID().hashValue))\(String(canaryModel.messageId))"
             let tmpTag = Int(strTag)
             self.canaryModel.latestID = tmpTag ?? -1
+            
+            // Place temporary marker to show where user is creating a POI
+            print("CRASHING 1?")
+            self.placeholderPOI.frame.origin = point
+            self.placeholderPOI.isHidden = false
+            print(point)
+            print(self.placeholderPOI.frame.origin)
+            // Zoom in to new point
+            self.floorPlanScrollView.zoom(to: self.placeholderPOI.frame, animated: true)
+            print("CRASHING 2?")
             
             //Create menu for type of message to add
             createPopOver()
@@ -96,25 +117,43 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     func addPois(){
         let msgs = self.canaryModel.getClosestLibrary().getFloor().messages
         for message in msgs {
+            // Positioning
             let x = CGFloat(message.x)
             let y = CGFloat(message.y)
+            
+            // Size
             let bubbleWidth:CGFloat = 72
             let bubbleHeight:CGFloat = 84
             let iconWidth:CGFloat = 48
             let iconHeight:CGFloat = 48
+            
+            // Graphic Component
             let bubble = UIImageView(frame: CGRect(x: x, y: y, width: bubbleWidth, height: bubbleHeight))
             bubble.image = UIImage(named: "Bubble")
             let image: UIImage = getPoiImageUrl(message.type.rawValue)
             let view = UIImageView(frame: CGRect(x: (bubbleWidth-iconWidth)/2, y: (bubbleWidth-iconHeight)/2, width: iconWidth, height: iconHeight))
             view.image = image
             bubble.tag = message.id
+            
             // Add a gesture recognizer to every created pin to move it
             let movePinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.poiTapped))
             bubble.isUserInteractionEnabled = true
             bubble.addGestureRecognizer(movePinRecognizer)
+            
+            // Add a gesture recognizer to focus on a tip (double tap)
+            let focusRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.focusOnPOI))
+            focusRecognizer.numberOfTapsRequired = 2
+            bubble.addGestureRecognizer(focusRecognizer)
+            
             bubble.addSubview(view)
             self.floorPlanView.addSubview(bubble)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
+        }
+    }
+    
+    @objc func focusOnPOI(_ sender: UITapGestureRecognizer){
+        if let senderView = sender.view {
+            floorPlanScrollView.zoom(to: senderView.frame, animated: true)
         }
     }
 
@@ -190,6 +229,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     @objc func alertControllerBackgroundTapped() {
         //TODO: Add functionality to dismiss temp-POI
+        placeholderPOI.isHidden = true
         print("TAP TAP TAP !!! CLICK CLICK CLICK!!!")
     }
     
@@ -231,19 +271,25 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
      */
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         //print("Zoomlevel: \(floorPlanScrollView.zoomScale)")
-        minimapCurrentView.frame.size = CGSize(width: self.view.frame.width / (10*floorPlanScrollView.zoomScale), height: self.view.frame.height / (10*floorPlanScrollView.zoomScale))
+        let tmpWidth = min((self.view.frame.width / (10*floorPlanScrollView.zoomScale)), self.minimapView.frame.width)
+        let tmpHeight = min((self.view.frame.height / (10*floorPlanScrollView.zoomScale)), self.minimapView.frame.height)
+        minimapCurrentView.frame.size = CGSize(width: tmpWidth, height: tmpHeight)
         setMinimapMarkerPos()
         if shouldRepaintToOverview()  {
             print("GIEF Overview")
             for subview in floorPlanView.subviews {
-                subview.removeFromSuperview()
+                if subview.subviews.count > 0 {
+                    subview.removeFromSuperview()
+                }
             }
             self.addPois()
         }else if shouldRepaintToDetailedView() {
             print("GIEF Detail")
             for subview in floorPlanView.subviews {
-                subview.subviews[0].removeFromSuperview()
-                repaintView(view: subview, standardImage: false)
+                if subview.subviews.count > 0 {
+                    subview.subviews[0].removeFromSuperview()
+                    repaintView(view: subview, standardImage: false)
+                }
             }
         }
         lastZoomLevel = self.floorPlanScrollView.zoomScale
@@ -301,11 +347,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             let message = self.canaryModel.getMessage(view.tag)
             //print("Message: \(message)")
             //print("Downloading from url: \((message?.urlToMessage)!)")
-            url = (message?.urlToMessage)!
-            canaryModel.downloadImageFromFirebase(url, completion: {data in
-                let detailedImage: UIImage = data
-                self.addPoiView(view: view, image:detailedImage)
-            })
+            if let url = message?.urlToMessage {
+                self.canaryModel.downloadImageFromFirebase(url, completion: {data in
+                    let detailedImage: UIImage = data
+                    self.addPoiView(view: view, image:detailedImage)
+                })
+            }
         }
 
     }
@@ -403,5 +450,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         })
     }
 
+}
+
+extension UIImage {
+    func image(alpha: CGFloat) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        draw(at: .zero, blendMode: .normal, alpha: alpha)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
 }
 
