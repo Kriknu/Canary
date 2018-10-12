@@ -346,7 +346,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         minimapView.contentMode = .scaleToFill
         minimapView.backgroundColor = .clear
         minimapView.layer.borderWidth = 0.5
-        minimapView.layer.borderColor = UIColor.lightGray.cgColor
+        minimapView.layer.borderColor = UIColor(displayP3Red: 102.0/255, green: 170.0/255, blue: 179.0/255, alpha: 1).cgColor
+        minimapView.layer.cornerRadius = 4.0
         
         // Minimap marker
         print(self.view.frame.width)
@@ -354,7 +355,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let tmpWidth = self.view.frame.width / (11*floorPlanScrollView.zoomScale)
         let tmpHeight = self.view.frame.height / (11*floorPlanScrollView.zoomScale)
         minimapCurrentView = UIImageView(frame: CGRect(x: 0, y: 0, width: tmpWidth, height: tmpHeight))
-        minimapCurrentView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+        minimapCurrentView.layer.cornerRadius = 4.0
+        minimapCurrentView.backgroundColor = UIColor(red: 236.0/255, green: 253.0/255, blue: 255.0/255, alpha: 0.5)
+        minimapCurrentView.layer.borderWidth = 1.0
+        minimapCurrentView.layer.borderColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 1).cgColor
+
         
         minimapView.addSubview(imageView)
         minimapView.addSubview(minimapCurrentView)
