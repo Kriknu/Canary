@@ -13,6 +13,8 @@ class TextViewController: UIViewController {
     @IBOutlet weak var textInputField: UITextView!
     @IBOutlet weak var createTextBTN: UIButton!
     
+    var canaryModel: CanaryModel = CanaryModel.sharedInstance
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,7 +29,22 @@ class TextViewController: UIViewController {
     }
     
     @objc func didButtonClick(_ sender: UIButton){
-        //TODO: Add functionality to uppload the image and create a pin
+        //TODO: Fetch the text from the textview - Done
+        let text: String = textInputField.text
+        print("Text: \(text)")
+        //TODO: Create an image - Done
+        let textImageView: UIImageView = UIImageView.init(frame: self.view.frame)
+        let scale = UIScreen.main.scale
+        UIGraphicsBeginImageContextWithOptions(textImageView.frame.size, false, scale)
+        //TODO: Update CGPoint to position
+        let rect = CGRect(origin: CGPoint(x: 10, y: 10), size: textImageView.frame.size)
+        text.draw(in: rect, withAttributes: nil)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        //TODO: Upload image to firebase - Done
+        //TODO: Upload it to correct folder with correct name
+        self.canaryModel.uploadImageToFirebase("text/test.png", img: newImage)
+        //TODO: Create a pin
         self.doSegueBack()
     }
     

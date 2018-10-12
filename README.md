@@ -39,3 +39,6 @@ I have added a file called database_structure.json. This file is only used as an
 when making queries to the database.
 Tutorial for the database: https://www.raywenderlich.com/3-firebase-tutorial-getting-started
 
+*** How to add text to an image ***
+Go down to Swift4:
+https://stackoverflow.com/questions/28906914/how-do-i-add-text-to-an-image-in-ios-swift
