@@ -11,7 +11,9 @@ import UIKit
 class TextViewController: UIViewController {
     
     @IBOutlet weak var textInputField: UITextView!
-    @IBOutlet weak var createTextBTN: UIButton!
+    
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    @IBOutlet weak var doneButton: UIBarButtonItem!
     
     var canaryModel: CanaryModel = CanaryModel.sharedInstance
 
@@ -20,6 +22,17 @@ class TextViewController: UIViewController {
         
         textInputField.clipsToBounds = true
         textInputField.layer.cornerRadius = 10.0
+        textInputField.layer.borderWidth = 1
+        textInputField.layer.borderColor = UIColor(displayP3Red: 102.0/255, green: 170.0/255, blue: 179.0/255, alpha: 0.75).cgColor
+        
+        //TODO: Fix shadow
+        textInputField.layer.shadowColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 0.25).cgColor
+        textInputField.layer.shadowOpacity = 1
+        textInputField.layer.shadowOffset = CGSize(width: 0, height: 1)
+        textInputField.layer.shadowRadius = 4
+
+        cancelButton.action = #selector(doSegueBack)
+        doneButton.action = #selector(closeTextView)
         
         textInputField.becomeFirstResponder()
         // Do any additional setup after loading the view.
@@ -46,6 +59,7 @@ class TextViewController: UIViewController {
         self.canaryModel.uploadImageToFirebase("text/test.png", img: newImage)
         //TODO: Create a pin
         self.doSegueBack()
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -53,9 +67,11 @@ class TextViewController: UIViewController {
     }
     
     @objc func doSegueBack(){
-        self.performSegue(withIdentifier: "createTextBack", sender: self)
+        self.performSegue(withIdentifier: "closeTextView", sender: self)
     }
-    @IBAction func closeTextView(_ sender: Any) {
+    
+    @objc func closeTextView(_ sender: Any) {
+        //TODO: Add functionality to uppload the image and create a pin
         self.performSegue(withIdentifier: "closeTextView", sender: self)
     }
 }
