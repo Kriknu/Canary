@@ -219,6 +219,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     func createPopOver(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 1)
         alert.addAction(UIAlertAction(title: "Text", style: UIAlertActionStyle.default, handler:
             {(alert: UIAlertAction!) in self.segueToTextTool()}))
         alert.addAction(UIAlertAction(title: "Paint", style: UIAlertActionStyle.default, handler: {(alert: UIAlertAction!) in self.segueToPaintTool()}))
@@ -249,21 +250,22 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     func setupTrashcan(){
-        // Load trashcan icon
-        do {
-            let url = URL(string:"https://i.imgur.com/jhav5sW.png")
-            let data = try Data.init(contentsOf: url!)
-            let image = UIImage(data: data)
-            let viewX = UIScreen.main.bounds.width / 2 - 64 / 2
-            let viewY = UIScreen.main.bounds.height - 96
-            trashCanView = UIImageView(frame: CGRect(x: viewX, y: viewY, width: 64, height: 64))
-            trashCanView.image = image
-            view.addSubview(trashCanView)
-            trashCanView.isHidden = true
-            trashCanView.isUserInteractionEnabled = false
-        } catch {
-            print(error)
-        }
+        let iconWidth:CGFloat = 48.0
+        let iconHeight:CGFloat = 48.0
+        let viewX = (UIScreen.main.bounds.width / 2) - (iconWidth / 2)
+        let viewY = UIScreen.main.bounds.height - (iconHeight * 1.5)
+        trashCanView = UIImageView(frame: CGRect(x: viewX, y: viewY, width: 48, height: 48))
+        trashCanView.image = UIImage(named: "TrashIcon")
+        
+        //trashCanView.layer.backgroundColor = UIColor(red: 236.0/255, green: 253.0/255, blue: 255.0/255, alpha: 0.5).cgColor
+        //trashCanView.layer.borderColor = UIColor(displayP3Red: 102.0/255, green: 170.0/255, blue: 179.0/255, alpha: 1).cgColor
+        //trashCanView.layer.borderWidth = 1.0
+        //trashCanView.layer.cornerRadius = 4.0
+        //minimapCurrentView.layer.borderColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 1).cgColor
+
+        view.addSubview(trashCanView)
+        trashCanView.isHidden = true
+        trashCanView.isUserInteractionEnabled = false
     }
     
     /*
@@ -392,7 +394,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         minimapView.contentMode = .scaleToFill
         minimapView.backgroundColor = .clear
         minimapView.layer.borderWidth = 0.5
-        minimapView.layer.borderColor = UIColor.lightGray.cgColor
+        minimapView.layer.borderColor = UIColor(displayP3Red: 102.0/255, green: 170.0/255, blue: 179.0/255, alpha: 1).cgColor
+        minimapView.layer.cornerRadius = 4.0
         
         // Minimap marker
         print(self.view.frame.width)
@@ -400,7 +403,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let tmpWidth = self.view.frame.width / (11*floorPlanScrollView.zoomScale)
         let tmpHeight = self.view.frame.height / (11*floorPlanScrollView.zoomScale)
         minimapCurrentView = UIImageView(frame: CGRect(x: 0, y: 0, width: tmpWidth, height: tmpHeight))
-        minimapCurrentView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+        minimapCurrentView.layer.cornerRadius = 4.0
+        minimapCurrentView.backgroundColor = UIColor(red: 236.0/255, green: 253.0/255, blue: 255.0/255, alpha: 0.5)
+        minimapCurrentView.layer.borderWidth = 1.0
+        minimapCurrentView.layer.borderColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 1).cgColor
+
         
         minimapView.addSubview(imageView)
         minimapView.addSubview(minimapCurrentView)

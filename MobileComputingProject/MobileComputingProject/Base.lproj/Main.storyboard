@@ -253,58 +253,49 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your text here:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XdC-Lc-OHh">
-                                <rect key="frame" x="20" y="99" width="164" height="22"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="F8E-Y9-v8s">
-                                <rect key="frame" x="20" y="129.00000000000003" width="374" height="335.66666666666674"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yuw-Z0-l1Z">
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="F8E-Y9-v8s" secondAttribute="height" multiplier="293:263" id="74V-I7-Fr6"/>
+                                    <constraint firstAttribute="height" constant="44" id="rgq-F0-F2e"/>
+                                </constraints>
+                                <color key="barTintColor" red="0.92549019610000005" green="0.99215686270000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <items>
+                                    <navigationItem title="Message" id="e8c-dc-fVr">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="TcF-yK-Fjy">
+                                            <color key="tintColor" red="0.027450980390000001" green="0.31372549020000001" blue="0.35294117650000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="cOx-lF-UMY">
+                                            <color key="tintColor" red="0.027450980390000001" green="0.31372549020000001" blue="0.35294117650000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <textView multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="F8E-Y9-v8s">
+                                <rect key="frame" x="20" y="108" width="374" height="300"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" red="0.027450980390000001" green="0.31372549020000001" blue="0.35294117650000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="fNa-r0-W56"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="light"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tBl-zF-BPl">
-                                <rect key="frame" x="125" y="484.66666666666669" width="165" height="30.000000000000057"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="165" id="drk-IO-xc7"/>
-                                </constraints>
-                                <state key="normal" title="Create message"/>
-                                <connections>
-                                    <segue destination="BYZ-38-t0r" kind="showDetail" identifier="createTextBack" id="Fh5-ed-xbd"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z0w-1J-eWp">
-                                <rect key="frame" x="342" y="44" width="64" height="30"/>
-                                <state key="normal" title="(X) Close"/>
-                                <connections>
-                                    <action selector="closeTextView:" destination="ivU-pM-vwf" eventType="touchUpInside" id="Vtd-3q-AfN"/>
-                                </connections>
-                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.81706600969210208" blue="0.29617683902895753" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.92549019610000005" green="0.99215686270000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="XdC-Lc-OHh" firstAttribute="leading" secondItem="d5z-og-v59" secondAttribute="leading" constant="20" id="5Mv-k8-dVY"/>
-                            <constraint firstItem="Z0w-1J-eWp" firstAttribute="top" secondItem="d5z-og-v59" secondAttribute="top" id="Bt4-yO-4c1"/>
-                            <constraint firstItem="tBl-zF-BPl" firstAttribute="top" secondItem="F8E-Y9-v8s" secondAttribute="bottom" constant="20" id="FNp-DO-IhE"/>
-                            <constraint firstItem="d5z-og-v59" firstAttribute="trailing" secondItem="Z0w-1J-eWp" secondAttribute="trailing" constant="8" id="GWc-Km-8zu"/>
-                            <constraint firstItem="d5z-og-v59" firstAttribute="trailing" secondItem="tBl-zF-BPl" secondAttribute="trailing" constant="124" id="GcF-6E-lPi"/>
-                            <constraint firstItem="d5z-og-v59" firstAttribute="trailing" secondItem="Z0w-1J-eWp" secondAttribute="trailing" constant="8" id="Jcp-bw-Ize"/>
-                            <constraint firstItem="F8E-Y9-v8s" firstAttribute="leading" secondItem="d5z-og-v59" secondAttribute="leading" constant="20" id="N0c-dO-Mh8"/>
-                            <constraint firstItem="tBl-zF-BPl" firstAttribute="leading" secondItem="d5z-og-v59" secondAttribute="leading" constant="125" id="Pxu-cb-Wa8"/>
-                            <constraint firstItem="d5z-og-v59" firstAttribute="trailing" secondItem="F8E-Y9-v8s" secondAttribute="trailing" constant="20" id="Uhy-gI-Ljw"/>
-                            <constraint firstItem="F8E-Y9-v8s" firstAttribute="top" secondItem="XdC-Lc-OHh" secondAttribute="bottom" constant="8" id="fdI-bD-vII"/>
-                            <constraint firstItem="XdC-Lc-OHh" firstAttribute="top" secondItem="d5z-og-v59" secondAttribute="top" constant="55" id="ldw-zg-CES"/>
-                            <constraint firstItem="Z0w-1J-eWp" firstAttribute="top" secondItem="d5z-og-v59" secondAttribute="top" id="pY1-PF-pzu"/>
+                            <constraint firstItem="Yuw-Z0-l1Z" firstAttribute="leading" secondItem="d5z-og-v59" secondAttribute="leading" id="A61-mo-R1W"/>
+                            <constraint firstItem="Yuw-Z0-l1Z" firstAttribute="trailing" secondItem="d5z-og-v59" secondAttribute="trailing" id="MZb-Ls-zlu"/>
+                            <constraint firstItem="F8E-Y9-v8s" firstAttribute="top" secondItem="Yuw-Z0-l1Z" secondAttribute="bottom" constant="20" id="UiH-KD-6gx"/>
+                            <constraint firstItem="F8E-Y9-v8s" firstAttribute="leading" secondItem="d5z-og-v59" secondAttribute="leading" constant="20" id="dpy-V9-gKm"/>
+                            <constraint firstItem="d5z-og-v59" firstAttribute="trailing" secondItem="F8E-Y9-v8s" secondAttribute="trailing" constant="20" id="jez-4G-2fa"/>
+                            <constraint firstItem="Yuw-Z0-l1Z" firstAttribute="top" secondItem="d5z-og-v59" secondAttribute="top" id="sgd-cC-pSF"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="d5z-og-v59"/>
                     </view>
                     <connections>
-                        <outlet property="createTextBTN" destination="tBl-zF-BPl" id="guq-y3-mxx"/>
+                        <outlet property="cancelButton" destination="TcF-yK-Fjy" id="SFi-Tn-BuC"/>
+                        <outlet property="doneButton" destination="cOx-lF-UMY" id="TOB-mP-u1H"/>
                         <outlet property="textInputField" destination="F8E-Y9-v8s" id="hoX-5g-Xse"/>
                         <segue destination="BYZ-38-t0r" kind="showDetail" identifier="closeTextView" id="AfX-mz-Ove"/>
                     </connections>
@@ -460,7 +451,6 @@
         <image name="Paintbrush" width="88" height="132"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Fdu-pv-F8u"/>
-        <segue reference="a1z-YG-0fJ"/>
+        <segue reference="AfX-mz-Ove"/>
     </inferredMetricsTieBreakers>
 </document>
