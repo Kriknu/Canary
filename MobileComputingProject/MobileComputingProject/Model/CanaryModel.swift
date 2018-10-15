@@ -116,7 +116,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     
     func downloadImageFromFirebase(_ path: String, completion: @escaping (UIImage) -> Void) {
         let storageReference: StorageReference = downloadImageReferenceFromFirebase(path)
-        storageReference.getData(maxSize: 1*1024*1024) {data, error in
+        storageReference.getData(maxSize: 50*1024*1024) {data, error in
             if let error = error {
                 print(error)
                 // Uh-oh, an error occurred!

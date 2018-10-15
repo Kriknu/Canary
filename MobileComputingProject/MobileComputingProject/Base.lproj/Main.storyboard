@@ -402,60 +402,105 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FaP-Ig-1o1">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GL1-Fi-Ka7">
-                                        <rect key="frame" x="177" y="718" width="60" height="60"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="Ite-RV-tRT"/>
-                                            <constraint firstAttribute="height" constant="60" id="j3s-0y-iSH"/>
-                                        </constraints>
-                                        <connections>
-                                            <action selector="takePicture:" destination="ibC-Dg-WjZ" eventType="touchUpInside" id="Ri5-Mg-bd2"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V1Q-5N-0Sf">
-                                        <rect key="frame" x="258" y="8" width="148" height="39"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                        <state key="normal" title="(X) close">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="closeCamera:" destination="ibC-Dg-WjZ" eventType="touchUpInside" id="DH7-V9-BMm"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G9O-5a-p3Q">
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <items>
+                                    <navigationItem title="Title" id="htm-4Z-bM1">
+                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="R6W-U0-ENZ">
+                                            <connections>
+                                                <action selector="cancelCamera:" destination="ibC-Dg-WjZ" id="p66-D5-4Lo"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GL1-Fi-Ka7">
+                                <rect key="frame" x="177" y="782" width="60" height="60"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="V1Q-5N-0Sf" firstAttribute="leading" secondItem="FaP-Ig-1o1" secondAttribute="leading" constant="258" id="CL2-Fj-3UA"/>
-                                    <constraint firstItem="V1Q-5N-0Sf" firstAttribute="top" secondItem="FaP-Ig-1o1" secondAttribute="top" constant="8" id="Tdl-Do-XO6"/>
-                                    <constraint firstAttribute="bottom" secondItem="GL1-Fi-Ka7" secondAttribute="bottom" constant="40" id="iAb-Hf-NZT"/>
-                                    <constraint firstItem="GL1-Fi-Ka7" firstAttribute="centerX" secondItem="FaP-Ig-1o1" secondAttribute="centerX" id="lh6-Ff-BnA"/>
-                                    <constraint firstAttribute="trailing" secondItem="V1Q-5N-0Sf" secondAttribute="trailing" constant="8" id="sr8-FU-VFo"/>
+                                    <constraint firstAttribute="width" constant="60" id="Ite-RV-tRT"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="QBs-OX-hTu"/>
+                                    <constraint firstAttribute="height" constant="60" id="j3s-0y-iSH"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="mlf-x1-cwg"/>
                                 </constraints>
-                            </view>
+                                <connections>
+                                    <action selector="takePicture:" destination="ibC-Dg-WjZ" eventType="touchUpInside" id="Ri5-Mg-bd2"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="FaP-Ig-1o1" firstAttribute="top" secondItem="s35-0t-zhy" secondAttribute="top" id="6P3-Fo-GJh"/>
-                            <constraint firstItem="s35-0t-zhy" firstAttribute="bottom" secondItem="FaP-Ig-1o1" secondAttribute="bottom" id="NBB-Lf-g9Q"/>
-                            <constraint firstItem="s35-0t-zhy" firstAttribute="trailing" secondItem="FaP-Ig-1o1" secondAttribute="trailing" id="USg-03-YrZ"/>
-                            <constraint firstItem="FaP-Ig-1o1" firstAttribute="leading" secondItem="s35-0t-zhy" secondAttribute="leading" id="mRk-2H-65H"/>
+                            <constraint firstItem="G9O-5a-p3Q" firstAttribute="trailing" secondItem="s35-0t-zhy" secondAttribute="trailing" id="Emt-6m-gkB"/>
+                            <constraint firstItem="GL1-Fi-Ka7" firstAttribute="centerX" secondItem="gDC-fA-S9v" secondAttribute="centerX" id="Mxf-45-QAB"/>
+                            <constraint firstItem="s35-0t-zhy" firstAttribute="bottom" secondItem="GL1-Fi-Ka7" secondAttribute="bottom" constant="20" id="Ulz-wt-ZUI"/>
+                            <constraint firstItem="G9O-5a-p3Q" firstAttribute="leading" secondItem="s35-0t-zhy" secondAttribute="leading" id="av2-le-3Il"/>
+                            <constraint firstItem="G9O-5a-p3Q" firstAttribute="top" secondItem="s35-0t-zhy" secondAttribute="top" id="fbH-Sp-70Y"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="s35-0t-zhy"/>
                     </view>
                     <connections>
-                        <outlet property="closeBtn" destination="V1Q-5N-0Sf" id="3gn-CP-bb5"/>
-                        <outlet property="previewView" destination="FaP-Ig-1o1" id="tca-zY-5au"/>
                         <outlet property="snapButton" destination="GL1-Fi-Ka7" id="X2B-uG-z0g"/>
                         <segue destination="BYZ-38-t0r" kind="showDetail" identifier="closeCamera" id="R9r-ul-pTL"/>
+                        <segue destination="8su-5M-iPQ" kind="showDetail" identifier="previewPhoto" id="HCI-0M-ujN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BJ5-9T-GUz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1376.8115942028987" y="18.75"/>
+        </scene>
+        <!--Preview View Controller-->
+        <scene sceneID="cPp-u3-Fnb">
+            <objects>
+                <viewController id="8su-5M-iPQ" customClass="PreviewViewController" customModule="MobileComputingProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cdn-Ld-xvt">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="065-1s-BcY">
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="srL-hK-Ola"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="Preview" id="TbC-CT-6oS">
+                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="TWp-If-PlW">
+                                            <connections>
+                                                <action selector="cancelPreview:" destination="8su-5M-iPQ" id="Lun-QB-6QJ"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Done" id="Val-CF-TmV">
+                                            <connections>
+                                                <action selector="donePreview:" destination="8su-5M-iPQ" id="3FZ-My-7a9"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qiW-k2-HEc">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="qiW-k2-HEc" firstAttribute="bottom" secondItem="KM7-Es-4eE" secondAttribute="bottom" id="G4b-ow-JPK"/>
+                            <constraint firstItem="qiW-k2-HEc" firstAttribute="top" secondItem="065-1s-BcY" secondAttribute="bottom" id="KhX-ZI-PMw"/>
+                            <constraint firstItem="065-1s-BcY" firstAttribute="top" secondItem="KM7-Es-4eE" secondAttribute="top" id="Oqe-Ae-Hnz"/>
+                            <constraint firstItem="qiW-k2-HEc" firstAttribute="leading" secondItem="KM7-Es-4eE" secondAttribute="leading" id="RK4-E8-j09"/>
+                            <constraint firstItem="qiW-k2-HEc" firstAttribute="trailing" secondItem="KM7-Es-4eE" secondAttribute="trailing" id="Rz6-RD-ltj"/>
+                            <constraint firstItem="065-1s-BcY" firstAttribute="leading" secondItem="cdn-Ld-xvt" secondAttribute="leading" id="Y8y-eB-7bh"/>
+                            <constraint firstAttribute="trailing" secondItem="065-1s-BcY" secondAttribute="trailing" id="fBM-xY-4bp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="KM7-Es-4eE"/>
+                    </view>
+                    <connections>
+                        <outlet property="previewImage" destination="qiW-k2-HEc" id="kwf-uE-oEU"/>
+                        <segue destination="ibC-Dg-WjZ" kind="showDetail" identifier="newPhotoSegue" id="TRf-LQ-Pef"/>
+                        <segue destination="BYZ-38-t0r" kind="showDetail" identifier="overviewSegue" id="HQv-Kj-yVE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jmx-Ei-2Rx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="606" y="802"/>
         </scene>
     </scenes>
     <resources>
@@ -463,7 +508,8 @@
         <image name="Paintbrush" width="88" height="132"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2GM-fD-qGd"/>
+        <segue reference="HCI-0M-ujN"/>
+        <segue reference="TRf-LQ-Pef"/>
         <segue reference="R9r-ul-pTL"/>
     </inferredMetricsTieBreakers>
 </document>

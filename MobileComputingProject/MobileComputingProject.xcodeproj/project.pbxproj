@@ -19,6 +19,7 @@
 		9C536004215E0B2F006C7BB1 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C536003215E0B2F006C7BB1 /* Message.swift */; };
 		9C8656372164ABBB00D39C57 /* Floor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8656362164ABBB00D39C57 /* Floor.swift */; };
 		9C86563C2164EE2F00D39C57 /* PointOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C86563B2164EE2F00D39C57 /* PointOfInterest.swift */; };
+		9C904F23217497CD00CFF400 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C904F22217497CD00CFF400 /* PreviewViewController.swift */; };
 		9CDB56F8216B35120071E8EB /* DetailedViewShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDB56F7216B35120071E8EB /* DetailedViewShape.swift */; };
 		9CF974F82167B14800CF855C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF974F72167B14800CF855C /* CameraViewController.swift */; };
 		D33ECBE2CC804D1C8E63877B /* Pods_MobileComputingProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA10D3149EC0F6271E87C549 /* Pods_MobileComputingProject.framework */; };
@@ -45,6 +46,7 @@
 		9C536003215E0B2F006C7BB1 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		9C8656362164ABBB00D39C57 /* Floor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Floor.swift; sourceTree = "<group>"; };
 		9C86563B2164EE2F00D39C57 /* PointOfInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfInterest.swift; sourceTree = "<group>"; };
+		9C904F22217497CD00CFF400 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		9CDB56F7216B35120071E8EB /* DetailedViewShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedViewShape.swift; sourceTree = "<group>"; };
 		9CF974F72167B14800CF855C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		DA10D3149EC0F6271E87C549 /* Pods_MobileComputingProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileComputingProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +103,7 @@
 				F6383D37215E3C0E008FD856 /* GoogleService-Info.plist */,
 				9C535FFA215C0366006C7BB1 /* Helper Files */,
 				9C1B6D39214A9A25006F0FE5 /* ViewController.swift */,
+				9C904F22217497CD00CFF400 /* PreviewViewController.swift */,
 				9CF974F72167B14800CF855C /* CameraViewController.swift */,
 				EB322BE721675FC5007F2378 /* LoadingViewController.swift */,
 				EB322BED21677103007F2378 /* loading_screen_04.json */,
@@ -296,6 +299,7 @@
 				9C86563C2164EE2F00D39C57 /* PointOfInterest.swift in Sources */,
 				9C8656372164ABBB00D39C57 /* Floor.swift in Sources */,
 				9CDB56F8216B35120071E8EB /* DetailedViewShape.swift in Sources */,
+				9C904F23217497CD00CFF400 /* PreviewViewController.swift in Sources */,
 				9C1B6D38214A9A25006F0FE5 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,15 +446,17 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 26N6SDZ7WD;
+				DEVELOPMENT_TEAM = X8NBC92BJ5;
 				INFOPLIST_FILE = MobileComputingProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = CIU196.MobileComputingProject.daniel;
+				PRODUCT_BUNDLE_IDENTIFIER = CIU196.MobileComputingProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -462,15 +468,17 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 26N6SDZ7WD;
+				DEVELOPMENT_TEAM = X8NBC92BJ5;
 				INFOPLIST_FILE = MobileComputingProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = CIU196.MobileComputingProject.daniel;
+				PRODUCT_BUNDLE_IDENTIFIER = CIU196.MobileComputingProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
