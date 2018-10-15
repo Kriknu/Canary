@@ -48,21 +48,19 @@ class TextViewController: UIViewController {
     }
     
     @objc func closeTextView(_ sender: Any) {
-        //TODO: Fetch the text from the textview - Done
         let text: String = textInputField.text
-        print("Text: \(text)")
-        //TODO: Create an image - Done
         let textImageView: UIImageView = UIImageView.init(frame: self.view.frame)
         let scale = UIScreen.main.scale
         UIGraphicsBeginImageContextWithOptions(textImageView.frame.size, false, scale)
-        //TODO: Update CGPoint to position
+        let textFont = UIFont(name: "Helvetica Bold", size: 72)!
+        let textFontAttributes = [NSAttributedStringKey.font: textFont,]
         let rect = CGRect(origin: CGPoint(x: 10, y: 10), size: textImageView.frame.size)
-        text.draw(in: rect, withAttributes: nil)
+        text.draw(in: rect, withAttributes: textFontAttributes)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        //TODO: Upload image to firebase - Done
-        //TODO: Upload it to correct folder with correct name
-        self.canaryModel.uploadImageToFirebase("text/test.png", img: newImage)
+        let imageName = self.canaryModel.getImageName()
+        self.canaryModel.uploadImageToFirebase(imageName, img: newImage)
+        self.canaryModel.addMessage(imageName: imageName, type: MessageType.TEXT)
         self.performSegue(withIdentifier: "closeTextView", sender: self)
     }
 }
