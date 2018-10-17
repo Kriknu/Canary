@@ -27,12 +27,21 @@ class LoadingViewController: UIViewController {
         
         animationView.play()
         
-        timer = Timer.scheduledTimer(timeInterval: 4.5, target: self, selector: #selector(goToMainScreen), userInfo: nil, repeats: true)
+        let firstLaunch = FirstLaunch()
+        if firstLaunch.isFirstLaunch {
+            timer = Timer.scheduledTimer(timeInterval: 4.5, target: self, selector: #selector(goToOnBoardingScreen), userInfo: nil, repeats: true)
+        } else {
+            timer = Timer.scheduledTimer(timeInterval: 4.5, target: self, selector: #selector(goToMainScreen), userInfo: nil, repeats: true)
+        }
 
     }
     
     @objc func goToMainScreen(){
         performSegue(withIdentifier: "mainScreen", sender: self)
+    }
+    
+    @objc func goToOnBoardingScreen() {
+        performSegue(withIdentifier: "onBoarding", sender: self)
     }
     /*
     // MARK: - Navigation
@@ -43,5 +52,25 @@ class LoadingViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+
+    final class FirstLaunch {
+        
+        let userDefaults: UserDefaults = .standard
+        
+        let wasLaunchedBefore: Bool
+        var isFirstLaunch: Bool {
+            return !wasLaunchedBefore
+        }
+        
+        init() {
+            let key = "com.any-suggestion.FirstLaunch.WasLaunchedBefore"
+            let wasLaunchedBefore = userDefaults.bool(forKey: key)
+            self.wasLaunchedBefore = wasLaunchedBefore
+            if !wasLaunchedBefore {
+                userDefaults.set(true, forKey: key)
+            }
+        }
+        
+    }
 
 }

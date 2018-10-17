@@ -316,11 +316,47 @@
                     </view>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="mainScreen" id="eXH-NP-Mmn"/>
+                        <segue destination="hNR-2J-yWO" kind="show" identifier="onBoarding" id="Cgt-1x-81r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oPF-DS-ceG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-861" y="19"/>
+            <point key="canvasLocation" x="-2132" y="-25"/>
+        </scene>
+        <!--On Boarding Controller-->
+        <scene sceneID="SOk-63-fHI">
+            <objects>
+                <viewController id="hNR-2J-yWO" customClass="OnBoardingController" customModule="MobileComputingProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XLZ-mr-47s">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BKC-n3-1Lz">
+                                <rect key="frame" x="137" y="701" width="140" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="Y8k-hA-eix"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Got it!"/>
+                                <connections>
+                                    <action selector="firstTimeEnter:" destination="hNR-2J-yWO" eventType="touchUpInside" id="D48-Pp-eVA"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="enterFirstTime" id="SgU-sd-bS9"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="oWx-qe-AGC" firstAttribute="bottom" secondItem="BKC-n3-1Lz" secondAttribute="bottom" constant="120" id="6GO-9z-cfT"/>
+                            <constraint firstItem="oWx-qe-AGC" firstAttribute="trailing" secondItem="BKC-n3-1Lz" secondAttribute="trailing" constant="137" id="LHh-si-bV6"/>
+                            <constraint firstItem="BKC-n3-1Lz" firstAttribute="leading" secondItem="oWx-qe-AGC" secondAttribute="leading" constant="137" id="YDk-Tv-Y2t"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="oWx-qe-AGC"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="6aX-5G-1My"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4p1-7M-9NQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1018.840579710145" y="-412.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -508,8 +544,7 @@
         <image name="Paintbrush" width="88" height="132"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HCI-0M-ujN"/>
         <segue reference="TRf-LQ-Pef"/>
-        <segue reference="R9r-ul-pTL"/>
+        <segue reference="SgU-sd-bS9"/>
     </inferredMetricsTieBreakers>
 </document>
