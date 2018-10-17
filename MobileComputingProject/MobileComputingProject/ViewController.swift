@@ -152,9 +152,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             
             // Add a gesture recognizer to focus on a tip (double tap)
             let focusRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.focusOnPOI))
-            focusRecognizer.numberOfTapsRequired = 2
+            focusRecognizer.numberOfTapsRequired = 1
             bubble.addGestureRecognizer(focusRecognizer)
-            
+            print("addpois added view with tag: \(bubble.tag)")
             bubble.addSubview(view)
             self.floorPlanView.addSubview(bubble)
             UIImpactFeedbackGenerator.init(style: UIImpactFeedbackStyle.heavy).impactOccurred()
@@ -378,6 +378,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         var tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: tmpImageWidth, height: tmpImageHeight)))
         tmpImg.contentMode = UIViewContentMode.scaleAspectFit
         tmpImg.image = image
+        print("addPoiView adding view with tag: \(view.tag)")
         view.addSubview(tmpImg)
     }
 
@@ -427,6 +428,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     func setupFirebaseMessageObserver(){
         //Clear Messages
+        print("Message Count: \(self.canaryModel.getClosestLibrary().getFloor().messages.count)")
         self.canaryModel.getClosestLibrary().getFloor().messages = Set<Message>()
         
         let date = Date()
