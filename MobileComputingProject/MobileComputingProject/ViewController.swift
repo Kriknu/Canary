@@ -295,6 +295,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                     subview.removeFromSuperview()
                 }
             }
+            print("scrollViewDidZoom called upon addPois")
             self.addPois()
         }else if shouldRepaintToDetailedView() {
             print("GIEF Detail")
@@ -464,8 +465,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                     self.canaryModel.getClosestLibrary().getFloor().messages.insert(tmpMsg)
                     //print("Added message with ID: \(msgID)")
                     //print("Size of messages: \(self.canaryModel.getClosestLibrary().getFloor().messages.count)")
-                    self.addPois()
                 }
+                print("Snapshot calling upon addPois")
+                self.addPois()
             }
         })
     }
