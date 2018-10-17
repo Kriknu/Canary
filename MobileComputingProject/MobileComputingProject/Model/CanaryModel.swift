@@ -20,6 +20,9 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     static let sharedInstance  = CanaryModel()
     var libraryID = 0;
     
+    // Information of last position of mainViewController
+    var lastPoint: CGPoint = CGPoint(x: 0.0, y: 0.0)
+    var lastZoom: CGFloat = 0.0
 
     let databaseRef = Database.database().reference()
     

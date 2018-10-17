@@ -76,6 +76,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }
         floorPlanView.bringSubview(toFront: placeholderPOI)
         placeholderPOI.isHidden = true
+        self.floorPlanScrollView.contentOffset = self.canaryModel.lastPoint
+        self.floorPlanScrollView.zoomScale = self.canaryModel.lastZoom
     }
 
 
@@ -249,14 +251,20 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
      Transations to other viewcontrollers
      */
     func segueToPaintTool(){
+        self.canaryModel.lastZoom = self.floorPlanScrollView.zoomScale
+        self.canaryModel.lastPoint = self.floorPlanScrollView.contentOffset
         self.performSegue(withIdentifier: "paintSegue", sender: self)
     }
     
     func segueToCameraTool(){
+        self.canaryModel.lastZoom = self.floorPlanScrollView.zoomScale
+        self.canaryModel.lastPoint = self.floorPlanScrollView.contentOffset
         self.performSegue(withIdentifier: "cameraSegue", sender: self)
     }
     
     func segueToTextTool(){
+        self.canaryModel.lastZoom = self.floorPlanScrollView.zoomScale
+        self.canaryModel.lastPoint = self.floorPlanScrollView.contentOffset
         self.performSegue(withIdentifier: "textSegue", sender: self)
     }
     
@@ -286,6 +294,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         //print("Zoomlevel: \(floorPlanScrollView.zoomScale)")
         let tmpWidth = min((self.view.frame.width / (10*floorPlanScrollView.zoomScale)), self.minimapView.frame.width)
         let tmpHeight = min((self.view.frame.height / (10*floorPlanScrollView.zoomScale)), self.minimapView.frame.height)
+        print(minimapCurrentView)
         minimapCurrentView.frame.size = CGSize(width: tmpWidth, height: tmpHeight)
         setMinimapMarkerPos()
         if shouldRepaintToOverview()  {
