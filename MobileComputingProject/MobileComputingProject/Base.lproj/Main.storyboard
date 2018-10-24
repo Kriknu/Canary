@@ -444,7 +444,7 @@
                                     <constraint firstAttribute="height" constant="44" id="oUr-2a-2Fh"/>
                                 </constraints>
                                 <items>
-                                    <navigationItem title="Title" id="htm-4Z-bM1">
+                                    <navigationItem title="Photo" id="htm-4Z-bM1">
                                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="R6W-U0-ENZ">
                                             <connections>
                                                 <action selector="cancelCamera:" destination="ibC-Dg-WjZ" id="p66-D5-4Lo"/>
@@ -453,32 +453,36 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GL1-Fi-Ka7">
-                                <rect key="frame" x="177" y="782" width="60" height="60"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="Ite-RV-tRT"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="QBs-OX-hTu"/>
-                                    <constraint firstAttribute="height" constant="60" id="j3s-0y-iSH"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="mlf-x1-cwg"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="takePicture:" destination="ibC-Dg-WjZ" eventType="touchUpInside" id="Ri5-Mg-bd2"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bAv-E0-TzF">
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GL1-Fi-Ka7">
+                                        <rect key="frame" x="177" y="698" width="60" height="60"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="Ite-RV-tRT"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="QBs-OX-hTu"/>
+                                            <constraint firstAttribute="height" constant="60" id="j3s-0y-iSH"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="mlf-x1-cwg"/>
+                                        </constraints>
+                                        <connections>
+                                            <action selector="takePicture:" destination="ibC-Dg-WjZ" eventType="touchUpInside" id="Ri5-Mg-bd2"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="GL1-Fi-Ka7" firstAttribute="centerX" secondItem="bAv-E0-TzF" secondAttribute="centerX" id="YRX-yU-ZrL"/>
+                                    <constraint firstAttribute="bottom" secondItem="GL1-Fi-Ka7" secondAttribute="bottom" constant="50" id="zk2-tY-R1h"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="bAv-E0-TzF" firstAttribute="top" secondItem="G9O-5a-p3Q" secondAttribute="bottom" id="3rs-vV-xx4"/>
                             <constraint firstItem="G9O-5a-p3Q" firstAttribute="trailing" secondItem="s35-0t-zhy" secondAttribute="trailing" id="Emt-6m-gkB"/>
-                            <constraint firstItem="GL1-Fi-Ka7" firstAttribute="centerX" secondItem="gDC-fA-S9v" secondAttribute="centerX" id="Mxf-45-QAB"/>
                             <constraint firstItem="bAv-E0-TzF" firstAttribute="trailing" secondItem="s35-0t-zhy" secondAttribute="trailing" id="PlG-93-z4V"/>
                             <constraint firstItem="bAv-E0-TzF" firstAttribute="leading" secondItem="s35-0t-zhy" secondAttribute="leading" id="TT4-Iu-S8N"/>
-                            <constraint firstItem="s35-0t-zhy" firstAttribute="bottom" secondItem="GL1-Fi-Ka7" secondAttribute="bottom" constant="20" id="Ulz-wt-ZUI"/>
                             <constraint firstItem="G9O-5a-p3Q" firstAttribute="leading" secondItem="s35-0t-zhy" secondAttribute="leading" id="av2-le-3Il"/>
                             <constraint firstItem="G9O-5a-p3Q" firstAttribute="top" secondItem="s35-0t-zhy" secondAttribute="top" id="fbH-Sp-70Y"/>
                             <constraint firstAttribute="bottom" secondItem="bAv-E0-TzF" secondAttribute="bottom" id="yKm-C4-tM1"/>
