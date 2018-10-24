@@ -6,10 +6,10 @@ Group project for the course CIU196 Mobile Interaction, Fall 2018, Chalmers Univ
 
 ## The team
 * Carl Albertsson
-* Daniel Roeven
-* Kristoffer Knutsson
-* Simon Takman
 * William Falkengren
+* Kristoffer Knutsson
+* Daniel Roeven
+* Simon Takman
 
 ## Design
 <img src="readme-resources/Overview.png" width="250" /> <img src="readme-resources/Choosing_Type.png" width="250" /><br/>
