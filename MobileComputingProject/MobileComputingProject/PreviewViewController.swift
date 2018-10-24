@@ -26,6 +26,7 @@ class PreviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        previewImage.contentMode = UIViewContentMode.scaleAspectFit
         previewImage.image = image
         // Do any additional setup after loading the view.
     }
