@@ -17,7 +17,6 @@ class PreviewViewController: UIViewController {
     }
     @IBAction func donePreview(_ sender: Any) {
         let imageName = self.canaryModel.getImageName()
-        self.previewImage.transform = CGAffineTransform(rotationAngle: (0.5 * .pi))
         self.canaryModel.uploadImageToFirebase(imageName, img: self.previewImage.image)
         self.canaryModel.addMessage(imageName: imageName, type: MessageType.PHOTO)
         performSegue(withIdentifier: "overviewSegue", sender: self)

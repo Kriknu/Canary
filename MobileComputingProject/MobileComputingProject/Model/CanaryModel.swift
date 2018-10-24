@@ -127,9 +127,9 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
             let fileName = imageName
             
             let image = img
-            let pngImage: Data? = UIImagePNGRepresentation(image!)
+            let jpgImage: Data? = UIImageJPEGRepresentation(image!, 1.0)
             let imageRef = storageReference.child(fileName)
-            _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
+            _ = imageRef.putData(jpgImage ?? Data(), metadata:nil, completion:{(metadata,error) in
             })
         }
     }
@@ -146,7 +146,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         let minute = components.minute
         let second = components.second
         let suffix = String(year!) + "-" + String(month!) + "-" + String(day!) + " " + String(hour!)  + ":" + String(minute!) + ":" +  String(second!)
-        return "images/\(prefix)-\(suffix).png"
+        return "images/\(prefix)-\(suffix).jpg"
     }
 
     func addMessage(imageName: String, type: MessageType){
