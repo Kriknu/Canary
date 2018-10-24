@@ -20,7 +20,6 @@
 		9C8656372164ABBB00D39C57 /* Floor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8656362164ABBB00D39C57 /* Floor.swift */; };
 		9C86563C2164EE2F00D39C57 /* PointOfInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C86563B2164EE2F00D39C57 /* PointOfInterest.swift */; };
 		9C904F23217497CD00CFF400 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C904F22217497CD00CFF400 /* PreviewViewController.swift */; };
-		9CDB56F8216B35120071E8EB /* DetailedViewShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDB56F7216B35120071E8EB /* DetailedViewShape.swift */; };
 		9CF974F82167B14800CF855C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF974F72167B14800CF855C /* CameraViewController.swift */; };
 		D33ECBE2CC804D1C8E63877B /* Pods_MobileComputingProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA10D3149EC0F6271E87C549 /* Pods_MobileComputingProject.framework */; };
 		EB223A32217728430079AC34 /* OnBoardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB223A31217728430079AC34 /* OnBoardingController.swift */; };
@@ -49,7 +48,6 @@
 		9C8656362164ABBB00D39C57 /* Floor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Floor.swift; sourceTree = "<group>"; };
 		9C86563B2164EE2F00D39C57 /* PointOfInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfInterest.swift; sourceTree = "<group>"; };
 		9C904F22217497CD00CFF400 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
-		9CDB56F7216B35120071E8EB /* DetailedViewShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedViewShape.swift; sourceTree = "<group>"; };
 		9CF974F72167B14800CF855C /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		DA10D3149EC0F6271E87C549 /* Pods_MobileComputingProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileComputingProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB223A31217728430079AC34 /* OnBoardingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingController.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 				9C1B6D3B214A9A25006F0FE5 /* Main.storyboard */,
 				9C8656382164EDCE00D39C57 /* Views */,
 				9C535FFD215C046D006C7BB1 /* Model */,
-				9CDB56F7216B35120071E8EB /* DetailedViewShape.swift */,
 				EB223A31217728430079AC34 /* OnBoardingController.swift */,
 			);
 			path = MobileComputingProject;
@@ -306,7 +303,6 @@
 				9C86563C2164EE2F00D39C57 /* PointOfInterest.swift in Sources */,
 				9C8656372164ABBB00D39C57 /* Floor.swift in Sources */,
 				EB223A32217728430079AC34 /* OnBoardingController.swift in Sources */,
-				9CDB56F8216B35120071E8EB /* DetailedViewShape.swift in Sources */,
 				9C904F23217497CD00CFF400 /* PreviewViewController.swift in Sources */,
 				9C1B6D38214A9A25006F0FE5 /* AppDelegate.swift in Sources */,
 			);

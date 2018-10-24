@@ -19,39 +19,11 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     // Singleton "getter"
     static let sharedInstance  = CanaryModel()
     var libraryID = 0;
+    let databaseRef = Database.database().reference()
     
     // Information of last position of mainViewController
     var lastPoint: CGPoint = CGPoint(x: 0.0, y: 0.0)
     var lastZoom: CGFloat = 0.0
-
-    let databaseRef = Database.database().reference()
-    
-    // Database
-    func writeToDatabase(path: String, value: NSDictionary){
-        databaseRef.child(path).setValue(value)
-    }
-
-    func readFromDatabase(path: String, completion: @escaping (NSDictionary) -> Void) {
-        //TODO: Make this work async
-        var dbResponse: NSDictionary?
-        let ref = Database.database().reference()
-        ref.child(path).observeSingleEvent(of: .value, with: {(snapshot) in
-            let value = snapshot.value as? NSDictionary
-            dbResponse = value
-            completion(dbResponse!)
-        }) {(error) in
-            print(error.localizedDescription)
-        }
-    }
-
-    // GPS
-    var locationManager: CLLocationManager = CLLocationManager()
-    var longitude: Double {
-        get{return Double(self.getLocation()?.coordinate.longitude ?? 0)}
-    }
-    var latitude: Double {
-        get{return Double(self.getLocation()?.coordinate.latitude ?? 0)}
-    }
     
     // Model stuff
     var libraries: [Library] = []
@@ -67,21 +39,37 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     
     // Connection between a Library and it's UIView (aka, the pin/poi)
     var libraryViews: Dictionary = [UIView: Library]()
+    // GPS
+    var locationManager: CLLocationManager = CLLocationManager()
+    var longitude: Double {
+        get{return Double(self.getLocation()?.coordinate.longitude ?? 0)}
+    }
+    var latitude: Double {
+        get{return Double(self.getLocation()?.coordinate.latitude ?? 0)}
+    }
     
-    // Functions
-    
-    
+    // Database
+    func writeToDatabase(path: String, value: NSDictionary){
+        databaseRef.child(path).setValue(value)
+    }
+
+    func readFromDatabase(path: String, completion: @escaping (NSDictionary) -> Void) {
+        var dbResponse: NSDictionary?
+        let ref = Database.database().reference()
+        ref.child(path).observeSingleEvent(of: .value, with: {(snapshot) in
+            let value = snapshot.value as? NSDictionary
+            dbResponse = value
+            completion(dbResponse!)
+        }) {(error) in
+            print(error.localizedDescription)
+        }
+    }
+
     func getLibrary(byName name: String) -> Library?{
         for lib in libraries {
             if lib.name == name {return lib}
         }
         return nil
-    }
-    
-    
-    
-    func deleteLibrary(byID id: Int){
-        //TODO
     }
     
     func deleteMessage(_ withId: Int) -> Bool{
@@ -93,13 +81,9 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         //TODO: Remove the message from FIREBASE
         return true;
     }
-    
-    /*
-     Untested method
-     */
+
     func getClosestLibrary() -> Library{
         var closestDistanceFound = 100000000000.0
-        var closestLibrary: Library
         for lib in libraries {
             let deltaLat = pow((lib.latitude - latitude), 2)
             let deltaLong = pow((lib.longitude - longitude), 2)
@@ -122,9 +106,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         storageReference.getData(maxSize: 50*1024*1024) {data, error in
             if let error = error {
                 print(error)
-                // Uh-oh, an error occurred!
             } else {
-                // Data for "images/island.jpg" is returned
                 let image = UIImage(data: data!)
                 completion(image!)
             }
@@ -139,9 +121,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
     }
 
     func uploadImageToFirebase(_ imageName: String, img: UIImage?){
-        print("Uploading...")
         do {
-            print("Do we trigger this function?")
             let storage = Storage.storage()
             let storageReference = storage.reference()
             let fileName = imageName
@@ -149,48 +129,26 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
             let image = img
             let pngImage: Data? = UIImagePNGRepresentation(image!)
             let imageRef = storageReference.child(fileName)
-            print("Uploading file with filename: \(fileName)")
             _ = imageRef.putData(pngImage ?? Data(), metadata:nil, completion:{(metadata,error) in
-                guard let metadata = metadata else{
-                    //print(error)
-                    return
-                }
-                //let downloadUrl = metadata.url
-                //print(downloadUrl)
             })
-            let tmpRef = storageReference.child(fileName)
-            /*tmpRef.downloadURL { url, error in
-                if let error = error {
-                    // Handle any errors
-                    print("Some error getting URL")
-                } else {
-                    // Get the download URL for 'images/stars.jpg'
-                    print(url?.absoluteString)
-                }
-            }*/
-        } catch{
-            print(error)
         }
     }
-    
-    
+
     func getImageName() -> String {
         let prefix = UIDevice.current.identifierForVendor!.uuidString
         let date = Date()
         let calender = Calendar.current
         let components = calender.dateComponents([.year,.month,.day,.hour,.minute,.second], from: date)
-        
         let year = components.year
         let month = components.month
         let day = components.day
         let hour = components.hour
         let minute = components.minute
         let second = components.second
-        
         let suffix = String(year!) + "-" + String(month!) + "-" + String(day!) + " " + String(hour!)  + ":" + String(minute!) + ":" +  String(second!)
         return "images/\(prefix)-\(suffix).png"
     }
-    
+
     func addMessage(imageName: String, type: MessageType){
         let tmpMessage = getClosestLibrary().getFloor().addMessage(x: latestLongPressXCoord, y: latestLongPressYCoord, url: imageName, id: latestID, type: type)
         let info: NSDictionary = ["id": String(tmpMessage.id),
@@ -210,10 +168,9 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         let uniqueID = databaseRef.child("Library/\(getClosestLibrary().name)/floors/\(getClosestLibrary().getFloor().name)/messages/\(dateString)").childByAutoId().key
         
         let tmpPath = "Library/\(getClosestLibrary().name)/floors/\(getClosestLibrary().getFloor().name)/messages/\(dateString)/\(uniqueID!)"
-        
         writeToDatabase(path: tmpPath, value: info)
     }
-    
+
     func addFloor(name: String, data: String){
         getClosestLibrary().addFloor(nameOfFloor: name, urlToPicture: data)
     }
@@ -223,7 +180,7 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         libraries.append(tmpLibrary)
         libraryID += 1
     }
-    
+
     func getMessage(_ byId: Int) -> Message?{
         let msg: Message? = nil
         for message in getClosestLibrary().getFloor().messages {
@@ -252,6 +209,5 @@ class CanaryModel: NSObject, CLLocationManagerDelegate{
         addLibrary(name: "Kuggen", lat: 0.0, lon: 0.0)
         addFloor(name: "Andra Våningen", data: "https://firebasestorage.googleapis.com/v0/b/canary-e717d.appspot.com/o/floorplans%2FFloorplan_v4.png?alt=media&token=4f9736ce-288d-41e9-bf17-eb1c2268e50b")
         // **** DUMMY VALUES END **** //
-        
     }
 }
