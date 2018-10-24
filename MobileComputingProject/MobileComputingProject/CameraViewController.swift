@@ -12,6 +12,7 @@ import AVFoundation
 class CameraViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var snapButton: UIButton!
+    @IBOutlet weak var safeView: UIView!
     
     var image: UIImage?
     var captureSession: AVCaptureSession?
@@ -43,7 +44,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
         videoPreviewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         videoPreviewLayer?.frame = self.view.frame
-        self.view.layer.insertSublayer(videoPreviewLayer!, at: 0)
+        self.safeView.layer.insertSublayer(videoPreviewLayer!, at: 0)
         
     }
     
