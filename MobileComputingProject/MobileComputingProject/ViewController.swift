@@ -44,7 +44,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         super.viewDidLoad()
         
         // 1. Setup Floorplan, Library Name, and scrollview
-        let floorImageURL = canaryModel.getClosestLibrary().getFloor().urlToFloorPlan
         let addPinRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addMessage))
         self.floorPlanView.isUserInteractionEnabled = true
         self.floorPlanView.addGestureRecognizer(addPinRecognizer)
@@ -58,8 +57,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         titleLabel.layer.shadowOffset = CGSize(width: 0, height: 0)
         titleLabel.layer.masksToBounds = false
 
-        
-        
         // 2. Setup Message Observer
         self.setupFirebaseMessageObserver()
         
@@ -80,7 +77,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         self.floorPlanScrollView.zoomScale = self.canaryModel.lastZoom
     }
 
-
     /*
     Method called by the LongTapRecognizer on the floorplanview. Saves the coordinates of the long tap and creates a
     unique ID in the canarymodel, and when a message is actually created (e.g. some painting has been done) the
@@ -99,14 +95,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             self.canaryModel.latestID = tmpTag ?? -1
             
             // Place temporary marker to show where user is creating a POI
-            print("CRASHING 1?")
             self.placeholderPOI.frame.origin = point
             self.placeholderPOI.isHidden = false
-            print(point)
-            print(self.placeholderPOI.frame.origin)
+
             // Zoom in to new point
             self.floorPlanScrollView.zoom(to: self.placeholderPOI.frame, animated: true)
-            print("CRASHING 2?")
             
             //Create menu for type of message to add
             createPopOver()
@@ -201,19 +194,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             tmpMessage?.y = Float(newY)
             let tmpPoint = CGPoint(x: newX, y: newY)
             view!.frame.origin = tmpPoint
-            if trashCanView.frame.intersects(self.view.convert(view!.frame, from: floorPlanView)) {
-                print("INTERSECTION FOUND")
-                // TODO: Fix visuals so that the user knows they are about to delete a poi
-            }
         }
         // If LongPress ended
         // And Poi dragged to trash
         // Delete Poi, hide trash
         else if gesture.state == .ended {
             if (trashCanView.frame.intersects(view.convert(gesture.view!.frame, from: floorPlanView))) {
-                // FIXME: Check if user has right to delete Poi
+                // TODO: Check if user has right to delete Poi
                 gesture.view!.removeFromSuperview()
-                // FIXME: Send delete request to firebase when deleting Poi
+                // TODO: Send delete request to firebase when deleting Poi
             }
             canaryModel.deleteMessage(gesture.view!.tag)
             trashCanView.isHidden = true
@@ -244,7 +233,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     @objc func alertControllerBackgroundTapped() {
         //TODO: Add functionality to dismiss temp-POI
         placeholderPOI.isHidden = true
-        print("TAP TAP TAP !!! CLICK CLICK CLICK!!!")
     }
     
     /*
@@ -275,12 +263,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         let viewY = UIScreen.main.bounds.height - (iconHeight * 1.5)
         trashCanView = UIImageView(frame: CGRect(x: viewX, y: viewY, width: 48, height: 48))
         trashCanView.image = UIImage(named: "TrashIcon")
-        
-        //trashCanView.layer.backgroundColor = UIColor(red: 236.0/255, green: 253.0/255, blue: 255.0/255, alpha: 0.5).cgColor
-        //trashCanView.layer.borderColor = UIColor(displayP3Red: 102.0/255, green: 170.0/255, blue: 179.0/255, alpha: 1).cgColor
-        //trashCanView.layer.borderWidth = 1.0
-        //trashCanView.layer.cornerRadius = 4.0
-        //minimapCurrentView.layer.borderColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 1).cgColor
 
         view.addSubview(trashCanView)
         trashCanView.isHidden = true
@@ -291,23 +273,19 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
      Called upon when a zooming events occurs
      */
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        //print("Zoomlevel: \(floorPlanScrollView.zoomScale)")
         let tmpWidth = min((self.view.frame.width / (10*floorPlanScrollView.zoomScale)), self.minimapView.frame.width)
         let tmpHeight = min((self.view.frame.height / (10*floorPlanScrollView.zoomScale)), self.minimapView.frame.height)
         print(minimapCurrentView)
         minimapCurrentView.frame.size = CGSize(width: tmpWidth, height: tmpHeight)
         setMinimapMarkerPos()
         if shouldRepaintToOverview()  {
-            print("GIEF Overview")
             for subview in floorPlanView.subviews {
                 if subview.subviews.count > 0 {
                     subview.removeFromSuperview()
                 }
             }
-            print("scrollViewDidZoom called upon addPois")
             self.addPois()
         }else if shouldRepaintToDetailedView() {
-            print("GIEF Detail")
             for subview in floorPlanView.subviews {
                 if subview.subviews.count > 0 {
                     subview.subviews[0].removeFromSuperview()
@@ -354,22 +332,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         }else if type == "DRAWING" {
             return UIImage(named: "DrawingIcon")!
         }else{
-            //TODO: Change this to the '...' icon, whatever it is called
-            return UIImage(named: "TextIcon")!
+            return UIImage(named: "MoreIcon")!
         }
     }
 
     func repaintView(view: UIView, standardImage: Bool){
-        var url: String
-        //print("view: \(view)")
         if(standardImage){
             let image: UIImage = getPoiImageUrl((self.canaryModel.getMessage(view.tag)?.type.rawValue)!)
             self.addPoiView(view: view, image: image)
         } else {
-            //print(self.canaryModel.getClosestLibrary().getFloor().messages.count)
             let message = self.canaryModel.getMessage(view.tag)
-            //print("Message: \(message)")
-            //print("Downloading from url: \((message?.urlToMessage)!)")
             if let url = message?.urlToMessage {
                 self.canaryModel.downloadImageFromFirebase(url, completion: {data in
                     let detailedImage: UIImage = data
@@ -383,12 +355,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     func addPoiView(view: UIView, image: UIImage){
         let tmpImageWidth:CGFloat = 56
         let tmpImageHeight:CGFloat = 56
-        var tmpOrigin = CGPoint(x: (view.frame.width - tmpImageWidth)/2, y: (view.frame.width - tmpImageWidth)/2)
-        print("origin: \(tmpOrigin)")
-        var tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: tmpImageWidth, height: tmpImageHeight)))
+        let tmpOrigin = CGPoint(x: (view.frame.width - tmpImageWidth)/2, y: (view.frame.width - tmpImageWidth)/2)
+        let tmpImg: UIImageView = UIImageView.init(frame: CGRect(origin: tmpOrigin, size: CGSize(width: tmpImageWidth, height: tmpImageHeight)))
         tmpImg.contentMode = UIViewContentMode.scaleAspectFit
         tmpImg.image = image
-        print("addPoiView adding view with tag: \(view.tag)")
         view.addSubview(tmpImg)
     }
 
@@ -429,7 +399,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         minimapCurrentView.backgroundColor = UIColor(red: 236.0/255, green: 253.0/255, blue: 255.0/255, alpha: 0.5)
         minimapCurrentView.layer.borderWidth = 1.0
         minimapCurrentView.layer.borderColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 1).cgColor
-
         
         minimapView.addSubview(imageView)
         minimapView.addSubview(minimapCurrentView)
@@ -438,7 +407,6 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     
     func setupFirebaseMessageObserver(){
         //Clear Messages
-        print("Message Count: \(self.canaryModel.getClosestLibrary().getFloor().messages.count)")
         self.canaryModel.getClosestLibrary().getFloor().messages = Set<Message>()
         
         let date = Date()
@@ -469,13 +437,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                     }else if msgTypeStr == "PHOTO" {
                         msgType = MessageType.PHOTO
                     }
+
                     //Add messages from snapshot
                     let tmpMsg = Message(x: msgX, y: msgY, url: msgURL!, id: msgID, type: msgType)
                     self.canaryModel.getClosestLibrary().getFloor().messages.insert(tmpMsg)
-                    //print("Added message with ID: \(msgID)")
-                    //print("Size of messages: \(self.canaryModel.getClosestLibrary().getFloor().messages.count)")
                 }
-                print("Snapshot calling upon addPois")
                 self.addPois()
             }
         })
@@ -492,4 +458,3 @@ extension UIImage {
         return newImage
     }
 }
-
