@@ -19,13 +19,11 @@ class TextViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         textInputField.clipsToBounds = true
         textInputField.layer.cornerRadius = 10.0
         textInputField.layer.borderWidth = 1
         textInputField.layer.borderColor = UIColor(displayP3Red: 102.0/255, green: 170.0/255, blue: 179.0/255, alpha: 0.75).cgColor
         
-        //TODO: Fix shadow
         textInputField.layer.shadowColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 0.25).cgColor
         textInputField.layer.shadowOpacity = 1
         textInputField.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -36,7 +34,6 @@ class TextViewController: UIViewController {
         
         textInputField.becomeFirstResponder()
         // Do any additional setup after loading the view.
-        
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -46,7 +43,7 @@ class TextViewController: UIViewController {
     @objc func doSegueBack(){
         self.performSegue(withIdentifier: "closeTextView", sender: self)
     }
-    
+
     @objc func closeTextView(_ sender: Any) {
         let text: String = textInputField.text
         let textImageView: UIImageView = UIImageView.init(frame: self.view.frame)

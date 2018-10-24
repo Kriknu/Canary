@@ -19,14 +19,11 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     var frontCam: AVCaptureDevice?
     var backCam :AVCaptureDevice?
     var currentCam: AVCaptureDevice?
-    
     var photoOutput: AVCapturePhotoOutput?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setSnapbuttonSettings()
-        
         setupCaptureSession()
         setupDevice()
         setupInputOutput()
@@ -44,9 +41,8 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         videoPreviewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         videoPreviewLayer?.frame = self.view.frame
         self.view.layer.insertSublayer(videoPreviewLayer!, at: 0)
-        
     }
-    
+
     func setupInputOutput(){
         do {
             let captureDeviceInput = try AVCaptureDeviceInput(device: currentCam!)
@@ -54,21 +50,20 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
             photoOutput = AVCapturePhotoOutput()
             photoOutput?.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])], completionHandler: nil)
             captureSession?.addOutput(photoOutput!)
-            
+
         } catch {
             print(error)
         }
     }
-    
+
     func setupCaptureSession(){
         captureSession = AVCaptureSession()
         captureSession?.sessionPreset = AVCaptureSession.Preset.photo
     }
-    
+
     func setupDevice(){
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
         let devices = deviceDiscoverySession.devices
-        
         for device in devices {
             if device.position == AVCaptureDevice.Position.back {
                 backCam = device
@@ -83,12 +78,12 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         let settings = AVCapturePhotoSettings()
         photoOutput?.capturePhoto(with: settings, delegate: self)
     }
-    
+
     func setSnapbuttonSettings() {
         snapButton.layer.cornerRadius = snapButton.frame.width / 2
         snapButton.backgroundColor = UIColor.white
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "previewPhoto" {
             let previewVC = segue.destination as! PreviewViewController
@@ -98,10 +93,9 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     @IBAction func cancelCamera(_ sender: Any) {
         self.performSegue(withIdentifier: "closeCamera", sender: self)
     }
-    
 }
 
-extension CameraViewController: AVCapturePhotoCaptureDelegate {
+extension CameraViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let imageData = photo.fileDataRepresentation() {
             let tmpImage = UIImage(data: imageData)

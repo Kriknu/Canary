@@ -89,9 +89,7 @@ class PaintViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         initComponents()
-        
         doneButton.action = #selector(PaintViewController.saveImage)
         doneButton.isEnabled = false
         cancelButton.action = #selector(PaintViewController.doSegueBack	)
@@ -103,8 +101,6 @@ class PaintViewController: UIViewController {
         // Hide necessary views
         settingsView.isHidden = true
         specificSettingsView.isHidden = true
-        
-        
         guard let touch = touches.first else {
             return
         }
@@ -155,7 +151,6 @@ class PaintViewController: UIViewController {
     func setupPaletteFrame(){
         opacitySlider.maximumTrackTintColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 0.25)
         sizeSlider.maximumTrackTintColor = UIColor(displayP3Red: 7.0/255, green: 80.0/255, blue: 90.0/255, alpha: 0.25)
-        
         let colSize = (specificSettingsView.frame.width - 40) / 8.0;
         var i = 0
         for entry in colors {
@@ -225,9 +220,6 @@ class PaintViewController: UIViewController {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?){
-        // Hide saveButton when drawing
-        //saveButton.isHidden = true
-        
         guard let touch = touches.first else {
             return
         }
@@ -240,13 +232,10 @@ class PaintViewController: UIViewController {
         // 7
         lastPoint = currentPoint
     }
-    
-    
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Show necessary views
         settingsView.isHidden = false
-        
         if !swiped {
             // draw a single point
             drawLine(from: lastPoint, to: lastPoint)
@@ -264,77 +253,65 @@ class PaintViewController: UIViewController {
     }
 
     @objc func saveImage(){
-        //TODO: Add error handling if we fail to upload image
-        /*
-         1.
-         Get device ID
-         2. Add Incrementer
-         3.
-         */
         let imageName = self.canaryModel.getImageName()
-        //canaryModel.getClosestLibrary(lat: <#T##Double#>, long: <#T##Double#>)
         self.canaryModel.uploadImageToFirebase(imageName, img: self.mainImageView.image)
         self.canaryModel.addMessage(imageName: imageName, type: MessageType.DRAWING)
         self.doSegueBack()
     }
-    
+
     @objc func doSegueBack(){
         self.performSegue(withIdentifier: "mainView", sender: self)
     }
 
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     @objc func setRedColor(){
         color = UIColor.init(red: colors[0].0, green: colors[0].1, blue: colors[0].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushRed")
         print("Red")
         setupSettingsButton()
     }
+
     @objc func setPurpleColor(){
         color = UIColor.init(red: colors[1].0, green: colors[1].1, blue: colors[1].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushPurple")
         print("Purple")
         setupSettingsButton()
     }
+
     @objc func setBlueColor(){
         color = UIColor.init(red: colors[2].0, green: colors[2].1, blue: colors[2].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushBlue")
         print("Blue")
         setupSettingsButton()
     }
+
     @objc func setTurquoiseColor(){
         color = UIColor.init(red: colors[3].0, green: colors[3].1, blue: colors[3].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushTurquoise")
         print("Cyan")
         setupSettingsButton()
     }
+
     @objc func setGreenColor(){
         color = UIColor.init(red: colors[4].0, green: colors[4].1, blue: colors[4].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushGreen")
         print("Green")
         setupSettingsButton()
     }
+
     @objc func setYellowColor(){
         color = UIColor.init(red: colors[5].0, green: colors[5].1, blue: colors[5].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushYellow")
         print("Yellow")
         setupSettingsButton()
     }
+
     @objc func setWhiteColor(){
         color = UIColor.init(red: colors[6].0, green: colors[6].1, blue: colors[6].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushWhite")
         print("White")
         setupSettingsButton()
     }
+
     @objc func setBlackColor(){
         color = UIColor.init(red: colors[7].0, green: colors[7].1, blue: colors[7].2, alpha: 1.0)
         brushColor.image = UIImage(named: "BrushBlack")
